@@ -10,4 +10,14 @@ module Phaser
     alias_native :physicsElapsed
     alias_native :physicsElapsedMS
   end
+
+  class Text
+    def x=(x)
+      `#@native.x = x`
+    end
+
+    def y=(y)
+      `#@native.y = y`
+    end
+  end
 end
