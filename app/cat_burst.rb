@@ -11,7 +11,7 @@ end
 
 class MainState < Phaser::State
   def preload
-    $game.load.image('cat', '/assets/images/cat-cupid-love-icon2.png')
+    $game.load.image('cat', '/images/cat-cupid-love-icon2.png')
   end
 
   def create

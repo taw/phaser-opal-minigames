@@ -11,7 +11,7 @@ end
 
 class MainState < Phaser::State
   def preload
-    $game.load.image('cookie', '/assets/images/cookie.png')
+    $game.load.image('cookie', '/images/cookie.png')
   end
 
   def update

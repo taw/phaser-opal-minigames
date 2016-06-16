@@ -32,7 +32,7 @@ end
 
 class MainState < Phaser::State
   def preload
-    $game.load.image("star", "/assets/images/star.png")
+    $game.load.image("star", "/images/star.png")
   end
 
   def create
