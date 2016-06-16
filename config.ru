@@ -1,11 +1,8 @@
-# config.ru
 require "bundler"
 Bundler.require
 
 opal = Opal::Server.new do |s|
   s.append_path "app"
-  s.append_path "assets"
-  # s.main = "main"
 end
 
 # map opal.source_maps.prefix do
@@ -17,7 +14,7 @@ map "/assets" do
 end
 
 get "/" do
-  send_file "index.html"
+  send_file "public/index.html"
 end
 
 get "/games/:name" do
