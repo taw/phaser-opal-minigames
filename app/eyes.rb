@@ -2,15 +2,10 @@ require_relative "common"
 
 class Game
   def initialize
-    run
-  end
-
-  def run
     $size_x = $window.view.width
     $size_y = $window.view.height
     $game = Phaser::Game.new(width: $size_x, height: $size_y)
-    state = MainLevel.new($game)
-    $game.state.add(:main, state, true)
+    $game.state.add(:main, MainState.new, true)
   end
 end
 
@@ -48,9 +43,9 @@ class Eye
   end
 end
 
-class MainLevel < Phaser::State
+class MainState < Phaser::State
   def create
-    @game.stage.background_color = "F88"
+    $game.stage.background_color = "F88"
     @eyes = (0..3).map{|x| (0..3).map{|y| Eye.new(x,y)}}.flatten
   end
 

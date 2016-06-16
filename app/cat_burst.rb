@@ -2,19 +2,14 @@ require_relative "common"
 
 class Game
   def initialize
-    run
-  end
-
-  def run
     $size_x = $window.view.width
     $size_y = $window.view.height
     $game = Phaser::Game.new(width: $size_x, height: $size_y)
-    state = MainLevel.new($game)
-    $game.state.add(:main, state, true)
+    $game.state.add(:main, MainState.new, true)
   end
 end
 
-class MainLevel < Phaser::State
+class MainState < Phaser::State
   def preload
     $game.load.image('cat', '/assets/images/cat-cupid-love-icon2.png')
   end
@@ -23,12 +18,11 @@ class MainLevel < Phaser::State
     $game.stage.background_color = "8FA"
     $game.physics.start_system(Phaser::Physics::ARCADE)
 
-    @emitter = game.add.emitter(0, 0, 1000)
+    @emitter = $game.add.emitter(0, 0, 1000)
     @emitter.make_particles('cat')
     @emitter.gravity = 200
 
-
-    game.input.on("down") do |pointer, event|
+    $game.input.on("down") do |pointer, event|
       @emitter.x = `pointer.x`
       @emitter.y = `pointer.y`
 

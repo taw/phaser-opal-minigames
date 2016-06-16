@@ -2,15 +2,10 @@ require_relative "common"
 
 class Game
   def initialize
-    run
-  end
-
-  def run
     $size_x = $window.view.width
     $size_y = $window.view.height
     $game = Phaser::Game.new(width: $size_x, height: $size_y)
-    state = MainLevel.new($game)
-    $game.state.add(:main, state, true)
+    $game.state.add(:main, MainState.new, true)
   end
 end
 
@@ -19,7 +14,8 @@ class Star
     @star = $game.add.sprite(rand*($size_x-24), rand*($size_y-22), 'star')
     a = rand * 2 * Math::PI
     speed = 500.0
-    @dx, @dy = speed * Math.sin(a), speed * Math.cos(a)
+    @dx = speed * Math.sin(a)
+    @dy = speed * Math.cos(a)
   end
 
   def update(dt)
@@ -34,7 +30,7 @@ class Star
   end
 end
 
-class MainLevel < Phaser::State
+class MainState < Phaser::State
   def preload
     $game.load.image("star", "/assets/images/star.png")
   end

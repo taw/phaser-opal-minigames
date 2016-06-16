@@ -2,19 +2,14 @@ require_relative "common"
 
 class Game
   def initialize
-    run
-  end
-
-  def run
     $size_x = $window.view.width
     $size_y = $window.view.height
     $game = Phaser::Game.new(width: $size_x, height: $size_y)
-    state = MainLevel.new($game)
-    $game.state.add(:main, state, true)
+    $game.state.add(:main, MainState.new, true)
   end
 end
 
-class MainLevel < Phaser::State
+class MainState < Phaser::State
   def update_label(label, distance, angle_ratio)
     angle_deg = 360 * angle_ratio
     a = $game.math.deg_to_rad(angle_deg)

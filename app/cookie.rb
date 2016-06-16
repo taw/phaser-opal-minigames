@@ -2,19 +2,14 @@ require_relative "common"
 
 class Game
   def initialize
-    run
-  end
-
-  def run
     $size_x = $window.view.width
     $size_y = $window.view.height
     $game = Phaser::Game.new(width: $size_x, height: $size_y)
-    state = MainLevel.new($game)
-    $game.state.add(:main, state, true)
+    $game.state.add(:main, MainState.new, true)
   end
 end
 
-class MainLevel < Phaser::State
+class MainState < Phaser::State
   def preload
     $game.load.image('cookie', '/assets/images/cookie.png')
   end
@@ -35,8 +30,8 @@ class MainLevel < Phaser::State
   def create
     @score = 0
     @scoreText = $game.add.text(16, 16, '', { fontSize: '32px', fill: '#fff' })
-    @game.stage.background_color = "F8F"
-    @cookie = @game.add.sprite(
+    $game.stage.background_color = "F8F"
+    @cookie = $game.add.sprite(
       $game.rnd.between(0, $size_x-120),
       $game.rnd.between(0, $size_y-120),
       'cookie',
@@ -45,7 +40,7 @@ class MainLevel < Phaser::State
     @cookie.events.on(:down) do
       @score += 1
     end
-    angle = $game.math.deg_to_rad(game.rnd.between(0, 360))
+    angle = $game.math.deg_to_rad($game.rnd.between(0, 360))
     speed = 200.0
     @dx = Math.cos(angle) * speed
     @dy = Math.sin(angle) * speed

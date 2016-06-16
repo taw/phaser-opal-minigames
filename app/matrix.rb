@@ -2,15 +2,10 @@ require_relative "common"
 
 class Game
   def initialize
-    run
-  end
-
-  def run
     $size_x = $window.view.width
     $size_y = $window.view.height
     $game = Phaser::Game.new(width: $size_x, height: $size_y)
-    state = MainLevel.new($game)
-    $game.state.add(:main, state, true)
+    $game.state.add(:main, MainState.new, true)
   end
 end
 
@@ -49,7 +44,7 @@ class Character
   end
 end
 
-class MainLevel < Phaser::State
+class MainState < Phaser::State
   def update
     dt = $game.time.physics_elapsed
     if @characters.length < 1000
