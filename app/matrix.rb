@@ -51,7 +51,7 @@ end
 
 class MainLevel < Phaser::State
   def update
-    dt = $game.time.physicsElapsed
+    dt = $game.time.physics_elapsed
     if @characters.length < 1000
       @characters << Character.new
     end

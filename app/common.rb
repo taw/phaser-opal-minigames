@@ -6,9 +6,9 @@ require "browser"
 module Phaser
   class Time
     alias_native :elapsed
-    alias_native :elapsedMS
-    alias_native :physicsElapsed
-    alias_native :physicsElapsedMS
+    alias_native :elapsed_ms, :elapsedMS
+    alias_native :physics_elapsed, :physicsElapsed
+    alias_native :physics_elapsed_ms, :physicsElapsedMS
   end
 
   class Text
@@ -60,6 +60,50 @@ module Phaser
     end
     def y=(y)
       `#@native.y = y`
+    end
+  end
+
+  class Input
+    # This needs to raise exception on unknown events
+    def on(type, &block)
+      puts [:ion, type]
+      if block_given?
+        case type.to_sym
+        when :down
+          `#@native.onDown.add(#{block.to_n})`
+        when :up
+          `#@native.onUp.add(#{block.to_n})`
+        when :tap
+          `#@native.onTap.add(#{block.to_n})`
+        when :hold
+          `#@native.onHold.add(#{block.to_n})`
+        else
+          raise ArgumentError, "Unrecognized event type #{type}"
+        end
+      else
+        # ???
+        Signal.new
+      end
+    end
+  end
+
+  class Events
+    def on(type, context, &block)
+      puts [:ev, type]
+      case type.to_sym
+      when :up
+        `#@native.onInputUp.add(#{block.to_n}, #{context})`
+      when :down
+        `#@native.onInputDown.add(#{block.to_n}, #{context})`
+      when :out
+        `#@native.onInputOut.add(#{block.to_n}, #{context})`
+      when :over
+        `#@native.onInputOver.add(#{block.to_n}, #{context})`
+      when :out_of_bounds
+        `#@native.onOutOfBounds.add(#{block.to_n}, #{context})`
+      else
+        raise ArgumentError, "Unrecognized event type #{type}"
+      end
     end
   end
 

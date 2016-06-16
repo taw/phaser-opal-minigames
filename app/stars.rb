@@ -46,7 +46,7 @@ class MainLevel < Phaser::State
   end
 
   def update
-    dt = $game.time.physicsElapsed
+    dt = $game.time.physics_elapsed
     @elements.each do |element|
       element.update(dt)
     end
