@@ -48,11 +48,27 @@ module Phaser
     end
   end
 
+  class Emitter
+    include Native
+    alias_native :make_particles, :makeParticles
+    alias_native :start
+    def gravity=(gravity)
+      `#@native.gravity = gravity`
+    end
+    def x=(x)
+      `#@native.x = x`
+    end
+    def y=(y)
+      `#@native.y = y`
+    end
+  end
+
   class Game
     alias_native :math, :math, as: Phaser::Math
   end
 
   class GameObjectFactory
     alias_native :graphics, :graphics, as: Phaser::Graphics
+    alias_native :emitter, :emitter, as: Phaser::Emitter
   end
 end
