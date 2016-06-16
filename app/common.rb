@@ -102,6 +102,7 @@ module Phaser
     include Native
     alias_native :deg_to_rad, :degToRad
     alias_native :rad_to_deg, :radToDeg
+    alias_native :clamp
   end
 
   class Graphics
@@ -110,7 +111,12 @@ module Phaser
     alias_native :end_fill, :endFill
     alias_native :draw_circle, :drawCircle
     alias_native :draw_polygon, :drawPolygon
+    alias_native :draw_rect, :drawRect
     alias_native :line_style, :lineStyle
+    alias_native :line_to, :lineTo
+    alias_native :move_to, :moveTo
+    alias_native :x
+    alias_native :y
     def x=(x)
       `#@native.x = x`
     end
