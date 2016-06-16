@@ -1,5 +1,6 @@
-require 'opal'
-require 'opal-phaser'
+require "opal"
+require "opal-phaser"
+require "math"
 
 # This needs to be PRed upstream
 module Phaser
@@ -30,9 +31,9 @@ class MainLevel < Phaser::State
 
   def create
     @star = $game.add.sprite(100, 100, 'star')
-    a = rand* 2 * `Math.PI`
+    a = rand* 2 * Math::PI
     speed = 200.0
-    @dx, @dy = speed * `Math.sin(a)`, speed * `Math.cos(a)`
+    @dx, @dy = speed * Math.sin(a), speed * Math.cos(a)
   end
 
   def update
