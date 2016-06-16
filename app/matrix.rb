@@ -6,8 +6,8 @@ class Game
   end
 
   def run
-    $size_x = `window.innerWidth`
-    $size_y = `window.innerHeight`
+    $size_x = $window.view.width
+    $size_y = $window.view.height
     $game = Phaser::Game.new(width: $size_x, height: $size_y)
     state = MainLevel.new($game)
     $game.state.add(:main, state, true)

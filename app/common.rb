@@ -1,6 +1,7 @@
 require "opal"
 require "opal-phaser"
 require "math"
+require "browser"
 
 # This needs to be PRed upstream
 module Phaser

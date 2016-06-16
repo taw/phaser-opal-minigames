@@ -1,5 +1,6 @@
 #Gemfile
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
-gem 'sinatra'
-gem 'opal-phaser'
+gem "sinatra"
+gem "opal-phaser"
+gem "opal-browser"
