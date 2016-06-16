@@ -5,7 +5,7 @@ Bundler.require
 opal = Opal::Server.new do |s|
   s.append_path "app"
   s.append_path "assets"
-  s.main = "main"
+  # s.main = "main"
 end
 
 # map opal.source_maps.prefix do
@@ -20,8 +20,8 @@ get "/" do
   send_file "index.html"
 end
 
-get "/demo" do
-  send_file "demo.html"
+get "/games/:name" do
+  send_file "games/#{params[:name]}.html"
 end
 
 run Sinatra::Application
