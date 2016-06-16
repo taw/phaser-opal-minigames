@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset= "utf-8" />
+    <title>Memory</title>
+    <style>
+      body {
+      	margin: 0;
+      	padding: 0;
+      	background-color: #000000;
+      }
+    </style>
+    <script src="/assets/js/phaser.js"></script>
+    <script src="/assets/memory.js"></script>
+  </head>
+
+  <body>
+    <script>
+      window.onload = function() {
+        Opal.load("memory")
+        opal_game = Opal.Game.$new()
+      }
+    </script>
+  </body>
+</html>

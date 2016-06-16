@@ -11,6 +11,10 @@ module Phaser
     alias_native :physics_elapsed_ms, :physicsElapsedMS
   end
 
+  class Button
+    alias_native :anchor, :anchor, as: Phaser::Point
+  end
+
   class Text
     alias_native :anchor, :anchor, as: Phaser::Point
     def x=(x)
@@ -25,11 +29,13 @@ module Phaser
     def fill=(fill)
       `#@native.fill = fill`
     end
+    def visible=(visible)
+      `#@native.visible = visible`
+    end
   end
 
   class Math
     include Native
-
     alias_native :deg_to_rad, :degToRad
     alias_native :rad_to_deg, :radToDeg
   end
@@ -39,6 +45,7 @@ module Phaser
     alias_native :begin_fill, :beginFill
     alias_native :end_fill, :endFill
     alias_native :draw_circle, :drawCircle
+    alias_native :draw_polygon, :drawPolygon
     alias_native :line_style, :lineStyle
     def x=(x)
       `#@native.x = x`
@@ -66,7 +73,6 @@ module Phaser
   class Input
     # This needs to raise exception on unknown events
     def on(type, &block)
-      puts [:ion, type]
       if block_given?
         case type.to_sym
         when :down
@@ -89,7 +95,6 @@ module Phaser
 
   class Events
     def on(type, context, &block)
-      puts [:ev, type]
       case type.to_sym
       when :up
         `#@native.onInputUp.add(#{block.to_n}, #{context})`
