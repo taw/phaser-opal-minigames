@@ -14,19 +14,15 @@ module Phaser
 
   class Text
     alias_native :anchor, :anchor, as: Phaser::Point
-
     def x=(x)
       `#@native.x = x`
     end
-
     def y=(y)
       `#@native.y = y`
     end
-
     def angle=(angle)
       `#@native.angle = angle`
     end
-
     def fill=(fill)
       `#@native.fill = fill`
     end
@@ -39,7 +35,25 @@ module Phaser
     alias_native :rad_to_deg, :radToDeg
   end
 
+  class Graphics
+    include Native
+    alias_native :begin_fill, :beginFill
+    alias_native :end_fill, :endFill
+    alias_native :draw_circle, :drawCircle
+    alias_native :line_style, :lineStyle
+    def x=(x)
+      `#@native.x = x`
+    end
+    def y=(y)
+      `#@native.y = y`
+    end
+  end
+
   class Game
     alias_native :math, :math, as: Phaser::Math
+  end
+
+  class GameObjectFactory
+    alias_native :graphics, :graphics, as: Phaser::Graphics
   end
 end
