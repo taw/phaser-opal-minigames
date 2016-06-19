@@ -26,6 +26,23 @@ class MainState < Phaser::State
   end
 
   def create
+    @sprites = []
+    4.times do |x|
+      4.times do |y|
+        longcat = $game.add.sprite($size_x*x/4, $size_y*y/4, "longcat")
+        @sprites << longcat
+        longcat.width = $size_x/4
+        longcat.height = $size_y/4
+      end
+    end
+
+    $game.input.on("down") do
+      shuffle_cats
+    end
+    shuffle_cats
+  end
+
+  def shuffle_cats
     cats = []
     4.times do |x|
       4.times do |y|
@@ -33,13 +50,9 @@ class MainState < Phaser::State
       end
     end
     cats.shuffle!
-    4.times do |x|
-      4.times do |y|
-        longcat = $game.add.sprite($size_x*x/4, $size_y*y/4, "longcat")
-        longcat.frame_name = cats.shift
-        longcat.width = $size_x/4
-        longcat.height = $size_y/4
-      end
+
+    @sprites.each do |longcat|
+      longcat.frame_name = cats.shift
     end
   end
 end
