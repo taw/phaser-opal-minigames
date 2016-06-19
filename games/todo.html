@@ -17,39 +17,34 @@
       <script src="/js/html5shiv.min.js"></script>
       <script src="/js/respond.min.js"></script>
     <![endif]-->
+    <style>
+    #todos {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    #new_item {
+      width: 50%;
+    }
+    </style>
   </head>
   <body>
     <div class="container">
-       <div>
-         <h1>Phaser Opal minigames</h1>
-         <p class="lead">This is collection of Phaser-Opal minigames and other Opal experiments.</p>
-         <h4>Noninteractive Demos</h4>
-         <ul>
-           <li><a href="/games/stars">Bouncy Stars</a></li>
-           <li><a href="/games/matrix">Matrix</a></li>
-           <li><a href="/games/text_clock">Text Clock</a></li>
-         </ul>
-         <h4>Interactive Demos</h4>
-         <ul>
-           <li><a href="/games/cat_burst">Cat Burst</a></li>
-           <li><a href="/games/eyes">Eyes</a></li>
-         </ul>
-         <h4>Minigames</h4>
-         <ul>
-           <li><a href="/games/cookie">Click The Cookie</a></li>
-           <li><a href="/games/memory">Memory</a></li>
-           <li><a href="/games/cat_pong">Cat Pong</a></li>
-         </ul>
-         <h4>Opal jQuery</h4>
-         <ul>
-           <li><a href="/games/todo">TODO list</a></li>
-         </ul>
-       </div>
-     </div>
+      <h1>TODO App</h1>
+      <ul id="todos">
+        <li class="new_item_line">
+          <input type="text" id="new_item" name="new_item" placeholder="What needs to be done?"></input>
+        </li>
+      </ul>
+      <ul id="done">
+      </ul>
+    </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="/js/jquery-1.12.4.min.js"></script>
+    <script src="/js/jquery-1.12.4.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="/js/bootstrap.min.js"></script>
+    <script src="/assets/todo.js"></script>
+    <script>Opal.load("todo")</script>
   </body>
 </html>
