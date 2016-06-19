@@ -12,6 +12,7 @@ end
 class MainState < Phaser::State
   def preload
     $game.load.image('cookie', '/images/cookie.png')
+    $game.load.audio("coin", "/audio/coin4.mp3")
   end
 
   def update
@@ -36,9 +37,11 @@ class MainState < Phaser::State
       $game.rnd.between(0, $size_y-120),
       'cookie',
     )
+    @coin = $game.add.audio("coin")
     @cookie.input_enabled = true
     @cookie.events.on(:down) do
       @score += 1
+      @coin.play
     end
     angle = $game.math.deg_to_rad($game.rnd.between(0, 360))
     speed = 200.0

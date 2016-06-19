@@ -12,6 +12,7 @@ end
 class MainState < Phaser::State
   def preload
     $game.load.image('cat', '/images/cat-cupid-love-icon2.png')
+    $game.load.audio("coin", "/audio/coin4.mp3")
   end
 
   def create
@@ -21,16 +22,17 @@ class MainState < Phaser::State
     @emitter = $game.add.emitter(0, 0, 1000)
     @emitter.make_particles('cat')
     @emitter.gravity = 200
+    @coin = $game.add.audio("coin")
 
     $game.input.on("down") do |pointer, event|
       @emitter.x = `pointer.x`
       @emitter.y = `pointer.y`
-
       # The first parameter sets the effect to "explode" which means all particles are emitted at once
       # The second gives each particle a 2000ms lifespan
       # The third is ignored when using burst/explode mode
       # The final parameter (10) is how many particles will be emitted in this single burst
       @emitter.start true, 5000, nil, 10
+      @coin.play
     end
   end
 end
