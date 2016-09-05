@@ -2,7 +2,8 @@ require "opal"
 require "opal-phaser"
 require "browser"
 
-# This needs to be PRed upstream
+# Newer version of opal has a (fancier) version of this functionality implemented
+# So this can be removed eventually
 # Copied from rubinius
 class Range
   def step(step_size=1) # :yields: object
@@ -63,131 +64,5 @@ class Range
     end
 
     return self
-  end
-end
-
-# This needs to be PRed upstream
-module Phaser
-  class Time
-    alias_native :elapsed
-    alias_native :elapsed_ms, :elapsedMS
-    alias_native :physics_elapsed, :physicsElapsed
-    alias_native :physics_elapsed_ms, :physicsElapsedMS
-  end
-
-  class Button
-    alias_native :anchor, :anchor, as: Phaser::Point
-  end
-
-  class Text
-    alias_native :anchor, :anchor, as: Phaser::Point
-    def x=(x)
-      `#@native.x = x`
-    end
-    def y=(y)
-      `#@native.y = y`
-    end
-    def angle=(angle)
-      `#@native.angle = angle`
-    end
-    def fill=(fill)
-      `#@native.fill = fill`
-    end
-    def visible=(visible)
-      `#@native.visible = visible`
-    end
-  end
-
-  class Math
-    include Native
-    alias_native :deg_to_rad, :degToRad
-    alias_native :rad_to_deg, :radToDeg
-    alias_native :clamp
-  end
-
-  class Graphics
-    include Native
-    alias_native :begin_fill, :beginFill
-    alias_native :end_fill, :endFill
-    alias_native :draw_circle, :drawCircle
-    alias_native :draw_polygon, :drawPolygon
-    alias_native :draw_rect, :drawRect
-    alias_native :line_style, :lineStyle
-    alias_native :line_to, :lineTo
-    alias_native :move_to, :moveTo
-    alias_native :x
-    alias_native :y
-    def x=(x)
-      `#@native.x = x`
-    end
-    def y=(y)
-      `#@native.y = y`
-    end
-  end
-
-  class Emitter
-    include Native
-    alias_native :make_particles, :makeParticles
-    alias_native :start
-    def gravity=(gravity)
-      `#@native.gravity = gravity`
-    end
-    def x=(x)
-      `#@native.x = x`
-    end
-    def y=(y)
-      `#@native.y = y`
-    end
-  end
-
-  class Input
-    # This needs to raise exception on unknown events
-    def on(type, &block)
-      if block_given?
-        case type.to_sym
-        when :down
-          `#@native.onDown.add(#{block.to_n})`
-        when :up
-          `#@native.onUp.add(#{block.to_n})`
-        when :tap
-          `#@native.onTap.add(#{block.to_n})`
-        when :hold
-          `#@native.onHold.add(#{block.to_n})`
-        else
-          raise ArgumentError, "Unrecognized event type #{type}"
-        end
-      else
-        # ???
-        Signal.new
-      end
-    end
-  end
-
-  class Events
-    def on(type, context, &block)
-      case type.to_sym
-      when :up
-        `#@native.onInputUp.add(#{block.to_n}, #{context})`
-      when :down
-        `#@native.onInputDown.add(#{block.to_n}, #{context})`
-      when :out
-        `#@native.onInputOut.add(#{block.to_n}, #{context})`
-      when :over
-        `#@native.onInputOver.add(#{block.to_n}, #{context})`
-      when :out_of_bounds
-        `#@native.onOutOfBounds.add(#{block.to_n}, #{context})`
-      else
-        raise ArgumentError, "Unrecognized event type #{type}"
-      end
-    end
-  end
-
-  class Game
-    alias_native :math, :math, as: Phaser::Math
-  end
-
-  class GameObjectFactory
-    alias_native :graphics, :graphics, as: Phaser::Graphics
-    alias_native :emitter, :emitter, as: Phaser::Emitter
   end
 end
