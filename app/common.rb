@@ -72,4 +72,8 @@ module Phaser
   class Text
     native_accessor :fontSize
   end
+
+  class Emitter
+    alias_native :set_alpha, :setAlpha
+  end
 end
