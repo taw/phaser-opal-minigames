@@ -18,7 +18,12 @@ class Character
     @x = $game.rnd.between(0, $size_x)
     @y = $game.rnd.between(0, $size_y/4)
     @speed = $game.rnd.between(30, 200)
-    @graphics = $game.add.text(@x, @y, @c, {fontSize: random_size, fill: random_color})
+    @graphics = $game.add.text(@x, @y, @c, {
+      fontSize: random_size,
+      fill: random_color,
+      stroke: random_outline_color,
+      strokeThickness: $game.rnd.between(0, 5),
+    })
   end
 
   def update(dt)
@@ -39,6 +44,14 @@ class Character
     "#%02x%02x%02x" % [
       $game.rnd.between(90, 140),
       $game.rnd.between(140, 255),
+      $game.rnd.between(90, 140),
+    ]
+  end
+
+  def random_outline_color
+    "#%02x%02x%02x" % [
+      $game.rnd.between(140, 255),
+      $game.rnd.between(90, 140),
       $game.rnd.between(90, 140),
     ]
   end
