@@ -13,10 +13,10 @@ class Eye
   def initialize(cell_x, cell_y)
     cx = cell_x * $size_x / 4
     cy = cell_y * $size_y / 4
-
+    max_eye_size = [$size_x, $size_y].min / 4.0
+    @eyesize = $game.rnd.between(max_eye_size*0.2, max_eye_size*0.8)
     @x = $game.rnd.between(cx + 50, cx + $size_x / 4 - 50)
     @y = $game.rnd.between(cy + 50, cy + $size_y / 4 - 50)
-    @eyesize = $game.rnd.between(50,200)
     @max_eye_movement = @eyesize * 0.2
     @eye = $game.add.graphics(@x, @y)
     @eye.begin_fill(0xFFFFFF)
