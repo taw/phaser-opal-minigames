@@ -12,7 +12,7 @@ end
 class MainState < Phaser::State
   def preload
     $game.load.image('cookie', '/images/cookie.png')
-    $game.load.audio("coin", "/audio/coin4.mp3")
+    $game.load.audio("coin", "/audio/balsa.mp3")
   end
 
   def update
