@@ -16,11 +16,17 @@ class MainState < Phaser::State
     label.x = $size_x / 2 + distance * Math.sin(a)
     label.y = $size_y / 2 - distance * Math.cos(a)
     label.angle = angle_deg
-    label.fill = (a == 0) ? "#44ff00" : "#ff0044"
+    if a == 0
+      label.fill = "#44ff00"
+      label.fontSize = 15
+    else
+      label.fill = "#ff0044"
+      label.fontSize = 10
+    end
   end
 
   def create_label(i)
-    text = $game.add.text(0, 0, "#{i}", { font: "20px Arial", fill: "#ff0044", align: "center" })
+    text = $game.add.text(0, 0, "#{i}", { font: "10px Arial", fill: "#ff0044", align: "center" })
     text.anchor.set(0.5)
     text
   end
@@ -31,6 +37,8 @@ class MainState < Phaser::State
     @hours   = 24.times.map{|i| create_label(i) }
     @minutes = 60.times.map{|i| create_label(i) }
     @seconds = 60.times.map{|i| create_label(i) }
+
+    @screen_size = [$size_x, $size_y].min
   end
 
   def update
@@ -39,15 +47,15 @@ class MainState < Phaser::State
     @last_time = time
 
     @seconds.each_with_index do |s,i|
-      update_label @seconds[i], 325, (i - time.sec)/60.0
+      update_label @seconds[i], 0.40*@screen_size, (i - time.sec)/60.0
     end
 
     @minutes.each_with_index do |s,i|
-      update_label @minutes[i], 250, (i - time.min)/60.0
+      update_label @minutes[i], 0.30*@screen_size, (i - time.min)/60.0
     end
 
     @hours.each_with_index do |s,i|
-      update_label @hours[i], 175, (i - time.hour)/24.0
+      update_label @hours[i], 0.20*@screen_size, (i - time.hour)/24.0
     end
   end
 end

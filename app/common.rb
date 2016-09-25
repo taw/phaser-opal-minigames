@@ -66,3 +66,10 @@ class Range
     return self
   end
 end
+
+# PR this
+module Phaser
+  class Text
+    native_accessor :fontSize
+  end
+end
