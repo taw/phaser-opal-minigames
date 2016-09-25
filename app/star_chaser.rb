@@ -12,6 +12,7 @@ end
 class MainState < Phaser::State
   def preload
     $game.load.image("star", "/images/star.png")
+    $game.load.image("star2", "/images/star2.png")
     $game.load.image("chaser", "/images/cat-cupid-love-icon2.png")
     $game.load.audio("coin", "/audio/coin4.mp3")
   end
@@ -51,6 +52,11 @@ class MainState < Phaser::State
     @chaser.body.collide_world_bounds = true
 
     @coin = $game.add.audio("coin")
+
+    @emitter = $game.add.emitter(0, 0, 1000)
+    @emitter.make_particles('star2')
+    @emitter.gravity = 0
+    @emitter.set_alpha(0.2, 0.5, 0)
   end
 
   def clamped_vector(a, b, max_len)
@@ -68,10 +74,21 @@ class MainState < Phaser::State
       (star.x - @chaser.x) ** 2 + (star.y - @chaser.y) ** 2
     }
     dx,dy = clamped_vector(@chaser, nearest_star, 200.0)
+    @chaser.anchor.set(0.5, 0.5)
     @chaser.body.velocity.x = dx
     @chaser.body.velocity.y = dy
     $game.physics.arcade.overlap(@chaser, @star_group) do |c,s|
       eat_star(s)
+    end
+
+    if rand < $game.time.physics_elapsed*10 and (dx != 0 or dy != 0)
+      @emitter.x = @chaser.x
+      @emitter.y = @chaser.y
+      @emitter.minParticleSpeed.x = -0.2 * dx
+      @emitter.minParticleSpeed.y = -0.2 * dy
+      @emitter.maxParticleSpeed.x = -0.4 * dx
+      @emitter.maxParticleSpeed.y = -0.4 * dy
+      @emitter.start true, 1000, nil, 1
     end
   end
 end
