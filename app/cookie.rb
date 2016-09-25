@@ -32,7 +32,7 @@ class MainState < Phaser::State
   def create
     @score = 0
     @scoreText = $game.add.text(16, 16, '', { fontSize: '32px', fill: '#fff' })
-    $game.stage.background_color = "F8F"
+    $game.stage.background_color = "4993FA"
     @cookie = $game.add.sprite(
       $game.rnd.between(60, $size_x-60),
       $game.rnd.between(60, $size_y-60),
