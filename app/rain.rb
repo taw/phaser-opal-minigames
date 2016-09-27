@@ -11,7 +11,7 @@ end
 
 class Raindrop
   def initialize
-    @raindrop = $game.add.sprite(rand*($size_x-24), rand*($size_y-22), 'raindrop')
+    @raindrop = $game.add.sprite(rand*($size_x-24), rand*($size_y-22), "raindrop")
     @speed = $game.rnd.between(100, 200)
   end
 
@@ -24,7 +24,6 @@ class Raindrop
 end
 
 class MainState < Phaser::State
-
   def preload
     $game.load.image("raindrop", "/images/raindrop.png")
   end
@@ -42,5 +41,4 @@ class MainState < Phaser::State
       element.update(dt)
     end
   end
-
 end

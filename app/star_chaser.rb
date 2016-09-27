@@ -54,7 +54,7 @@ class MainState < Phaser::State
     @coin = $game.add.audio("coin")
 
     @emitter = $game.add.emitter(0, 0, 1000)
-    @emitter.make_particles('star2')
+    @emitter.make_particles("star2")
     @emitter.gravity = 0
     @emitter.set_alpha(0.2, 0.5, 0)
   end

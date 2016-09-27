@@ -138,9 +138,9 @@ class GameState < Phaser::State
 
   def create
     @score = 0
-    @scoreText = $game.add.text(16, 16, '', { fontSize: '32px', fill: '#fff' })
+    @scoreText = $game.add.text(16, 16, "", { fontSize: "32px", fill: "#fff" })
     @meow = $game.add.audio("meow")
-    @button_menu = $game.add.button(16, 64, 'menu') do
+    @button_menu = $game.add.button(16, 64, "menu") do
       $game.state.start("Menu")
     end
     $game.stage.background_color = "88F"
@@ -168,17 +168,17 @@ class MenuState < Phaser::State
 
   def create
     $game.stage.background_color = "F8F"
-    @button22 = $game.add.button($size_x*0.5, $size_y*0.33, 'button2x2') do
+    @button22 = $game.add.button($size_x*0.5, $size_y*0.33, "button2x2") do
       $game.state.start("Game2x2")
     end
     @button22.anchor.set(0.5, 0.5)
 
-    @button44 = $game.add.button($size_x*0.5, $size_y*0.50, 'button4x4') do
+    @button44 = $game.add.button($size_x*0.5, $size_y*0.50, "button4x4") do
       $game.state.start("Game4x4")
     end
     @button44.anchor.set(0.5, 0.5)
 
-    @button66 = $game.add.button($size_x*0.5, $size_y*0.67, 'button6x6') do
+    @button66 = $game.add.button($size_x*0.5, $size_y*0.67, "button6x6") do
       $game.state.start("Game6x6")
     end
     @button66.anchor.set(0.5, 0.5)

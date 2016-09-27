@@ -11,8 +11,8 @@ end
 
 class MainState < Phaser::State
   def preload
-    $game.load.image('cookie', '/images/cookie.png')
-    $game.load.image('banana', '/images/banana.png')
+    $game.load.image("cookie", "/images/cookie.png")
+    $game.load.image("banana", "/images/banana.png")
     $game.load.audio("coin", "/audio/balsa.mp3")
   end
 
@@ -31,12 +31,12 @@ class MainState < Phaser::State
 
   def create
     @score = 0
-    @scoreText = $game.add.text(16, 16, '', { fontSize: '32px', fill: '#fff' })
+    @scoreText = $game.add.text(16, 16, "", { fontSize: "32px", fill: "#fff" })
     $game.stage.background_color = "4993FA"
     @cookie = $game.add.sprite(
       $game.rnd.between(60, $size_x-60),
       $game.rnd.between(60, $size_y-60),
-      'cookie',
+      "cookie",
     )
     @cookie.anchor.set(0.5, 0.5)
     @coin = $game.add.audio("coin")
@@ -54,7 +54,7 @@ class MainState < Phaser::State
     @dy = Math.sin(angle) * speed
 
     @emitter = $game.add.emitter(0, 0, 1000)
-    @emitter.make_particles('banana')
+    @emitter.make_particles("banana")
     @emitter.gravity = -50
     @emitter.minParticleSpeed.x = -0.1 * @dx
     @emitter.minParticleSpeed.y = -0.1 * @dy

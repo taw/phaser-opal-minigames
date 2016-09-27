@@ -109,10 +109,10 @@ class MainState < Phaser::State
     @left_score_val  = 0
     @right_score_val = 0
 
-    @left_score = $game.add.text($size_x / 4, $size_y / 8, @left_score_val, { fontSize: '100px', fill: '#000', align: "center" })
+    @left_score = $game.add.text($size_x / 4, $size_y / 8, @left_score_val, { fontSize: "100px", fill: "#000", align: "center" })
     @left_score.anchor.set(0.5)
 
-    @right_score = $game.add.text($size_x / 4 * 3, $size_y / 8, @right_score_val, { fontSize: '100px', fill: '#000', align: "center" })
+    @right_score = $game.add.text($size_x / 4 * 3, $size_y / 8, @right_score_val, { fontSize: "100px", fill: "#000", align: "center" })
     @right_score.anchor.set(0.5)
 
     # paddles
@@ -130,7 +130,7 @@ class MainState < Phaser::State
 
     # star emitter
     @emitter = $game.add.emitter(0, 0, 1000)
-    @emitter.make_particles('star')
+    @emitter.make_particles("star")
     @emitter.gravity = 200
 
     # ball

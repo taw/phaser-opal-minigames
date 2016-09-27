@@ -11,7 +11,7 @@ end
 
 class Star
   def initialize
-    @star = $game.add.sprite(rand*($size_x-24), rand*($size_y-22), 'star')
+    @star = $game.add.sprite(rand*($size_x-24), rand*($size_y-22), "star")
     a = rand * 2 * Math::PI
     speed = 500.0
     @dx = speed * Math.sin(a)

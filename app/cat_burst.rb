@@ -11,8 +11,8 @@ end
 
 class MainState < Phaser::State
   def preload
-    $game.load.image('star', '/images/star2.png')
-    $game.load.image('cat', '/images/cat-cupid-love-icon2.png')
+    $game.load.image("star", "/images/star2.png")
+    $game.load.image("cat", "/images/cat-cupid-love-icon2.png")
     $game.load.audio("coin", "/audio/coin4.mp3")
   end
 
@@ -21,7 +21,7 @@ class MainState < Phaser::State
     $game.physics.start_system(Phaser::Physics::ARCADE)
 
     @emitter2 = $game.add.emitter(0, 0, 1000)
-    @emitter2.make_particles('star')
+    @emitter2.make_particles("star")
     @emitter2.gravity = -50
     @emitter2.maxParticleSpeed.x = 50
     @emitter2.minParticleSpeed.x = -50
@@ -30,7 +30,7 @@ class MainState < Phaser::State
     @emitter2.set_alpha(0.2, 0.5, 0)
 
     @emitter = $game.add.emitter(0, 0, 1000)
-    @emitter.make_particles('cat')
+    @emitter.make_particles("cat")
     @emitter.gravity = 200
 
     @coin = $game.add.audio("coin")
