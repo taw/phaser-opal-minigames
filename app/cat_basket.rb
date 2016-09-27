@@ -36,11 +36,8 @@ end
 
 class Basket
   def initialize
-    @basket = $game.add.graphics($size_x/2, $size_y)
-    @basket.line_style(5, "white")
-    @basket.line_style(0)
-    @basket.begin_fill(0x000)
-    @basket.draw_rect(-100, -20, 200, 10)
+    @basket = $game.add.sprite($size_x/2, $size_y, "basket")
+    @basket.anchor.set(0.5, 0.7)
   end
 
   def update(dt)
@@ -60,25 +57,32 @@ end
 
 class MainState < Phaser::State
   def preload
-    $game.load.image("cat", "/images/cat_images/cat17.png")
+    $game.load.image("cat", "/images/happy_cat.png")
+    $game.load.image("basket", "/images/basket.png")
+    $game.load.audio("meow2", "/audio/cat_meow_2.mp3")
+    $game.load.audio("coin", "/audio/coin4.mp3")
   end
 
   def create
+    @coin = $game.add.audio("coin")
+    @meow = $game.add.audio("meow2")
     $game.stage.background_color = "8FB"
-    @cat = Cat.new
-    @basket = Basket.new
     @score_val = 0
     @score = $game.add.text($size_x / 8, $size_y / 8, @score_val, { fontSize: "100px", fill: "#000", align: "center" })
     @score.anchor.set(0.5)
+    @basket = Basket.new
+    @cat = Cat.new
   end
 
   def cat_in_basket!
     @score_val += 1
+    @coin.play
     @cat.send_new_cat!
   end
 
   def cat_fell_out!
     @score_val -= 1
+    @meow.play
     @cat.send_new_cat!
   end
 
