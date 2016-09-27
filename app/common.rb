@@ -76,4 +76,9 @@ module Phaser
   class Emitter
     alias_native :set_alpha, :setAlpha
   end
+
+  class Sound
+    native_accessor :volume
+    native_accessor :mute
+  end
 end

@@ -48,6 +48,7 @@ class MainState < Phaser::State
       # The final parameter (10) is how many particles will be emitted in this single burst
       @emitter.start true, 5000, nil, 5
       @coin.play
+      @coin.volume = 0.2
     end
   end
 end
