@@ -80,5 +80,6 @@ module Phaser
   class Sound
     native_accessor :volume
     native_accessor :mute
+    native_accessor :loop
   end
 end
