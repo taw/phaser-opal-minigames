@@ -76,18 +76,21 @@ class SpaceShip
   end
 end
 
-class Asteroid
+class Star
   attr_reader :x, :y
-  def initialize(x,y)
+  def initialize
+    @graphics = $game.add.graphics(@x, @y)
+    @graphics.begin_fill(0xFF0000)
+    @graphics.draw_circle(0, 0, 20)
+  end
+
+  def launch(x,y)
     @x  = x
     @y  = y
     angle = $game.rnd.between(0,360)
     speed = $game.rnd.between(50, 200)
     @dx = Math.cos($game.math.deg_to_rad(angle)) * speed
     @dy = Math.sin($game.math.deg_to_rad(angle)) * speed
-    @graphics = $game.add.graphics(@x, @y)
-    @graphics.begin_fill(0xFF0000)
-    @graphics.draw_circle(0, 0, 20)
   end
 
   def update(dt)
@@ -107,40 +110,43 @@ class Asteroid
 end
 
 class MainState < Phaser::State
+  def preload
+    $game.load.image("star", "/images/star.png")
+  end
+
   def create
     @score = 0.0
     @score_text = $game.add.text(10, 10, "", { fontSize: '16px', fill: '#000', align: "center" })
-    @active = true
     $game.stage.background_color = "448"
     @space_ship = SpaceShip.new
-    @asteroids = 10.times.map do
-      while true
-        x = $game.rnd.between(100, $size_x-100)
-        y = $game.rnd.between(100, $size_y-100)
-        # Make sure it's not too close to the spaceship
-        break if (x-$size_x/2).abs + (y-$size_y/2).abs > 600
-      end
-      Asteroid.new(x, y)
+    @stars = 10.times.map do
+      Star.new.tap{|s| relocate_star(s) }
     end
   end
 
-  def update
-    return unless @active
+  def relocate_star(star)
+    while true
+      x = $game.rnd.between(100, $size_x-100)
+      y = $game.rnd.between(100, $size_y-100)
+      # Make sure it's not too close to the spaceship
+      break if (x-@space_ship.x)**2 + (y-@space_ship.x)**2 > 200**2
+    end
+    star.launch(x,y)
+  end
 
+  def update
     dt = $game.time.physics_elapsed
     @space_ship.speed_up(+1.0, dt) if $game.input.keyboard.down?(`Phaser.KeyCode.UP`)
     @space_ship.speed_up(-1.0, dt) if $game.input.keyboard.down?(`Phaser.KeyCode.DOWN`)
     @space_ship.turn(-1.0, dt) if $game.input.keyboard.down?(`Phaser.KeyCode.LEFT`)
     @space_ship.turn(+1.0, dt) if $game.input.keyboard.down?(`Phaser.KeyCode.RIGHT`)
-
-    @score += dt
-    @score_text.text = "You survived %.3fs" % [@score]
-
+    @score_text.text = "Stars Collected: #{@score}"
     @space_ship.update(dt)
-    @asteroids.each do |a|
-      a.update(dt)
-      if collision?(@space_ship, a)
-        @active = false
+    @stars.each do |star|
+      star.update(dt)
+      if collision?(@space_ship, star)
+        @score += 1
+        relocate_star(star)
       end
     end
   end
