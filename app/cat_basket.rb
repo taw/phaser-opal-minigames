@@ -2,8 +2,6 @@ require_relative "common"
 
 class Game
   def initialize
-    $size_x = $window.view.width
-    $size_y = $window.view.height
     $game = Phaser::Game.new(width: $size_x, height: $size_y)
     $game.state.add(:main, MainState.new, true)
   end

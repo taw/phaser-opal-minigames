@@ -2,6 +2,10 @@ require "opal"
 require "opal-phaser"
 require "browser"
 
+# Shared code
+$size_x = $window.view.width
+$size_y = $window.view.height
+
 # Newer version of opal has a (fancier) version of this functionality implemented
 # So this can be removed eventually
 # Copied from rubinius
