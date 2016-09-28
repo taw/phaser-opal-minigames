@@ -62,8 +62,6 @@ Capitals = [
   ["Doha", "Qatar"],
   ["Dublin", "Ireland"],
   ["Dushanbe", "Tajikistan"],
-  ["Flying Fish Cove", "Christmas Island"],
-  ["Fort-de-France", "Martinique"],
   ["Freetown", "Sierra Leone"],
   ["Funafuti", "Tuvalu"],
   ["Gaborone", "Botswana"],
