@@ -79,9 +79,8 @@ end
 class Star
   attr_reader :x, :y
   def initialize
-    @graphics = $game.add.graphics(@x, @y)
-    @graphics.begin_fill(0xFF0000)
-    @graphics.draw_circle(0, 0, 20)
+    @graphics = $game.add.sprite(@x, @y, "star")
+    @graphics.anchor.set(0.5, 0.5)
   end
 
   def launch(x,y)
@@ -98,6 +97,7 @@ class Star
     @y += @dy * dt
     @graphics.x = @x
     @graphics.y = @y
+    @graphics.angle += 100*dt
     ensure_bounds
   end
 
