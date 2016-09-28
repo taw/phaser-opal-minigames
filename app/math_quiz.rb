@@ -23,24 +23,58 @@ class Score
   end
 end
 
+class Question
+  def initialize
+    @label = $game.add.text(0.5*$size_x, 0.3*$size_y, "", { fontSize: "80px", fill: "#000", align: "center" })
+    @label.anchor.set(0.5)
+  end
+
+  def text=(v)
+    @label.text = v
+  end
+end
+
+class Answer
+  attr_accessor :correct
+  def initialize(x,y)
+    @label = $game.add.text(x, y, "", { fontSize: "80px", fill: "#000", align: "center", backgroundColor: "#8EA" })
+    @label.anchor.set(0.5)
+    @correct = false
+  end
+
+  def text=(v)
+    @label.text = v
+  end
+end
+
 class MainState < Phaser::State
   def create
     $game.stage.background_color = "AFB"
     @score = Score.new
+    @question = Question.new
+    @answers = [
+      Answer.new(0.25*$size_x, 0.5*$size_y),
+      Answer.new(0.75*$size_x, 0.5*$size_y),
+      Answer.new(0.25*$size_x, 0.7*$size_y),
+      Answer.new(0.75*$size_x, 0.7*$size_y),
+    ]
     new_question
   end
 
   def new_question
-    @question_label = $game.add.text(0.5*$size_x, 0.3*$size_y, "2 + 2 =", { fontSize: "80px", fill: "#000", align: "center" })
-    @question_label.anchor.set(0.5)
-
-    @answer_a = $game.add.text(0.25*$size_x, 0.5*$size_y, "3", { fontSize: "80px", fill: "#000", align: "center" })
-    @answer_a.anchor.set(0.5)
-    @answer_b = $game.add.text(0.75*$size_x, 0.5*$size_y, "4", { fontSize: "80px", fill: "#000", align: "center" })
-    @answer_b.anchor.set(0.5)
-    @answer_c = $game.add.text(0.25*$size_x, 0.7*$size_y, "5", { fontSize: "80px", fill: "#000", align: "center" })
-    @answer_c.anchor.set(0.5)
-    @answer_d = $game.add.text(0.75*$size_x, 0.7*$size_y, "6", { fontSize: "80px", fill: "#000", align: "center" })
-    @answer_d.anchor.set(0.5)
+    a = $game.rnd.between(10, 100)
+    b = $game.rnd.between(10, 100)
+    @question.text = "#{a} + #{b}"
+    correct = a + b
+    fake_answers = [-12,-11,-10,-2,-1,1,2,10,11,12].map{|fuzz| fuzz+correct}.sample(3)
+    @answers.shuffle.each_with_index do |answer, i|
+      if i == 3
+        answer.text = correct
+        answer.correct = true
+      else
+        answer.text = fake_answers[i]
+        answer.correct = false
+      end
+    end
   end
 end
