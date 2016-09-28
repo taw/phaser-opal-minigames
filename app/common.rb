@@ -69,6 +69,10 @@ end
 
 # PR this
 module Phaser
+  class Sprite
+    alias_native :add_child, :addChild
+  end
+
   class Text
     native_accessor :fontSize
     alias_native :events, as: Phaser::Events
@@ -84,4 +88,8 @@ module Phaser
     native_accessor :mute
     native_accessor :loop
   end
+end
+
+class Phaser::Physics::Arcade
+  alias_native :enable_body, :enableBody
 end
