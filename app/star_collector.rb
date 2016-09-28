@@ -54,7 +54,7 @@ class SpaceShip
 
   def limit_speed
     dl = (@dx*@dx + @dy*@dy) ** 0.5
-    max_speed = 250.0
+    max_speed = 400.0
     if dl > max_speed
       @dx *= (max_speed/dl)
       @dy *= (max_speed/dl)
@@ -62,7 +62,7 @@ class SpaceShip
   end
 
   def speed_up(dir, dt)
-    speed_gain_per_second = 100.0
+    speed_gain_per_second = 200.0
     @dx += dir_x * dt * speed_gain_per_second * dir
     @dy += dir_y * dt * speed_gain_per_second * dir
     limit_speed
@@ -117,7 +117,7 @@ class MainState < Phaser::State
     @score_text = $game.add.text(10, 10, "", { fontSize: '16px', fill: '#000', align: "center" })
     $game.stage.background_color = "448"
     @space_ship = SpaceShip.new
-    @stars = 10.times.map do
+    @stars = 25.times.map do
       Star.new.tap{|s| relocate_star(s) }
     end
   end
