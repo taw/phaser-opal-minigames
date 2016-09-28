@@ -93,6 +93,10 @@ module Phaser
     native_accessor :mute
     native_accessor :loop
   end
+
+  class StateManager
+    alias_native :restart
+  end
 end
 
 class Phaser::Physics::Arcade
