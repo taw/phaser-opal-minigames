@@ -97,6 +97,15 @@ module Phaser
   class StateManager
     alias_native :restart
   end
+
+  class Pointer
+    native_accessor :worldX
+    native_accessor :worldY
+  end
+
+  class Timer
+    alias_native :add
+  end
 end
 
 class Phaser::Physics::Arcade
