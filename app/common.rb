@@ -71,6 +71,8 @@ end
 module Phaser
   class Text
     native_accessor :fontSize
+    alias_native :events, as: Phaser::Events
+    native_accessor :inputEnabled
   end
 
   class Emitter

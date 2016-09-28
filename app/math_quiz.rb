@@ -36,10 +36,16 @@ end
 
 class Answer
   attr_accessor :correct
-  def initialize(x,y)
+  def initialize(x,y,state)
     @label = $game.add.text(x, y, "", { fontSize: "80px", fill: "#000", align: "center", backgroundColor: "#8EA" })
     @label.anchor.set(0.5)
     @correct = false
+    @state = state
+
+    @label.inputEnabled = true
+    @label.events.on(:down) do
+      @state.answered(@correct)
+    end
   end
 
   def text=(v)
@@ -53,11 +59,20 @@ class MainState < Phaser::State
     @score = Score.new
     @question = Question.new
     @answers = [
-      Answer.new(0.25*$size_x, 0.5*$size_y),
-      Answer.new(0.75*$size_x, 0.5*$size_y),
-      Answer.new(0.25*$size_x, 0.7*$size_y),
-      Answer.new(0.75*$size_x, 0.7*$size_y),
+      Answer.new(0.25*$size_x, 0.5*$size_y, self),
+      Answer.new(0.75*$size_x, 0.5*$size_y, self),
+      Answer.new(0.25*$size_x, 0.7*$size_y, self),
+      Answer.new(0.75*$size_x, 0.7*$size_y, self),
     ]
+    new_question
+  end
+
+  def answered(correct)
+    if correct
+      @score.value += 1
+    else
+      @score.value -= 1
+    end
     new_question
   end
 
