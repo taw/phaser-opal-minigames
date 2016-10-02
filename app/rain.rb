@@ -9,7 +9,11 @@ end
 
 class Raindrop
   def initialize
-    @raindrop = $game.add.sprite(rand*($size_x-24), rand*($size_y-22), "raindrop")
+    @raindrop = $game.add.sprite(
+      $game.rnd.between(0,$size_x-24),
+      $game.rnd.between(0,$size_x-22),
+      "raindrop"
+    )
     @speed = $game.rnd.between(100, 200)
   end
 
@@ -23,8 +27,11 @@ end
 
 class Cloud
   def initialize
-    @cloud = $game.add.sprite(rand*($size_x-24),
-             $game.add.sprite(rand*($size_y/2), "cloud")
+    @cloud = $game.add.sprite(
+      $game.rnd.between(0,$size_x-24),
+      $game.rnd.between(0,$size_y/2),
+      "cloud"
+    )
     @speed = $game.rnd.between(100,200)
   end
 
