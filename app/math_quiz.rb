@@ -10,7 +10,7 @@ end
 class Score
   attr_reader :value
   def initialize
-    @label = $game.add.text(0.5*$size_x, 0.1*$size_y, "", { fontSize: "80px", fill: "#000", align: "center" })
+    @label = $game.add.text(0.5*$size_x, 0.1*$size_y, "", { font: "Revalia", fontSize: "80px", fill: "#000", align: "center" })
     @label.anchor.set(0.5)
     self.value = 0
   end
@@ -23,7 +23,7 @@ end
 
 class Question
   def initialize
-    @label = $game.add.text(0.5*$size_x, 0.3*$size_y, "", { fontSize: "80px", fill: "#000", align: "center" })
+    @label = $game.add.text(0.5*$size_x, 0.3*$size_y, "", { font: "Revalia", fontSize: "80px", fill: "#000", align: "center" })
     @label.anchor.set(0.5)
   end
 
@@ -35,7 +35,7 @@ end
 class Answer
   attr_accessor :correct
   def initialize(x,y,state)
-    @label = $game.add.text(x, y, "", { fontSize: "80px", fill: "#000", align: "center", backgroundColor: "#8EA" })
+    @label = $game.add.text(x, y, "", { font: "Revalia", fontSize: "80px", fill: "#000", align: "center", backgroundColor: "#8EA" })
     @label.anchor.set(0.5)
     @correct = false
     @state = state

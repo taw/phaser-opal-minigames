@@ -80,6 +80,7 @@ module Phaser
 
   class Text
     native_accessor :fontSize
+    native_accessor :font
     alias_native :events, as: Phaser::Events
     native_accessor :inputEnabled
   end
