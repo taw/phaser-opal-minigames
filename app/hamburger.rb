@@ -73,12 +73,13 @@ class MainState < Phaser::State
   end
 
   def create
+    @score = 0
+    @score_text = $game.add.text(10, 10, "", { fontSize: '16px', fill: '#FA4659', align: 'center' })
     $game.stage.background_color = "#FFC47F"
     @hamburgers = 15.times.map do
       Hamburger.new
     end
     @smiley = Smiley.new
-    @score = 0
   end
 
   def burger_eaten?(burger)
@@ -96,6 +97,7 @@ class MainState < Phaser::State
     @smiley.move(-1, 0, dt) if $game.input.keyboard.down?(`Phaser.KeyCode.LEFT`)
     @smiley.move(0, 1, dt) if $game.input.keyboard.down?(`Phaser.KeyCode.DOWN`)
     @smiley.move(0, -1, dt) if $game.input.keyboard.down?(`Phaser.KeyCode.UP`)
+    @score_text.text = "Burgers eaten: #{@score}"
     @hamburgers.each do |burger|
       if burger_eaten?(burger)
         burger.reset_hamburger_position
