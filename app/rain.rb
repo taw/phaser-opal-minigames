@@ -21,15 +21,34 @@ class Raindrop
   end
 end
 
+class Cloud
+  def initialize
+    @cloud = $game.add.sprite(rand*($size_x-24),
+             $game.add.sprite(rand*($size_y/2), "cloud")
+    @speed = $game.rnd.between(100,200)
+  end
+
+  def update(time)
+    @cloud.x += @speed * time
+    if @cloud.x > $size_x-5
+      @cloud.x = 0
+    end
+  end
+end
+
 class MainState < Phaser::State
   def preload
     $game.load.image("raindrop", "/images/raindrop.png")
+    $game.load.image("cloud", "/images/cloud.png")
   end
 
   def create
     $game.stage.background_color = "F7825D"
     @elements = 50.times.map do
       Raindrop.new
+    end
+    @elements += 10.times.map do
+      Cloud.new
     end
   end
 
