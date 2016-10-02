@@ -17,9 +17,8 @@ class Brick
     @x = x*$size_x/12
     @y = y*$size_y/20
     @brick = $game.add.graphics(@x, @y)
-    @brick.line_style(0)
     @brick.begin_fill(0xFF0000)
-    @brick.draw_rect(-@brick_x_size/2, -@brick_x_size/2, @brick_x_size, @brick_y_size)
+    @brick.draw_rect(-@brick_x_size/2, -@brick_y_size/2, @brick_x_size, @brick_y_size)
   end
 
   def destroy
@@ -32,7 +31,6 @@ class Ball
   attr_accessor :dx, :dy
   def initialize
     @ball = $game.add.graphics(0.5*$size_x, 0.8*$size_y)
-    @ball.line_style(0)
     @ball.begin_fill(0x000000)
     @ball.draw_rect(-10,-10,20,20)
     @dx = 300
@@ -65,7 +63,6 @@ end
 class Paddle
   def initialize
     @paddle = $game.add.graphics(0.5*$size_x, $size_y-20)
-    @paddle.line_style(0)
     @paddle.begin_fill(0x0000FF)
     @paddle.draw_rect(-50, -10, 100, 20)
   end
