@@ -51,9 +51,6 @@ class Ball
     if @ball.y <= 10 and @dy < 0
       @dy = - @dy
     end
-    if @ball.y >= $size_y-10 and @dy > 0
-      @dy = - @dy
-    end
   end
 
   def x
@@ -74,13 +71,18 @@ class Paddle
   end
 
   def update(dt, direction)
-    @paddle.x += dt * direction * 200
+    @paddle.x += dt * direction * 300
     @paddle.x = $game.math.clamp(@paddle.x, 55, $size_x-55)
+  end
+
+  def x
+    @paddle.x
   end
 end
 
 class MainState < Phaser::State
   def create
+    @active = true
     $game.stage.background_color = "AAF"
     @paddle = Paddle.new
     @ball = Ball.new
@@ -106,6 +108,7 @@ class MainState < Phaser::State
   end
 
   def update
+    return unless @active
     dt = $game.time.physics_elapsed
     @ball.update(dt)
 
@@ -119,11 +122,24 @@ class MainState < Phaser::State
     @bricks.each do |brick|
       handle_brick_colission(brick)
     end
-    if @ball_bounce_x
-      @ball.dx = -@ball.dx
+    @ball.dx = -@ball.dx if @ball_bounce_x
+    @ball.dy = -@ball.dy if @ball_bounce_y
+
+    paddle_distance = (@paddle.x - @ball.x).abs
+    bottom_distance = $size_y - @ball.y
+
+    if @ball.dy > 0
+      if bottom_distance <= 30 and paddle_distance <= 60
+        @ball.dy = -@ball.dy
+      elsif bottom_distance <= 10 and paddle_distance >= 60
+        $game.stage.background_color = "FAA"
+        @active = false
+      end
     end
-    if @ball_bounce_y
-      @ball.dy = -@ball.dy
+
+    if @bricks.all?(&:destroyed)
+      $game.stage.background_color = "FFF"
+      @active = false
     end
   end
 end
