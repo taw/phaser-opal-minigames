@@ -29,7 +29,7 @@ class Cloud
   def initialize
     @cloud = $game.add.sprite(
       $game.rnd.between(0,$size_x-24),
-      $game.rnd.between(0,$size_y/2),
+      $game.rnd.between(0,$size_y/6),
       "cloud"
     )
     @speed = $game.rnd.between(100,200)
@@ -38,7 +38,7 @@ class Cloud
   def update(time)
     @cloud.x += @speed * time
     if @cloud.x > $size_x-5
-      @cloud.x = 0
+      @cloud.x = -256
     end
   end
 end
@@ -54,7 +54,7 @@ class MainState < Phaser::State
     @elements = 50.times.map do
       Raindrop.new
     end
-    @elements += 10.times.map do
+    @elements += 6.times.map do
       Cloud.new
     end
   end
