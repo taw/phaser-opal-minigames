@@ -42,7 +42,9 @@ class Smiley
 
   def move(direction_x, direction_y, time)
     @graphics_smiley.x += time * direction_x * 300
+    @graphics_smiley.x = $game.math.clamp(@graphics_smiley.x, 0, $size_x-80)
     @graphics_smiley.y += time * direction_y * 300
+    @graphics_smiley.y = $game.math.clamp(@graphics_smiley.y, 0, $size_y-80)
   end
 
 end
