@@ -24,10 +24,10 @@ class MainState < Phaser::State
   def update
     $game.physics.arcade.collide(@player, @platforms)
     @player.body.velocity.x = 0
-    if @cursors.left.isDown
+    if @cursors.left.down?
       @player.body.velocity.x = -150
     end
-    if @cursors.right.isDown
+    if @cursors.right.down?
       @player.body.velocity.x = 150
     end
     # @player.body.on_floor? works with world floor, but not with platforms
@@ -42,7 +42,7 @@ class MainState < Phaser::State
     # Wrappers for this are not consistent with the rest of interface
     # thus isDown vs down?
     # This ought to be fixed upstream
-    @cursors = $game.input.keyboard.create_cursor_keys()
+    @cursors = $game.input.keyboard.create_cursor_keys
     @jumpButton = $game.input.keyboard.add_key(`Phaser.Keyboard.SPACEBAR`)
 
     @player = $game.add.sprite($size_x/2, $size_y-100, 'cat')

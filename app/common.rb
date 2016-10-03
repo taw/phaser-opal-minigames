@@ -111,6 +111,18 @@ module Phaser
   class Physics::Arcade::Body
     alias_native :on_floor?, :onFloor
   end
+
+  class CursorKeys
+    include Native
+    alias_native :left, as: Key
+    alias_native :right, as: Key
+    alias_native :up, as: Key
+    alias_native :down, as: Key
+  end
+
+  class Keyboard
+     alias_native :create_cursor_keys, :createCursorKeys, as: CursorKeys
+  end
 end
 
 class Phaser::Physics::Arcade
