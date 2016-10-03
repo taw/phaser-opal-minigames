@@ -20,12 +20,9 @@ class Eye
     @eye.begin_fill(0xFFFFFF)
     @eye.line_style(3, 0x000000, 1)
     @eye.draw_circle(0, 0, @eyesize)
-    @eye.end_fill
     @retina = $game.add.graphics(@x, @y)
     @retina.begin_fill(rand_retina_color)
-    # @retina.line_style(1, 0x000000, 1)
     @retina.draw_circle(0, 0, @eyesize*0.5)
-    @retina.end_fill
   end
 
   def rand_retina_color

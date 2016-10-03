@@ -32,7 +32,6 @@ class Shape
         $game.rnd.between(-50, 50),
       ])
     end
-    @graphics.end_fill
   end
 
   def destroy
@@ -60,10 +59,3 @@ class MainState < Phaser::State
     end
   end
 end
-
-__END__
-
-random_color = ->
-  Math.random() * 0xFFFFFF
-
-class Shape

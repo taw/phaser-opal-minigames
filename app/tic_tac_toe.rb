@@ -24,7 +24,6 @@ class MainState < Phaser::State
     @grid.line_to(-100,  300)
     @grid.move_to( 100, -300)
     @grid.line_to( 100,  300)
-    @grid.end_fill()
     $game.input.on(:down) do |pointer, ev|
       click `pointer.x`, `pointer.y`
     end

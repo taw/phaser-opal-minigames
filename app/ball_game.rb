@@ -16,10 +16,8 @@ class Ball
     ensure_bounds
     random_direction
     @graphics = $game.add.graphics(@x, @y)
-    @graphics.line_style(0)
     @graphics.begin_fill(Math.rand(0x1_00_00_00))
     @graphics.draw_circle(0, 0, 10)
-    @graphics.end_fill
   end
 
   def random_direction

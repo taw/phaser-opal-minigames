@@ -21,7 +21,6 @@ class MainState < Phaser::State
 
   def new_star
     star = $game.add.graphics(0, 0)
-    star.line_style(0)
     star.begin_fill(0xFFFFEE)
     star.draw_circle(0, 0, 5)
     star_sprite = $game.add.sprite(0,0)

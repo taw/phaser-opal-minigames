@@ -24,7 +24,6 @@ class Cell
        20, -20,
       -20, -20,
     )
-    @grid_hidden.end_fill
 
     @grid_visible = $game.add.graphics(@x, @y)
     @grid_visible.line_style(2, 0x000000, 1)
@@ -40,7 +39,6 @@ class Cell
        20, -20,
       -20, -20,
     )
-    @grid_visible.end_fill
     @grid_visible.visible = false
 
     label = @c

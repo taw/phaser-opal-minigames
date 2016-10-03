@@ -10,8 +10,6 @@ end
 class Paddle
   def initialize(position)
     @paddle = $game.add.graphics(position, $size_y / 2)
-    @paddle.line_style(5, "white")
-    @paddle.line_style(0)
     @paddle.begin_fill(0x000)
     @paddle.draw_rect(0, -65, 30, 130)
   end

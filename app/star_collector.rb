@@ -16,7 +16,6 @@ class SpaceShip
     @dx = 0
     @dy = 0
     @graphics = $game.add.graphics(@x, @y)
-    @graphics.line_style(0)
     @graphics.begin_fill(0x00FF00)
     @graphics.draw_polygon([
       0,   -20,
@@ -25,7 +24,6 @@ class SpaceShip
       -15,  20,
       -15,  10,
     ])
-    @graphics.end_fill
   end
 
   def ensure_bounds
