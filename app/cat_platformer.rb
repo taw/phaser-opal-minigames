@@ -30,7 +30,8 @@ class MainState < Phaser::State
     if @cursors.right.isDown
       @player.body.velocity.x = 150
     end
-    if @jumpButton.down? # && @player.body.onFloor()
+    # @player.body.on_floor? works with world floor, but not with platforms
+    if @jumpButton.down?
       @player.body.velocity.y = -250
     end
   end

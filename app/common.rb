@@ -107,6 +107,10 @@ module Phaser
   class Timer
     alias_native :add
   end
+
+  class Physics::Arcade::Body
+    alias_native :on_floor?, :onFloor
+  end
 end
 
 class Phaser::Physics::Arcade
