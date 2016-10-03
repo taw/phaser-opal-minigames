@@ -1,12 +1,5 @@
 require_relative "common"
 
-class Game
-  def initialize
-    $game = Phaser::Game.new(width: $size_x, height: $size_y)
-    $game.state.add(:main, MainState.new, true)
-  end
-end
-
 class MainState < Phaser::State
   def preload
     $game.load.image("cat", "/images/cat_images/cat17.png")
@@ -68,3 +61,5 @@ class MainState < Phaser::State
     add_platform 800, $size_y-500
   end
 end
+
+$game.state.add(:main, MainState.new, true)

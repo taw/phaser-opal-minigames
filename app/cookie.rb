@@ -1,12 +1,5 @@
 require_relative "common"
 
-class Game
-  def initialize
-    $game = Phaser::Game.new(width: $size_x, height: $size_y)
-    $game.state.add(:main, MainState.new, true)
-  end
-end
-
 class MainState < Phaser::State
   def preload
     $game.load.image("cookie", "/images/cookie.png")
@@ -61,3 +54,5 @@ class MainState < Phaser::State
     @emitter.set_alpha(0.5, 0.8, 0)
   end
 end
+
+$game.state.add(:main, MainState.new, true)

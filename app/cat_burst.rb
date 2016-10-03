@@ -1,12 +1,5 @@
 require_relative "common"
 
-class Game
-  def initialize
-    $game = Phaser::Game.new(width: $size_x, height: $size_y)
-    $game.state.add(:main, MainState.new, true)
-  end
-end
-
 class CatEmitter
   def initialize
     @emitter = $game.add.emitter(0, 0, 1000)
@@ -65,3 +58,5 @@ class MainState < Phaser::State
     end
   end
 end
+
+$game.state.add(:main, MainState.new, true)

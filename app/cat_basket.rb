@@ -1,12 +1,5 @@
 require_relative "common"
 
-class Game
-  def initialize
-    $game = Phaser::Game.new(width: $size_x, height: $size_y)
-    $game.state.add(:main, MainState.new, true)
-  end
-end
-
 class Cat
   def initialize
     @cat = $game.add.sprite(0, 0, "cat")
@@ -98,3 +91,5 @@ class MainState < Phaser::State
     @score.text  = @score_val
   end
 end
+
+$game.state.add(:main, MainState.new, true)

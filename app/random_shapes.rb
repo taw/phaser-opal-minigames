@@ -1,12 +1,5 @@
 require_relative "common"
 
-class Game
-  def initialize
-    $game = Phaser::Game.new(width: $size_x, height: $size_y)
-    $game.state.add(:main, MainState.new, true)
-  end
-end
-
 class Shape
   def random_color
     $game.rnd.between(0, 0x1_00_00_00)
@@ -59,3 +52,5 @@ class MainState < Phaser::State
     end
   end
 end
+
+$game.state.add(:main, MainState.new, true)

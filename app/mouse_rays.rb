@@ -1,12 +1,5 @@
 require_relative "common"
 
-class Game
-  def initialize
-    $game = Phaser::Game.new(width: $size_x, height: $size_y)
-    $game.state.add(:main, MainState.new, true)
-  end
-end
-
 class MainState < Phaser::State
   def fragment_src
     """
@@ -60,3 +53,5 @@ class MainState < Phaser::State
     @filter.update($game.input.active_pointer)
   end
 end
+
+$game.state.add(:main, MainState.new, true)

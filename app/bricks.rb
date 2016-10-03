@@ -1,12 +1,5 @@
 require_relative "common"
 
-class Game
-  def initialize
-    $game = Phaser::Game.new(width: $size_x, height: $size_y)
-    $game.state.add(:main, MainState.new, true)
-  end
-end
-
 class Brick
   attr_reader :brick_x_size, :brick_y_size
   attr_reader :x, :y, :destroyed
@@ -140,3 +133,5 @@ class MainState < Phaser::State
     end
   end
 end
+
+$game.state.add(:main, MainState.new, true)

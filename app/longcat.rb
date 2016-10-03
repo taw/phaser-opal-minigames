@@ -1,13 +1,6 @@
 require_relative "common"
 require "json"
 
-class Game
-  def initialize
-    $game = Phaser::Game.new(width: $size_x, height: $size_y)
-    $game.state.add(:main, MainState.new, true)
-  end
-end
-
 class MainState < Phaser::State
   def preload
     atlas = {
@@ -54,3 +47,5 @@ class MainState < Phaser::State
     end
   end
 end
+
+$game.state.add(:main, MainState.new, true)

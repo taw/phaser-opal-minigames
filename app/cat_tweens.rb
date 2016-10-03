@@ -1,12 +1,5 @@
 require_relative "common"
 
-class Game
-  def initialize
-    $game = Phaser::Game.new(width: $size_x, height: $size_y)
-    $game.state.add(:main, MainState.new, true)
-  end
-end
-
 class MainState < Phaser::State
   def preload
     (1..20).each do |i|
@@ -45,3 +38,5 @@ class MainState < Phaser::State
     new_tween(cat)
   end
 end
+
+$game.state.add(:main, MainState.new, true)

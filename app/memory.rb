@@ -1,15 +1,5 @@
 require_relative "common"
 
-class Game
-  def initialize
-    $game = Phaser::Game.new(width: $size_x, height: $size_y)
-    $game.state.add("Menu", MenuState.new, true)
-    $game.state.add("Game2x2", GameState.new(2,2))
-    $game.state.add("Game4x4", GameState.new(4,4))
-    $game.state.add("Game6x6", GameState.new(6,6))
-  end
-end
-
 class Tile
   attr_reader :status, :c
   def initialize(x,y,c)
@@ -182,3 +172,8 @@ class MenuState < Phaser::State
     @button66.anchor.set(0.5, 0.5)
   end
 end
+
+$game.state.add("Menu", MenuState.new, true)
+$game.state.add("Game2x2", GameState.new(2,2))
+$game.state.add("Game4x4", GameState.new(4,4))
+$game.state.add("Game6x6", GameState.new(6,6))

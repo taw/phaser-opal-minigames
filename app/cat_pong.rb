@@ -1,12 +1,5 @@
 require_relative "common"
 
-class Game
-  def initialize
-    $game = Phaser::Game.new(width: $size_x, height: $size_y)
-    $game.state.add(:main, MainState.new, true)
-  end
-end
-
 class Paddle
   def initialize(position)
     @paddle = $game.add.graphics(position, $size_y / 2)
@@ -203,3 +196,5 @@ class MainState < Phaser::State
     @ball.update(dt)
   end
 end
+
+$game.state.add(:main, MainState.new, true)

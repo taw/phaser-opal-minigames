@@ -1,12 +1,5 @@
 require_relative "common"
 
-class Game
-  def initialize
-    $game = Phaser::Game.new(width: $size_x, height: $size_y)
-    $game.state.add(:main, MainState.new, true)
-  end
-end
-
 class Star
   def initialize(pos)
     @star = $game.add.sprite(
@@ -99,3 +92,5 @@ class MainState < Phaser::State
     @emitter.update(dt, @cat)
   end
 end
+
+$game.state.add(:main, MainState.new, true)

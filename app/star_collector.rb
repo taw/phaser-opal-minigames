@@ -1,12 +1,5 @@
 require_relative "common"
 
-class Game
-  def initialize
-    $game = Phaser::Game.new(width: $size_x, height: $size_y)
-    $game.state.add(:main, MainState.new, true)
-  end
-end
-
 class SpaceShip
   attr_reader :x, :y
   def initialize
@@ -153,3 +146,5 @@ class MainState < Phaser::State
     Math.sqrt((dx*dx) + (dy*dy)) < 25
   end
 end
+
+$game.state.add(:main, MainState.new, true)
