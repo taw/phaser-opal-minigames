@@ -1,5 +1,27 @@
 require_relative "common"
 
+class Cat
+  def initialize
+    @cat = $game.add.sprite(0, 0, "cat")
+    @cat.anchor.set(0.5, 0.5)
+    @phase = 0
+  end
+
+  def update(dt)
+    @phase -= dt
+    @cat.x = ( 0.5 + 0.4 * Math.sin(@phase) ) * $size_x
+    @cat.y = ( 0.5 + 0.4 * Math.cos(@phase) ) * $size_y
+  end
+
+  def x
+    @cat.x
+  end
+
+  def y
+    @cat.y
+  end
+end
+
 class MainState < Phaser::State
   def fragment_src
     """
@@ -106,6 +128,10 @@ class MainState < Phaser::State
     """
   end
 
+  def preload
+    $game.load.image("cat", "/images/cat_images/cat4.png")
+  end
+
   def create
     $game.stage.background_color = "000"
 
@@ -116,10 +142,14 @@ class MainState < Phaser::State
     @sprite.width = $size_x/2
     @sprite.height = $size_y/2
     @sprite.filters = [ @filter ]
+
+    @cat = Cat.new
   end
 
   def update
-    @filter.update($game.input.active_pointer)
+    dt = $game.time.physics_elapsed
+    @cat.update(dt)
+    @filter.update
   end
 end
 
