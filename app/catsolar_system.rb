@@ -45,14 +45,15 @@ class MainState < Phaser::State
     	freqs[3] = texture2D( backbuffer, vec2( 0.30, 0.25 ) ).x;
     	float brightness	= freqs[1] * 0.25 + freqs[2] * 0.25;
     	float radius		= 0.24 + brightness * 0.2;
-    	float invRadius 	= 1.0/radius;
+    	float invRadius 	= 1.0 / radius;
 
     	vec3 orange			= vec3( 0.8, 0.65, 0.3 );
     	vec3 orangeRed		= vec3( 0.8, 0.35, 0.1 );
     	float time		= time * 0.1;
-    	float aspect	= resolution.x/resolution.y;
-    	vec2 uv			= gl_FragCoord.xy / resolution.xy;
-    	vec2 p 			= -0.5 + uv;
+    	float aspect	= resolution.x / resolution.y;
+      // rescale -0.5..0.5 to -2..2
+    	vec2 uv			= (gl_FragCoord.xy / resolution.xy) * 4.0 - 1.5;
+    	vec2 p 			= (-0.5 + uv);
     	p.x *= aspect;
 
     	float fade		= pow( length( 2.0 * p ), 0.5 );
@@ -106,13 +107,14 @@ class MainState < Phaser::State
   end
 
   def create
-    $game.stage.background_color = "0F8"
+    $game.stage.background_color = "000"
 
     @filter = Phaser::Filter.new($game, nil, fragment_src)
     @filter.set_resolution($size_x, $size_y)
-    @sprite = $game.add.sprite()
-    @sprite.width = $size_x
-    @sprite.height = $size_y
+    @sprite = $game.add.sprite($size_x/2, $size_y/2)
+    @sprite.anchor.set(0.5, 0.5)
+    @sprite.width = $size_x/2
+    @sprite.height = $size_y/2
     @sprite.filters = [ @filter ]
   end
 
