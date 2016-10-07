@@ -1,7 +1,7 @@
 require "opal"
 require "opal-phaser"
-require "browser"
-require "upstream_fixes"
+require "opal-browser"
+require_relative "upstream_fixes"
 
 # Shared code
 $size_x = $window.view.width
