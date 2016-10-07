@@ -2,8 +2,8 @@ require_relative "common"
 
 class MainState < Phaser::State
   def preload
-    $game.load.image("cat", "/images/cat_images/cat17.png")
-    $game.load.image("platform", "/images/grass_platform.png")
+    $game.load.image("cat", "../images/cat_images/cat17.png")
+    $game.load.image("platform", "../images/grass_platform.png")
   end
 
   def add_platform(x,y)

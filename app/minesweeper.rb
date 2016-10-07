@@ -141,7 +141,7 @@ end
 
 class MainState < Phaser::State
   def preload
-    $game.load.audio("meow", "/audio/cat_meow.mp3")
+    $game.load.audio("meow", "../audio/cat_meow.mp3")
   end
 
   def click(x,y)

@@ -13,7 +13,7 @@ class MainState < Phaser::State
         }
       }
     }
-    $game.load.atlas("longcat", "/images/longcat.jpg", nil, atlas, `Phaser.Loader.TEXTURE_ATLAS_JSON_HASH`)
+    $game.load.atlas("longcat", "../images/longcat.jpg", nil, atlas, `Phaser.Loader.TEXTURE_ATLAS_JSON_HASH`)
   end
 
   def create

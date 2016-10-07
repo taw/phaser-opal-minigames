@@ -145,13 +145,13 @@ end
 class MenuState < Phaser::State
   def preload
     (1..20).each do |i|
-      $game.load.image("cat#{i}", "/images/cat_images/cat#{i}.png")
+      $game.load.image("cat#{i}", "../images/cat_images/cat#{i}.png")
     end
-    $game.load.audio("meow", "/audio/cat_meow.mp3")
-    $game.load.image("menu", "/images/buttons/menu.png")
-    $game.load.image("button2x2", "/images/buttons/play2x2.png")
-    $game.load.image("button4x4", "/images/buttons/play4x4.png")
-    $game.load.image("button6x6", "/images/buttons/play6x6.png")
+    $game.load.audio("meow", "../audio/cat_meow.mp3")
+    $game.load.image("menu", "../images/buttons/menu.png")
+    $game.load.image("button2x2", "../images/buttons/play2x2.png")
+    $game.load.image("button4x4", "../images/buttons/play4x4.png")
+    $game.load.image("button6x6", "../images/buttons/play6x6.png")
   end
 
   def create

@@ -61,8 +61,8 @@ end
 
 class MainState < Phaser::State
   def preload
-    $game.load.image("hamburger", "/images/hamburger.png")
-    $game.load.image("smiley", "/images/smiley.png")
+    $game.load.image("hamburger", "../images/hamburger.png")
+    $game.load.image("smiley", "../images/smiley.png")
   end
 
   def create

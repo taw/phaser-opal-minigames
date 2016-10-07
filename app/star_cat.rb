@@ -67,10 +67,10 @@ end
 
 class MainState < Phaser::State
   def preload
-    $game.load.image("cat", "/images/cat_images/cat4.png")
-    $game.load.image("star", "/images/star-icon.png")
-    $game.load.audio("nyan", "/audio/nyan.mp3")
-    $game.load.image("star2", "/images/star2.png")
+    $game.load.image("cat", "../images/cat_images/cat4.png")
+    $game.load.image("star", "../images/star-icon.png")
+    $game.load.audio("nyan", "../audio/nyan.mp3")
+    $game.load.image("star2", "../images/star2.png")
   end
 
   def create

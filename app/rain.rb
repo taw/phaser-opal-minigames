@@ -38,8 +38,8 @@ end
 
 class MainState < Phaser::State
   def preload
-    $game.load.image("raindrop", "/images/raindrop.png")
-    $game.load.image("cloud", "/images/cloud.png")
+    $game.load.image("raindrop", "../images/raindrop.png")
+    $game.load.image("cloud", "../images/cloud.png")
   end
 
   def create

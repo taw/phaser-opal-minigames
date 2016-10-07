@@ -3,7 +3,7 @@ require_relative "common"
 class MainState < Phaser::State
   def preload
     (1..20).each do |i|
-      $game.load.image("cat#{i}", "/images/cat_images/cat#{i}.png")
+      $game.load.image("cat#{i}", "../images/cat_images/cat#{i}.png")
     end
   end
 

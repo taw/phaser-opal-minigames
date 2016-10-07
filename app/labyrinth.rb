@@ -2,10 +2,10 @@ require_relative "common"
 
 class MainState < Phaser::State
   def preload
-    $game.load.image("cat", "/images/cat_images/cat17.png")
-    $game.load.image("green_box", "/images/green_box.png")
-    $game.load.image("star", "/images/star.png")
-    $game.load.audio("coin", "/audio/coin4.mp3")
+    $game.load.image("cat", "../images/cat_images/cat17.png")
+    $game.load.image("green_box", "../images/green_box.png")
+    $game.load.image("star", "../images/star.png")
+    $game.load.audio("coin", "../audio/coin4.mp3")
   end
 
   def map

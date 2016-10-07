@@ -9,6 +9,6 @@ task "docs" do
   Pathname("docs/assets").mkpath
   Dir["games/*.html"].each do |path|
     n = Pathname(path).basename(".html")
-    system "opal -I . #{$:.map{|x| "-I #{x} "}.join} -c app/#{n}.rb >docs/assets/#{n}.js"
+    system "wget http://localhost:9292/assets/#{n}.js -O docs/assets/#{n}.js"
   end
 end

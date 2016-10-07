@@ -2,10 +2,10 @@ require_relative "common"
 
 class MainState < Phaser::State
   def preload
-    $game.load.image("star", "/images/star.png")
-    $game.load.image("star2", "/images/star2.png")
-    $game.load.image("chaser", "/images/cat-cupid-love-icon2.png")
-    $game.load.audio("coin", "/audio/coin4.mp3")
+    $game.load.image("star", "../images/star.png")
+    $game.load.image("star2", "../images/star2.png")
+    $game.load.image("chaser", "../images/cat-cupid-love-icon2.png")
+    $game.load.audio("coin", "../audio/coin4.mp3")
   end
 
   def add_star(x=nil,y=nil)
