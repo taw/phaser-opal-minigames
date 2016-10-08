@@ -40,7 +40,7 @@ class MainState < Phaser::State
     @score = 0
     @score_text = $game.add.text(10, 10, "", { fontSize: '16px', fill: '#FBE8D3', align: 'center' })
 	  $game.physics.start_system(Phaser::Physics::ARCADE)
-    
+
 
     @platforms = $game.add.group()
     @platforms.enable_body = true
@@ -50,7 +50,7 @@ class MainState < Phaser::State
 
     add_platform 700, $size_y-150
     add_platform 900, $size_y-300
-    
+
     add_platform 1050, $size_y-100
     add_platform 1100, $size_y-400
 
@@ -63,15 +63,15 @@ class MainState < Phaser::State
 
   	add_fruit(575, $size_y-500, "icelolly")
     add_fruit(625, $size_y-500, "cupcake")
-  	
+
     add_fruit(675, $size_y-200, "grapes")
   	add_fruit(725, $size_y-200, "apple")
-  
+
     add_fruit(900, $size_y-350, "orange")
 
     add_fruit(1075, $size_y-450, "watermelon")
     add_fruit(1125, $size_y-450, "doughnut")
-  	
+
     add_fruit(1025, $size_y-150, "pineapple")
   	add_fruit(1075, $size_y-150, "banana2")
 
@@ -102,8 +102,8 @@ class MainState < Phaser::State
       0
     end
 
-    if @cursors.up.down?
-      @penguin.body.velocity.y = -200
+    if @cursors.up.down? and (@penguin.body.blocked.down or @penguin.body.touching.down)
+      @penguin.body.velocity.y = -350
     end
   end
 end

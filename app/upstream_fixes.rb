@@ -130,4 +130,8 @@ module Phaser
       @native = `new Phaser.Filter(#{game.to_n}, #{uniforms.to_n}, #{source.to_n})`
     end
   end
+
+  class Physics::Arcade::Body
+    alias_native :blocked
+  end
 end
