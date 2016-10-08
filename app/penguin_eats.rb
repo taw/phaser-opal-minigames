@@ -26,37 +26,74 @@ class MainState < Phaser::State
     platform.body.immovable = true
   end
 
+  def add_fruit(x, y, fruit_name)
+    fruit = $game.add.sprite(x, y, fruit_name)
+    @fruits.add fruit
+    fruit.body.immovable = true
+  end
+
   def create
-	background = $game.add.sprite(0, 0, 'mountain')
+	  $game.physics.start_system(Phaser::Physics::ARCADE)
+    background = $game.add.sprite(0, 0, 'mountain')
   	background.height = $size_y
   	background.width = $size_x
-  	$game.add.sprite(rand*$size_x/2, rand*$size_y-100, 'lollipop')
-  	$game.add.sprite(rand*$size_x/2, rand*$size_y-100, 'icecream')
-  	$game.add.sprite(rand*$size_x/2, rand*$size_y-100, 'icelolly')
-  	$game.add.sprite(rand*$size_x/2, rand*$size_y-100, 'grapes')
-  	$game.add.sprite(rand*$size_x/2, rand*$size_y-100, 'cupcake')
-  	$game.add.sprite(rand*$size_x/2, rand*$size_y-100, 'doughnut')
-  	$game.add.sprite(rand*$size_x/2, rand*$size_y-100, 'pineapple')
-  	$game.add.sprite(rand*$size_x/2, rand*$size_y-100, 'orange')
-  	$game.add.sprite(rand*$size_x/2, rand*$size_y-100, 'watermelon')
-  	$game.add.sprite(rand*$size_x/2, rand*$size_y-100, 'cherry')
-  	$game.add.sprite(rand*$size_x/2, rand*$size_y-100, 'apple')
-  	$game.add.sprite(rand*$size_x/2, rand*$size_y-100, 'banana2')
-  	$game.add.sprite(rand*$size_x/2, rand*$size_y-100, 'clouds2')
+    @fruits = $game.add.group()
+  	@fruits.enable_body = true
+    add_fruit(rand*$size_x/2, rand*$size_y-100, 'lollipop')
+  	add_fruit(rand*$size_x/2, rand*$size_y-100, 'icecream')
+  	add_fruit(rand*$size_x/2, rand*$size_y-100, 'icelolly')
+  	add_fruit(rand*$size_x/2, rand*$size_y-100, 'grapes')
+  	add_fruit(rand*$size_x/2, rand*$size_y-100, 'cupcake')
+  	add_fruit(rand*$size_x/2, rand*$size_y-100, 'doughnut')
+  	add_fruit(rand*$size_x/2, rand*$size_y-100, 'pineapple')
+  	add_fruit(rand*$size_x/2, rand*$size_y-100, 'orange')
+  	add_fruit(rand*$size_x/2, rand*$size_y-100, 'watermelon')
+  	add_fruit(rand*$size_x/2, rand*$size_y-100, 'cherry')
+  	add_fruit(rand*$size_x/2, rand*$size_y-100, 'apple')
+  	add_fruit(rand*$size_x/2, rand*$size_y-100, 'banana2')
   	@penguin = $game.add.sprite(rand*$size_x/2, rand*$size_y-100, 'penguin2')
+
+    $game.physics.enable(@penguin, Phaser::Physics::ARCADE)
 
   	@platforms = $game.add.group()
     @platforms.enable_body = true
-    add_platform 200, $size_y-100
-    add_platform 200, $size_y-300
-    add_platform 200, $size_y-500
-    add_platform 500, $size_y-200
-    add_platform 500, $size_y-400
-    add_platform 500, $size_y-600
-    add_platform 800, $size_y-100
-    add_platform 800, $size_y-300
-    add_platform 800, $size_y-500
+    add_platform 400, $size_y-100
+    add_platform 400, $size_y-300
+    add_platform 400, $size_y-500
+    add_platform 700, $size_y-200
+    add_platform 700, $size_y-400
+    add_platform 700, $size_y-600
+    add_platform 1000, $size_y-100
+    add_platform 1000, $size_y-300
+    add_platform 1000, $size_y-500
+
+   
+    @cursors = $game.input.keyboard.create_cursor_keys
   end
+
+  def update
+      $game.physics.arcade.collide(@penguin, @platforms)
+      $game.physics.arcade.overlap(@penguin, @fruits) do |c,s|
+        # @coin.play
+        s.destroy
+      end
+      penguin_speed = 200
+      @penguin.body.velocity.x = if @cursors.right.down?
+        penguin_speed
+      elsif @cursors.left.down?
+        -penguin_speed
+      else
+        0
+      end
+      @penguin.body.velocity.y = if @cursors.down.down?
+        penguin_speed
+      elsif @cursors.up.down?
+        -penguin_speed
+      else
+        0
+      end
+    end
+
 
 end
 
