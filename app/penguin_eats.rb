@@ -38,6 +38,7 @@ class MainState < Phaser::State
     $game.load.image("clouds2", "../images/clouds2.png")
     $game.load.image("mountain", "../images/mountain.jpg")
     $game.load.image("star3", "../images/star3.png")
+    $game.load.audio("pop", "../audio/pop3.mp3")
   end
 
   def add_platform(x, y)
@@ -54,12 +55,20 @@ class MainState < Phaser::State
     fruit.body.immovable = true
   end
 
+  def add_sweet(x, y, sweet_name)
+    sweet = $game.add.sprite(x, y, sweet_name)
+    sweet.anchor.set(0.5)
+    @sweets.add sweet
+    sweet.body.immovable = true
+  end
+
   def create
     background = $game.add.sprite(0, 0, 'mountain')
     background.height = $size_y
     background.width = $size_x
-    @score = 0
-    @score_text = $game.add.text(10, 10, "", { fontSize: '16px', fill: '#FBE8D3', align: 'center' })
+    @score_fruits = 0
+    @score_sweets = 0
+    @score_text = $game.add.text(10, 10, "", { fontSize: '16px', fill: '#FBE8D3', align: 'left' })
 	  $game.physics.start_system(Phaser::Physics::ARCADE)
 
 
@@ -77,26 +86,24 @@ class MainState < Phaser::State
 
     @fruits = $game.add.group()
   	@fruits.enable_body = true
-    add_fruit(225, $size_y-200, "lollipop")
+    
   	add_fruit(275, $size_y-200, "cherry")
-
-    add_fruit(400, $size_y-350, "icecream")
-
-  	add_fruit(575, $size_y-500, "icelolly")
-    add_fruit(625, $size_y-500, "cupcake")
-
     add_fruit(675, $size_y-200, "grapes")
   	add_fruit(725, $size_y-200, "apple")
-
     add_fruit(900, $size_y-350, "orange")
-
     add_fruit(1075, $size_y-450, "watermelon")
-    add_fruit(1125, $size_y-450, "doughnut")
-
     add_fruit(1025, $size_y-150, "pineapple")
   	add_fruit(1075, $size_y-150, "banana2")
 
-  	@penguin = $game.add.sprite(100, $size_y-100, 'penguin2')
+    @sweets = $game.add.group()
+    @sweets.enable_body = true
+    add_sweet(225, $size_y-200, "lollipop")
+    add_sweet(400, $size_y-350, "icecream")
+    add_sweet(575, $size_y-500, "icelolly")
+    add_sweet(625, $size_y-500, "cupcake")
+    add_sweet(1125, $size_y-450, "doughnut")
+
+  	@penguin = $game.add.sprite(100, $size_y-100, "penguin2")
     $game.physics.enable(@penguin, Phaser::Physics::ARCADE)
 
     @penguin.body.collide_world_bounds = true
@@ -105,18 +112,28 @@ class MainState < Phaser::State
 
     @emitter = StarEmitter.new
 
+    @pop = $game.add.audio("pop")
+
     @cursors = $game.input.keyboard.create_cursor_keys
   end
 
   def update
     $game.physics.arcade.collide(@penguin, @platforms)
     $game.physics.arcade.overlap(@penguin, @fruits) do |c,s|
-      # @coin.play
+      @pop.play
       s.destroy
-      @score += 1
+      @score_fruits += 1
+    end
+
+    $game.physics.arcade.overlap(@penguin, @sweets) do |c,s|
+      @pop.play
+      s.destroy
+      @score_sweets += 2
       @emitter.burst_at(@penguin.x, @penguin.y)
     end
-    @score_text.text = "Penguin ate #{@score} fruits/sweets."
+
+    @score_text.text = "Penguin ate #{@score_fruits} fruits.\nPenguin ate #{@score_sweets} sweets.\nTotal score is #{@score_fruits + @score_sweets}."
+
     penguin_speed = 200
     @penguin.body.velocity.x = if @cursors.right.down?
       penguin_speed
