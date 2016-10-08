@@ -41,7 +41,7 @@ class MainState < Phaser::State
   end
 
   def add_platform(x, y)
-    platform = $game.add.tile_sprite(x, y, 64*3, 64, "clouds2")
+    platform = $game.add.tile_sprite(x, y, 64*3, 36, "clouds2")
     platform.anchor.set(0.5)
     @platforms.add platform
     platform.body.immovable = true
