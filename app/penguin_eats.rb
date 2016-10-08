@@ -1,8 +1,28 @@
 require_relative "common"
 
+class StarEmitter
+  def initialize
+    @emitter = $game.add.emitter(0, 0, 1000)
+    @emitter.make_particles("star3")
+    @emitter.gravity = -50
+    @emitter.maxParticleSpeed.x = 50
+    @emitter.minParticleSpeed.x = -50
+    @emitter.maxParticleSpeed.y = 50
+    @emitter.minParticleSpeed.y = -50
+    @emitter.set_alpha(0.2, 0.5, 0)
+  end
+
+  def burst_at(x, y)
+    @emitter.x = x
+    @emitter.y = y
+    @emitter.start true, 2000, nil, 40
+  end
+end
+
+
 class MainState < Phaser::State
   def preload
-	$game.load.image("lollipop", "../images/lollipop.png")
+	  $game.load.image("lollipop", "../images/lollipop.png")
     $game.load.image("icecream", "../images/icecream.png")
     $game.load.image("icelolly", "../images/icelolly.png")
     $game.load.image("grapes", "../images/grapes.png")
@@ -17,6 +37,7 @@ class MainState < Phaser::State
     $game.load.image("penguin2", "../images/penguin2.png")
     $game.load.image("clouds2", "../images/clouds2.png")
     $game.load.image("mountain", "../images/mountain.jpg")
+    $game.load.image("star3", "../images/star3.png")
   end
 
   def add_platform(x, y)
@@ -82,6 +103,8 @@ class MainState < Phaser::State
 
     @penguin.body.gravity.y = 250
 
+    @emitter = StarEmitter.new
+
     @cursors = $game.input.keyboard.create_cursor_keys
   end
 
@@ -91,6 +114,7 @@ class MainState < Phaser::State
       # @coin.play
       s.destroy
       @score += 1
+      @emitter.burst_at(@penguin.x, @penguin.y)
     end
     @score_text.text = "Penguin ate #{@score} fruits/sweets."
     penguin_speed = 200
