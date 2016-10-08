@@ -80,6 +80,8 @@ class MainState < Phaser::State
 
     @penguin.body.collide_world_bounds = true
 
+    @penguin.body.gravity.y = 250
+
     @cursors = $game.input.keyboard.create_cursor_keys
   end
 
@@ -99,12 +101,9 @@ class MainState < Phaser::State
     else
       0
     end
-    @penguin.body.velocity.y = if @cursors.down.down?
-      penguin_speed
-    elsif @cursors.up.down?
-      -penguin_speed
-    else
-      0
+
+    if @cursors.up.down?
+      @penguin.body.velocity.y = -200
     end
   end
 end
