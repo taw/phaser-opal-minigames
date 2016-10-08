@@ -19,6 +19,33 @@ class StarEmitter
   end
 end
 
+class Snowflake
+  def initialize
+
+    circle = $game.add.sprite(rand*$size_x, rand*$size_y, "circle")
+    circle.height = circle.width = rand*10
+    circle.alpha = rand*0.6
+    end
+    @snowflake = $game.add.sprite(
+      $game.rnd.between(0,$size_x-24),
+      $game.rnd.between(0,$size_x-22),
+      "circle"
+    )
+    @speed = $game.rnd.between(100, 200)
+  end
+
+  def update(time)
+    @snowflake.y += @speed * time
+    @snowflake.x += @speed * time
+    if @snowflake.y > $size_y-5
+      @snowflake.y = 0
+    end
+
+    if @snowflake.x > $size_x-5
+      @snowflake.x = 0
+    end
+  end
+end
 
 class MainState < Phaser::State
   def preload
@@ -38,7 +65,9 @@ class MainState < Phaser::State
     $game.load.image("clouds2", "../images/clouds2.png")
     $game.load.image("mountain", "../images/mountain.jpg")
     $game.load.image("star3", "../images/star3.png")
+    $game.load.image("circle", "../images/circle.png")
     $game.load.audio("pop", "../audio/pop3.mp3")
+
   end
 
   def add_platform(x, y)
@@ -71,7 +100,12 @@ class MainState < Phaser::State
     @score_text = $game.add.text(10, 10, "", { fontSize: '16px', fill: '#FBE8D3', align: 'left' })
 	  $game.physics.start_system(Phaser::Physics::ARCADE)
 
-
+    # 20.times do
+    # circle = $game.add.sprite(rand*$size_x, rand*$size_y, "circle")
+    # circle.height = circle.width = rand*10
+    # circle.alpha = rand*0.6
+    # end
+    
     @platforms = $game.add.group()
     @platforms.enable_body = true
     add_platform 250, $size_y-150
@@ -114,6 +148,10 @@ class MainState < Phaser::State
     @pop = $game.add.audio("pop")
 
     @cursors = $game.input.keyboard.create_cursor_keys
+
+    @snowflake = 50.times.map do
+      Snowflake.new
+    end
   end
 
   def update
@@ -144,6 +182,11 @@ class MainState < Phaser::State
 
     if @cursors.up.down? and (@penguin.body.blocked.down or @penguin.body.touching.down)
       @penguin.body.velocity.y = -350
+    end
+
+    dt = $game.time.physics_elapsed
+    @snowflake.each do |snowflake|
+      snowflake.update(dt)
     end
   end
 end
