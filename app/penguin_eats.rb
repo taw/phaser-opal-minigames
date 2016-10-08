@@ -21,16 +21,13 @@ end
 
 class Snowflake
   def initialize
-
-    circle = $game.add.sprite(rand*$size_x, rand*$size_y, "circle")
-    circle.height = circle.width = rand*10
-    circle.alpha = rand*0.6
-    end
     @snowflake = $game.add.sprite(
       $game.rnd.between(0,$size_x-24),
       $game.rnd.between(0,$size_x-22),
       "circle"
     )
+    @snowflake.height = @snowflake.width = rand*10
+    @snowflake.alpha = rand*0.6
     @speed = $game.rnd.between(100, 200)
   end
 
@@ -105,7 +102,7 @@ class MainState < Phaser::State
     # circle.height = circle.width = rand*10
     # circle.alpha = rand*0.6
     # end
-    
+
     @platforms = $game.add.group()
     @platforms.enable_body = true
     add_platform 250, $size_y-150
