@@ -34,40 +34,51 @@ class MainState < Phaser::State
   end
 
   def create
-	  $game.physics.start_system(Phaser::Physics::ARCADE)
     background = $game.add.sprite(0, 0, 'mountain')
-  	background.height = $size_y
-  	background.width = $size_x
+    background.height = $size_y
+    background.width = $size_x
+    @score = 0
+    @score_text = $game.add.text(10, 10, "", { fontSize: '16px', fill: '#FBE8D3', align: 'center' })
+	  $game.physics.start_system(Phaser::Physics::ARCADE)
+    
 
     @platforms = $game.add.group()
     @platforms.enable_body = true
-    add_platform 400, $size_y-100
+    add_platform 250, $size_y-150
     add_platform 400, $size_y-300
-    add_platform 400, $size_y-500
-    add_platform 700, $size_y-200
-    add_platform 700, $size_y-400
-    add_platform 700, $size_y-600
-    add_platform 1000, $size_y-100
-    add_platform 1000, $size_y-300
-    add_platform 1000, $size_y-500
+    add_platform 600, $size_y-450
+
+    add_platform 700, $size_y-150
+    add_platform 900, $size_y-300
+    
+    add_platform 1050, $size_y-100
+    add_platform 1100, $size_y-400
 
     @fruits = $game.add.group()
   	@fruits.enable_body = true
-    add_fruit(400, $size_y-150, "lollipop")
-  	add_fruit(400, $size_y-350, "icecream")
-  	add_fruit(400, $size_y-550, "icelolly")
-  	add_fruit(700, $size_y-250, "grapes")
-  	add_fruit(700, $size_y-450, "cupcake")
-  	add_fruit(700, $size_y-650, "doughnut")
-  	add_fruit(1000, $size_y-150, "pineapple")
-  	add_fruit(1000, $size_y-350, "orange")
-  	add_fruit(950, $size_y-550, "watermelon")
-  	add_fruit(100, $size_y-500, "cherry")
-  	add_fruit(700, $size_y-100, "apple")
-  	add_fruit(1050, $size_y-550, "banana2")
+    add_fruit(225, $size_y-200, "lollipop")
+  	add_fruit(275, $size_y-200, "cherry")
+
+    add_fruit(400, $size_y-350, "icecream")
+
+  	add_fruit(575, $size_y-500, "icelolly")
+    add_fruit(625, $size_y-500, "cupcake")
+  	
+    add_fruit(675, $size_y-200, "grapes")
+  	add_fruit(725, $size_y-200, "apple")
+  
+    add_fruit(900, $size_y-350, "orange")
+
+    add_fruit(1075, $size_y-450, "watermelon")
+    add_fruit(1125, $size_y-450, "doughnut")
+  	
+    add_fruit(1025, $size_y-150, "pineapple")
+  	add_fruit(1075, $size_y-150, "banana2")
 
   	@penguin = $game.add.sprite(100, $size_y-100, 'penguin2')
     $game.physics.enable(@penguin, Phaser::Physics::ARCADE)
+
+    @penguin.body.collide_world_bounds = true
 
     @cursors = $game.input.keyboard.create_cursor_keys
   end
@@ -77,7 +88,9 @@ class MainState < Phaser::State
     $game.physics.arcade.overlap(@penguin, @fruits) do |c,s|
       # @coin.play
       s.destroy
+      @score += 1
     end
+    @score_text.text = "Penguin ate #{@score} fruits/sweets."
     penguin_speed = 200
     @penguin.body.velocity.x = if @cursors.right.down?
       penguin_speed
