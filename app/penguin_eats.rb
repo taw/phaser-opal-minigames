@@ -86,7 +86,7 @@ class MainState < Phaser::State
 
     @fruits = $game.add.group()
   	@fruits.enable_body = true
-    
+
   	add_fruit(275, $size_y-200, "cherry")
     add_fruit(675, $size_y-200, "grapes")
   	add_fruit(725, $size_y-200, "apple")
@@ -105,9 +105,8 @@ class MainState < Phaser::State
 
   	@penguin = $game.add.sprite(100, $size_y-100, "penguin2")
     $game.physics.enable(@penguin, Phaser::Physics::ARCADE)
-
+    @penguin.anchor.set(0.5)
     @penguin.body.collide_world_bounds = true
-
     @penguin.body.gravity.y = 250
 
     @emitter = StarEmitter.new
