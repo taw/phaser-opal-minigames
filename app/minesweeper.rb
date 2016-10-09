@@ -144,24 +144,29 @@ class MainState < Phaser::State
     $game.load.audio("meow", "../audio/cat_meow.mp3")
   end
 
-  def click(x,y)
+  def click(x, y, right_button)
     x = ((x - $size_x / 2 + 200) / 40).floor
     y = ((y - $size_y / 2 + 200) / 40).floor
     if x >= 0 and x <= @board.size_x-1 and y >= 0 and y <= @board.size_y-1
-      @board.click_cell(x,y)
-      if @board.grid[x][y].c == "X"
-        @meow.play()
+      if right_button
+
+      else
+        @board.click_cell(x,y)
+        if @board.grid[x][y].c == "X"
+          @meow.play()
+        end
       end
     end
   end
 
   def create
+    `document.getElementsByTagName("body")[0].oncontextmenu = function(){return false;}`
     @result = $game.add.text(16, 16, "Have fun playing", { fontSize: '32px', fill: '#fff' })
     $game.stage.background_color = "8F8"
     @board = Board.new
     @meow = $game.add.audio("meow")
-    $game.input.on(:down) do |pointer, ev|
-      click(`pointer.x`, `pointer.y`)
+    $game.input.on(:down) do |pointer, event|
+      click(event.x, event.y, event.buttons != 1)
     end
   end
 end

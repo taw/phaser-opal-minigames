@@ -17,8 +17,8 @@ class MainState < Phaser::State
     @grid.line_to(-100,  300)
     @grid.move_to( 100, -300)
     @grid.line_to( 100,  300)
-    $game.input.on(:down) do |pointer, ev|
-      click `pointer.x`, `pointer.y`
+    $game.input.on(:down) do |pointer, event|
+      click event.x, event.y
     end
   end
 

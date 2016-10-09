@@ -48,7 +48,7 @@ class MainState < Phaser::State
     @balls = []
     $game.stage.background_color = "88F"
     $game.input.on("down") do |pointer, event|
-      @balls << Ball.new(`pointer.x`, `pointer.y`)
+      @balls << Ball.new(event.x, event.y)
     end
   end
 

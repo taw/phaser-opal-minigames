@@ -115,8 +115,8 @@ class MainState < Phaser::State
     @scoreText = $game.add.text(16, 16, '', { fontSize: '32px', fill: '#fff' })
     $game.stage.background_color = "F88"
     @board = Board.new
-    $game.input.on(:down) do |pointer, ev|
-      click(`pointer.x`, `pointer.y`)
+    $game.input.on(:down) do |pointer, event|
+      click(event.x, event.y)
     end
 
     left_key  = $game.input.keyboard.add_key(`Phaser.KeyCode.LEFT`)

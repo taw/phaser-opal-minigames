@@ -35,7 +35,7 @@ class MainState < Phaser::State
     end
 
     $game.input.on("down") do |pointer, event|
-      add_star(`pointer.x`, `pointer.y`)
+      add_star(event.x, event.y)
     end
 
     @chaser = $game.add.sprite($size_x/2, $size_y/2, "kitty_potter")

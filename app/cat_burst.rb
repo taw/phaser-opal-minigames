@@ -51,8 +51,8 @@ class MainState < Phaser::State
     @cat_emitter = CatEmitter.new
     @coin = $game.add.audio("coin")
     $game.input.on("down") do |pointer, event|
-      @star_emitter.burst_at(`pointer.x`, `pointer.y`)
-      @cat_emitter.burst_at(`pointer.x`, `pointer.y`)
+      @star_emitter.burst_at(event.x, event.y)
+      @cat_emitter.burst_at(event.x, event.y)
       @coin.play
       @coin.volume = 0.2
     end
