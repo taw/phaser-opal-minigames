@@ -68,6 +68,7 @@ module Phaser
   class Sprite
     alias_native :add_child, :addChild
     native_accessor :angle
+    native_accessor :frame
   end
 
   class Text

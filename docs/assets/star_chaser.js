@@ -35176,7 +35176,9 @@ if (o == null) o = nil;
 
       self.$alias_native("add_child", "addChild");
 
-      return self.$native_accessor("angle");
+      self.$native_accessor("angle");
+
+      return self.$native_accessor("frame");
     })($scope.base, null);
 
     (function($base, $super) {
@@ -35346,11 +35348,11 @@ Opal.modules["star_chaser"] = function(Opal) {
   function $rb_divide(lhs, rhs) {
     return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs / rhs : lhs['$/'](rhs);
   }
-  function $rb_plus(lhs, rhs) {
-    return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs + rhs : lhs['$+'](rhs);
-  }
   function $rb_times(lhs, rhs) {
     return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs * rhs : lhs['$*'](rhs);
+  }
+  function $rb_plus(lhs, rhs) {
+    return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs + rhs : lhs['$+'](rhs);
   }
   function $rb_lt(lhs, rhs) {
     return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs < rhs : lhs['$<'](rhs);
@@ -35358,7 +35360,7 @@ Opal.modules["star_chaser"] = function(Opal) {
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $gvars = Opal.gvars;
   if ($gvars.game == null) $gvars.game = nil;
 
-  Opal.add_stubs(['$image', '$load', '$audio', '$between', '$rnd', '$-', '$create', '$immovable=', '$body', '$<<', '$kill', '$delete_if', '$==', '$x', '$y', '$play', '$background_color=', '$stage', '$start_system', '$physics', '$group', '$add', '$enable_body=', '$times', '$add_star', '$on', '$input', '$sprite', '$/', '$enable', '$collide_world_bounds=', '$emitter', '$make_particles', '$gravity=', '$set_alpha', '$**', '$+', '$*', '$min_by', '$clamped_vector', '$set', '$anchor', '$x=', '$velocity', '$y=', '$overlap', '$eat_star', '$arcade', '$<', '$rand', '$physics_elapsed', '$time', '$!=', '$minParticleSpeed', '$maxParticleSpeed', '$start', '$state', '$new']);
+  Opal.add_stubs(['$image', '$load', '$audio', '$spritesheet', '$between', '$rnd', '$-', '$create', '$immovable=', '$body', '$<<', '$kill', '$delete_if', '$==', '$x', '$y', '$play', '$background_color=', '$stage', '$start_system', '$physics', '$group', '$add', '$enable_body=', '$times', '$add_star', '$on', '$input', '$sprite', '$/', '$set', '$anchor', '$animations', '$width=', '$*', '$width', '$height=', '$height', '$enable', '$collide_world_bounds=', '$emitter', '$make_particles', '$gravity=', '$set_alpha', '$**', '$+', '$min_by', '$clamped_vector', '$x=', '$velocity', '$y=', '$overlap', '$eat_star', '$arcade', '$<', '$rand', '$physics_elapsed', '$time', '$!=', '$minParticleSpeed', '$maxParticleSpeed', '$start', '$state', '$new']);
   self.$require("star_chaser"+ '/../' + "common");
   (function($base, $super) {
     function $MainState(){};
@@ -35373,8 +35375,8 @@ Opal.modules["star_chaser"] = function(Opal) {
 
       $gvars.game.$load().$image("star", "../images/star.png");
       $gvars.game.$load().$image("star2", "../images/star2.png");
-      $gvars.game.$load().$image("chaser", "../images/cat-cupid-love-icon2.png");
-      return $gvars.game.$load().$audio("coin", "../audio/coin4.mp3");
+      $gvars.game.$load().$audio("coin", "../audio/coin4.mp3");
+      return $gvars.game.$load().$spritesheet("kitty_potter", "../images/kitty_potter.png", 348, 273, 4);
     });
 
     Opal.defn(self, '$add_star', function(x, y) {
@@ -35409,6 +35411,7 @@ if (s == null) s = nil;
     Opal.defn(self, '$create', function() {
       var $a, $b, TMP_2, $c, TMP_3, $d, self = this;
       if ($gvars.game == null) $gvars.game = nil;
+      if ($gvars.size_x == null) $gvars.size_x = nil;
       if ($gvars.size_y == null) $gvars.size_y = nil;
 
       (($a = ["AAF"]), $b = $gvars.game.$stage(), $b['$background_color='].apply($b, $a), $a[$a.length-1]);
@@ -35422,7 +35425,12 @@ if (s == null) s = nil;
       ($a = ($c = $gvars.game.$input()).$on, $a.$$p = (TMP_3 = function(pointer, event){var self = TMP_3.$$s || this;
 if (pointer == null) pointer = nil;if (event == null) event = nil;
       return self.$add_star(pointer.x, pointer.y)}, TMP_3.$$s = self, TMP_3), $a).call($c, "down");
-      self.chaser = $gvars.game.$add().$sprite(20, $rb_divide($gvars.size_y, 2), "chaser");
+      self.chaser = $gvars.game.$add().$sprite($rb_divide($gvars.size_x, 2), $rb_divide($gvars.size_y, 2), "kitty_potter");
+      self.chaser.$anchor().$set(0.5, 0.5);
+      self.chaser.$animations().$add("fly");
+      self.chaser.$animations().$play("fly", 15, true);
+      ($a = self.chaser, $a['$width=']($rb_times($a.$width(), 0.5)));
+      ($a = self.chaser, $a['$height=']($rb_times($a.$height(), 0.5)));
       $gvars.game.$physics().$enable(self.chaser, (((($scope.get('Phaser')).$$scope.get('Physics'))).$$scope.get('ARCADE')));
       (($a = [true]), $d = self.chaser.$body(), $d['$collide_world_bounds='].apply($d, $a), $a[$a.length-1]);
       self.coin = $gvars.game.$add().$audio("coin");
@@ -35454,7 +35462,6 @@ if (pointer == null) pointer = nil;if (event == null) event = nil;
 if (star == null) star = nil;
       return $rb_plus(($rb_minus(star.$x(), self.chaser.$x()))['$**'](2), ($rb_minus(star.$y(), self.chaser.$y()))['$**'](2))}, TMP_4.$$s = self, TMP_4), $a).call($b);
       $c = self.$clamped_vector(self.chaser, nearest_star, 200.0), $a = Opal.to_ary($c), dx = ($a[0] == null ? nil : $a[0]), dy = ($a[1] == null ? nil : $a[1]), $c;
-      self.chaser.$anchor().$set(0.5, 0.5);
       (($a = [dx]), $c = self.chaser.$body().$velocity(), $c['$x='].apply($c, $a), $a[$a.length-1]);
       (($a = [dy]), $c = self.chaser.$body().$velocity(), $c['$y='].apply($c, $a), $a[$a.length-1]);
       ($a = ($c = $gvars.game.$physics().$arcade()).$overlap, $a.$$p = (TMP_5 = function(c, s){var self = TMP_5.$$s || this;

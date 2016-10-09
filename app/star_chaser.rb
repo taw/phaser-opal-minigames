@@ -4,8 +4,8 @@ class MainState < Phaser::State
   def preload
     $game.load.image("star", "../images/star.png")
     $game.load.image("star2", "../images/star2.png")
-    $game.load.image("chaser", "../images/cat-cupid-love-icon2.png")
     $game.load.audio("coin", "../audio/coin4.mp3")
+    $game.load.spritesheet("kitty_potter", "../images/kitty_potter.png", 348, 273, 4)
   end
 
   def add_star(x=nil,y=nil)
@@ -38,7 +38,12 @@ class MainState < Phaser::State
       add_star(`pointer.x`, `pointer.y`)
     end
 
-    @chaser = $game.add.sprite(20, $size_y/2, "chaser")
+    @chaser = $game.add.sprite($size_x/2, $size_y/2, "kitty_potter")
+    @chaser.anchor.set(0.5, 0.5)
+    @chaser.animations.add("fly")
+    @chaser.animations.play("fly", 15, true)
+    @chaser.width *= 0.5
+    @chaser.height *= 0.5
     $game.physics.enable(@chaser, Phaser::Physics::ARCADE)
     @chaser.body.collide_world_bounds = true
 
@@ -65,7 +70,6 @@ class MainState < Phaser::State
       (star.x - @chaser.x) ** 2 + (star.y - @chaser.y) ** 2
     }
     dx,dy = clamped_vector(@chaser, nearest_star, 200.0)
-    @chaser.anchor.set(0.5, 0.5)
     @chaser.body.velocity.x = dx
     @chaser.body.velocity.y = dy
     $game.physics.arcade.overlap(@chaser, @star_group) do |c,s|

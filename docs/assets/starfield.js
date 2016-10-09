@@ -35176,7 +35176,9 @@ if (o == null) o = nil;
 
       self.$alias_native("add_child", "addChild");
 
-      return self.$native_accessor("angle");
+      self.$native_accessor("angle");
+
+      return self.$native_accessor("frame");
     })($scope.base, null);
 
     (function($base, $super) {
