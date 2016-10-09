@@ -1,11 +1,12 @@
 require_relative "common"
 
 class Cell
-  attr_reader :c, :revealed
+  attr_reader :c, :revealed, :marked_mine
   def initialize(x,y,c)
     @x = x
     @y = y
     @c = c
+    @marked_mine = false
     @revealed = false
     @grid_hidden = $game.add.graphics(@x, @y)
     @grid_hidden.line_style(2, 0x000000, 1)
@@ -51,6 +52,10 @@ class Cell
     @text = $game.add.text(@x, @y, label, style)
     @text.anchor.set(0.5)
     @text.visible = false
+
+    @mine_mark = $game.add.text(@x, @y, "M", style)
+    @mine_mark.anchor.set(0.5)
+    @mine_mark.visible = false
   end
 
   def reveal
@@ -58,6 +63,11 @@ class Cell
     @text.visible = true
     @grid_hidden.visible = false
     @grid_visible.visible = true
+  end
+
+  def flip_mine_mark
+    @marked_mine = !@marked_mine
+    @mine_mark.visible = !@mine_mark.visible
   end
 end
 
@@ -82,6 +92,7 @@ class Board
 
   def click_cell(x,y)
     return if @grid[x][y].revealed
+    return if @grid[x][y].marked_mine
     @grid[x][y].reveal()
     if @grid[x][y].c == 0
       auto_propagate_reveal(x-1, y-1)
@@ -93,6 +104,11 @@ class Board
       auto_propagate_reveal(x+1, y  )
       auto_propagate_reveal(x+1, y+1)
     end
+  end
+
+  def right_click_cell(x,y)
+    return if @grid[x][y].revealed
+    @grid[x][y].flip_mine_mark
   end
 
   def setup_grid
@@ -149,10 +165,10 @@ class MainState < Phaser::State
     y = ((y - $size_y / 2 + 200) / 40).floor
     if x >= 0 and x <= @board.size_x-1 and y >= 0 and y <= @board.size_y-1
       if right_button
-
+        @board.right_click_cell(x,y)
       else
         @board.click_cell(x,y)
-        if @board.grid[x][y].c == "X"
+        if @board.grid[x][y].revealed and @board.grid[x][y].c == "X"
           @meow.play()
         end
       end
