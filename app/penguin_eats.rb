@@ -46,7 +46,7 @@ end
 
 class MainState < Phaser::State
   def preload
-	  $game.load.image("lollipop", "../images/lollipop.png")
+    $game.load.image("lollipop", "../images/lollipop.png")
     $game.load.image("icecream", "../images/icecream.png")
     $game.load.image("icelolly", "../images/icelolly.png")
     $game.load.image("grapes", "../images/grapes.png")
@@ -64,7 +64,6 @@ class MainState < Phaser::State
     $game.load.image("star3", "../images/star3.png")
     $game.load.image("circle", "../images/circle.png")
     $game.load.audio("pop", "../audio/pop3.mp3")
-
   end
 
   def add_platform(x, y)
@@ -95,36 +94,27 @@ class MainState < Phaser::State
     @score_fruits = 0
     @score_sweets = 0
     @score_text = $game.add.text(10, 10, "", { fontSize: '16px', fill: '#FBE8D3', align: 'left' })
-	  $game.physics.start_system(Phaser::Physics::ARCADE)
-
-    # 20.times do
-    # circle = $game.add.sprite(rand*$size_x, rand*$size_y, "circle")
-    # circle.height = circle.width = rand*10
-    # circle.alpha = rand*0.6
-    # end
+    $game.physics.start_system(Phaser::Physics::ARCADE)
 
     @platforms = $game.add.group()
     @platforms.enable_body = true
     add_platform 250, $size_y-150
     add_platform 400, $size_y-300
     add_platform 600, $size_y-450
-
     add_platform 700, $size_y-150
     add_platform 900, $size_y-300
-
     add_platform 1050, $size_y-100
     add_platform 1100, $size_y-400
 
     @fruits = $game.add.group()
-  	@fruits.enable_body = true
-
-  	add_fruit(275, $size_y-200, "cherry")
+    @fruits.enable_body = true
+    add_fruit(275, $size_y-200, "cherry")
     add_fruit(675, $size_y-200, "grapes")
-  	add_fruit(725, $size_y-200, "apple")
+    add_fruit(725, $size_y-200, "apple")
     add_fruit(900, $size_y-350, "orange")
     add_fruit(1075, $size_y-450, "watermelon")
     add_fruit(1025, $size_y-150, "pineapple")
-  	add_fruit(1075, $size_y-150, "banana2")
+    add_fruit(1075, $size_y-150, "banana2")
 
     @sweets = $game.add.group()
     @sweets.enable_body = true
@@ -134,7 +124,7 @@ class MainState < Phaser::State
     add_sweet(625, $size_y-500, "cupcake")
     add_sweet(1125, $size_y-450, "doughnut")
 
-  	@penguin = $game.add.sprite(100, $size_y-100, "penguin2")
+    @penguin = $game.add.sprite(100, $size_y-100, "penguin2")
     $game.physics.enable(@penguin, Phaser::Physics::ARCADE)
     @penguin.anchor.set(0.5)
     @penguin.body.collide_world_bounds = true
