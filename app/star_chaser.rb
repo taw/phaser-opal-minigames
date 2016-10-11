@@ -75,6 +75,11 @@ class MainState < Phaser::State
     $game.physics.arcade.overlap(@chaser, @star_group) do |c,s|
       eat_star(s)
     end
+    if @chaser.body.velocity.x > 0
+      @chaser.scale.x = -0.5
+    elsif @chaser.body.velocity.x < 0
+      @chaser.scale.x = 0.5
+    end
 
     if rand < $game.time.physics_elapsed*10 and (dx != 0 or dy != 0)
       @emitter.x = @chaser.x

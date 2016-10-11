@@ -19,11 +19,12 @@ class MainState < Phaser::State
     @player.body.velocity.x = 0
     if @cursors.left.down?
       @player.body.velocity.x = -250
+      @player.scale.x = (@player.scale.x.abs)
     end
     if @cursors.right.down?
       @player.body.velocity.x = 250
+      @player.scale.x = -(@player.scale.x.abs)
     end
-    # @player.body.on_floor? works with world floor, but not with platforms
     if @jumpButton.down? and (@player.body.blocked.down or @player.body.touching.down)
       @player.body.velocity.y = -250
     end
