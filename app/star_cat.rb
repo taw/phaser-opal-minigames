@@ -7,11 +7,14 @@ class Star
       $game.rnd.between(0, $size_y),
       "star"
     )
+    @star.angle = $game.rnd.between(0, 360)
+    @rotation_speed = $game.rnd.between(30, 120) * [1,-1].sample
     @star.anchor.set(0.5, 0.5)
   end
 
   def update(dt)
-    @star.x += dt*100
+    @star.x += 100*dt
+    @star.angle += @rotation_speed*dt
     if @star.x > $size_x
       @star.x -= $size_x
       @star.y = $game.rnd.between(0, $size_y)
@@ -74,7 +77,7 @@ class MainState < Phaser::State
   end
 
   def create
-    $game.stage.background_color = "006"
+    $game.stage.background_color = "005"
     @nyan_music = $game.add.audio("nyan")
     @nyan_music.play
     @nyan_music.loop = true
