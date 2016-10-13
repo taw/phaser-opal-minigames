@@ -5,13 +5,14 @@ class Cat
   def initialize
     @cat = $game.add.sprite(0, 0, "cat")
     @cat.anchor.set(0.5, 0.5)
+    @cat.width = @cat.height = [$size_x, $size_y].min * 0.05
     @phase = 0
   end
 
   def update(dt)
     @phase -= dt
-    @cat.x = ( 0.5 + 0.4 * Math.sin(@phase) ) * $size_x
-    @cat.y = ( 0.5 + 0.4 * Math.cos(@phase) ) * $size_y
+    @cat.x = ( 0.5 + 0.4 * Math.sin(@phase/5) ) * $size_x
+    @cat.y = ( 0.5 + 0.4 * Math.cos(@phase/5) ) * $size_y
   end
 end
 
