@@ -15,9 +15,13 @@ class MainState < Phaser::State
     $game.rnd.between(100, $size_y - 100)
   end
 
+  def random_size
+    $game.rnd.between(32, 128)
+  end
+
   def create
     $game.stage.background_color = "F88"
-    (1..5).each do |i|
+    (1..20).each do |i|
       new_cat_and_tween(i)
     end
   end
@@ -27,14 +31,23 @@ class MainState < Phaser::State
     tween.on(:complete) do
       new_tween(cat)
     end
-    x = rand_x
-    y = rand_y
-    tween.to(properties: {x: x, y: y}, duration: 1000, auto_start: true)
+    size = random_size
+    tween.to(
+      properties: {
+        x: rand_x,
+        y: rand_y,
+        height: size,
+        width: size,
+      },
+      duration: $game.rnd.between(500, 5000),
+      auto_start: true
+    )
   end
 
   def new_cat_and_tween(i)
     cat = $game.add.sprite(rand_x, rand_y, "cat#{i}")
     cat.anchor.set(0.5, 0.5)
+    cat.width = cat.height = random_size
     new_tween(cat)
   end
 end
