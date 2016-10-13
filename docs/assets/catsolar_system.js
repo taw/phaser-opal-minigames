@@ -35082,7 +35082,7 @@ Opal.modules["upstream_fixes"] = function(Opal) {
   }
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $module = Opal.module, $hash2 = Opal.hash2;
 
-  Opal.add_stubs(['$to_enum', '$kind_of?', '$Float', '$raise', '$class', '$Integer', '$!', '$<=', '$<', '$*', '$/', '$+', '$abs', '$-', '$>', '$floor', '$each', '$==', '$%', '$alias_native', '$native_accessor', '$include', '$to_n', '$proc', '$call', '$new', '$to_sym', '$===']);
+  Opal.add_stubs(['$to_enum', '$kind_of?', '$Float', '$raise', '$class', '$Integer', '$!', '$<=', '$<', '$*', '$/', '$+', '$abs', '$-', '$>', '$floor', '$each', '$==', '$%', '$alias_native', '$native_accessor', '$Native', '$include', '$to_n', '$proc', '$new', '$call', '$to_sym', '$===']);
   (function($base, $super) {
     function $Range(){};
     var self = $Range = $klass($base, $super, 'Range', $Range);
@@ -35187,9 +35187,24 @@ if (o == null) o = nil;
 
       var def = self.$$proto, $scope = self.$$scope;
 
-      self.$native_accessor("fontSize");
+      def["native"] = nil;
+      self.$native_accessor("font", "stroke");
 
-      self.$native_accessor("font");
+      self.$alias_native("font_size", "fontSize");
+
+      Opal.defn(self, '$font_size=', function(value) {
+        var self = this;
+
+        return self.$Native(self["native"].fontSize = value);
+      });
+
+      self.$alias_native("stroke_thickness", "strokeThickness");
+
+      Opal.defn(self, '$stroke_thickness=', function(value) {
+        var self = this;
+
+        return self.$Native(self["native"].strokeThickness = value);
+      });
 
       self.$alias_native("events", $hash2(["as"], {"as": (($scope.get('Phaser')).$$scope.get('Events'))}));
 
@@ -35400,9 +35415,11 @@ if (o == null) o = nil;
         var $a, $b, TMP_4, self = this, $iter = TMP_3.$$p, block = $iter || nil, cast_and_yield = nil, $case = nil;
 
         TMP_3.$$p = null;
-        cast_and_yield = ($a = ($b = self).$proc, $a.$$p = (TMP_4 = function(pointer, event){var self = TMP_4.$$s || this;
+        cast_and_yield = ($a = ($b = self).$proc, $a.$$p = (TMP_4 = function(pointer, event){var self = TMP_4.$$s || this, $a;
 if (pointer == null) pointer = nil;if (event == null) event = nil;
-        return block.$call((($scope.get('Phaser')).$$scope.get('Pointer')).$new(pointer), (($scope.get('Phaser')).$$scope.get('MouseEvent')).$new(event))}, TMP_4.$$s = self, TMP_4), $a).call($b);
+        pointer = (($scope.get('Phaser')).$$scope.get('Pointer')).$new(pointer);
+          event = (($a = event !== false && event !== nil) ? (($scope.get('Phaser')).$$scope.get('MouseEvent')).$new(event) : event);
+          return block.$call(pointer, event);}, TMP_4.$$s = self, TMP_4), $a).call($b);
         return (function() {$case = type.$to_sym();if ("down"['$===']($case)) {return self["native"].onDown.add(cast_and_yield.$to_n());}else if ("up"['$===']($case)) {return self["native"].onUp.add(cast_and_yield.$to_n());}else if ("tap"['$===']($case)) {return self["native"].onTap.add(cast_and_yield.$to_n());}else if ("hold"['$===']($case)) {return self["native"].onHold.add(cast_and_yield.$to_n());}else {return self.$raise($scope.get('ArgumentError'), "Unrecognized event type " + (type))}})();
       });
 
@@ -35440,11 +35457,11 @@ Opal.modules["shaders/sun"] = function(Opal) {
 Opal.modules["catsolar_system"] = function(Opal) {
   Opal.dynamic_require_severity = "error";
   var OPAL_CONFIG = { method_missing: true, arity_check: false, freezing: true, tainting: true };
-  function $rb_minus(lhs, rhs) {
-    return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs - rhs : lhs['$-'](rhs);
-  }
   function $rb_times(lhs, rhs) {
     return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs * rhs : lhs['$*'](rhs);
+  }
+  function $rb_minus(lhs, rhs) {
+    return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs - rhs : lhs['$-'](rhs);
   }
   function $rb_plus(lhs, rhs) {
     return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs + rhs : lhs['$+'](rhs);
@@ -35455,7 +35472,7 @@ Opal.modules["catsolar_system"] = function(Opal) {
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $gvars = Opal.gvars;
   if ($gvars.game == null) $gvars.game = nil;
 
-  Opal.add_stubs(['$sprite', '$add', '$set', '$anchor', '$-', '$x=', '$*', '$+', '$sin', '$y=', '$cos', '$image', '$load', '$background_color=', '$stage', '$new', '$set_resolution', '$/', '$width=', '$height=', '$filters=', '$physics_elapsed', '$time', '$update', '$state']);
+  Opal.add_stubs(['$sprite', '$add', '$set', '$anchor', '$width=', '$height=', '$*', '$min', '$-', '$x=', '$+', '$sin', '$/', '$y=', '$cos', '$image', '$load', '$background_color=', '$stage', '$new', '$set_resolution', '$filters=', '$physics_elapsed', '$time', '$update', '$state']);
   self.$require("catsolar_system"+ '/../' + "common");
   self.$require("catsolar_system"+ '/../' + "shaders/sun");
   (function($base, $super) {
@@ -35466,11 +35483,14 @@ Opal.modules["catsolar_system"] = function(Opal) {
 
     def.cat = def.phase = nil;
     Opal.defn(self, '$initialize', function() {
-      var self = this;
+      var $a, $b, $c, $d, self = this;
       if ($gvars.game == null) $gvars.game = nil;
+      if ($gvars.size_x == null) $gvars.size_x = nil;
+      if ($gvars.size_y == null) $gvars.size_y = nil;
 
       self.cat = $gvars.game.$add().$sprite(0, 0, "cat");
       self.cat.$anchor().$set(0.5, 0.5);
+      (($a = [(($c = [$rb_times([$gvars.size_x, $gvars.size_y].$min(), 0.05)]), $d = self.cat, $d['$height='].apply($d, $c), $c[$c.length-1])]), $b = self.cat, $b['$width='].apply($b, $a), $a[$a.length-1]);
       return self.phase = 0;
     });
 
@@ -35480,8 +35500,8 @@ Opal.modules["catsolar_system"] = function(Opal) {
       if ($gvars.size_y == null) $gvars.size_y = nil;
 
       self.phase = $rb_minus(self.phase, dt);
-      (($a = [$rb_times(($rb_plus(0.5, $rb_times(0.4, $scope.get('Math').$sin(self.phase)))), $gvars.size_x)]), $b = self.cat, $b['$x='].apply($b, $a), $a[$a.length-1]);
-      return (($a = [$rb_times(($rb_plus(0.5, $rb_times(0.4, $scope.get('Math').$cos(self.phase)))), $gvars.size_y)]), $b = self.cat, $b['$y='].apply($b, $a), $a[$a.length-1]);
+      (($a = [$rb_times(($rb_plus(0.5, $rb_times(0.4, $scope.get('Math').$sin($rb_divide(self.phase, 5))))), $gvars.size_x)]), $b = self.cat, $b['$x='].apply($b, $a), $a[$a.length-1]);
+      return (($a = [$rb_times(($rb_plus(0.5, $rb_times(0.4, $scope.get('Math').$cos($rb_divide(self.phase, 5))))), $gvars.size_y)]), $b = self.cat, $b['$y='].apply($b, $a), $a[$a.length-1]);
     }), nil) && 'update';
   })($scope.base, null);
   (function($base, $super) {

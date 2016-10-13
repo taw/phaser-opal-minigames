@@ -35082,7 +35082,7 @@ Opal.modules["upstream_fixes"] = function(Opal) {
   }
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $module = Opal.module, $hash2 = Opal.hash2;
 
-  Opal.add_stubs(['$to_enum', '$kind_of?', '$Float', '$raise', '$class', '$Integer', '$!', '$<=', '$<', '$*', '$/', '$+', '$abs', '$-', '$>', '$floor', '$each', '$==', '$%', '$alias_native', '$native_accessor', '$include', '$to_n', '$proc', '$call', '$new', '$to_sym', '$===']);
+  Opal.add_stubs(['$to_enum', '$kind_of?', '$Float', '$raise', '$class', '$Integer', '$!', '$<=', '$<', '$*', '$/', '$+', '$abs', '$-', '$>', '$floor', '$each', '$==', '$%', '$alias_native', '$native_accessor', '$Native', '$include', '$to_n', '$proc', '$new', '$call', '$to_sym', '$===']);
   (function($base, $super) {
     function $Range(){};
     var self = $Range = $klass($base, $super, 'Range', $Range);
@@ -35187,9 +35187,24 @@ if (o == null) o = nil;
 
       var def = self.$$proto, $scope = self.$$scope;
 
-      self.$native_accessor("fontSize");
+      def["native"] = nil;
+      self.$native_accessor("font", "stroke");
 
-      self.$native_accessor("font");
+      self.$alias_native("font_size", "fontSize");
+
+      Opal.defn(self, '$font_size=', function(value) {
+        var self = this;
+
+        return self.$Native(self["native"].fontSize = value);
+      });
+
+      self.$alias_native("stroke_thickness", "strokeThickness");
+
+      Opal.defn(self, '$stroke_thickness=', function(value) {
+        var self = this;
+
+        return self.$Native(self["native"].strokeThickness = value);
+      });
 
       self.$alias_native("events", $hash2(["as"], {"as": (($scope.get('Phaser')).$$scope.get('Events'))}));
 
@@ -35400,9 +35415,11 @@ if (o == null) o = nil;
         var $a, $b, TMP_4, self = this, $iter = TMP_3.$$p, block = $iter || nil, cast_and_yield = nil, $case = nil;
 
         TMP_3.$$p = null;
-        cast_and_yield = ($a = ($b = self).$proc, $a.$$p = (TMP_4 = function(pointer, event){var self = TMP_4.$$s || this;
+        cast_and_yield = ($a = ($b = self).$proc, $a.$$p = (TMP_4 = function(pointer, event){var self = TMP_4.$$s || this, $a;
 if (pointer == null) pointer = nil;if (event == null) event = nil;
-        return block.$call((($scope.get('Phaser')).$$scope.get('Pointer')).$new(pointer), (($scope.get('Phaser')).$$scope.get('MouseEvent')).$new(event))}, TMP_4.$$s = self, TMP_4), $a).call($b);
+        pointer = (($scope.get('Phaser')).$$scope.get('Pointer')).$new(pointer);
+          event = (($a = event !== false && event !== nil) ? (($scope.get('Phaser')).$$scope.get('MouseEvent')).$new(event) : event);
+          return block.$call(pointer, event);}, TMP_4.$$s = self, TMP_4), $a).call($b);
         return (function() {$case = type.$to_sym();if ("down"['$===']($case)) {return self["native"].onDown.add(cast_and_yield.$to_n());}else if ("up"['$===']($case)) {return self["native"].onUp.add(cast_and_yield.$to_n());}else if ("tap"['$===']($case)) {return self["native"].onTap.add(cast_and_yield.$to_n());}else if ("hold"['$===']($case)) {return self["native"].onHold.add(cast_and_yield.$to_n());}else {return self.$raise($scope.get('ArgumentError'), "Unrecognized event type " + (type))}})();
       });
 
@@ -35450,7 +35467,7 @@ Opal.modules["match_3_cats"] = function(Opal) {
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $gvars = Opal.gvars, $range = Opal.range, $hash2 = Opal.hash2;
   if ($gvars.game == null) $gvars.game = nil;
 
-  Opal.add_stubs(['$attr_accessor', '$attr_reader', '$map', '$+', '$/', '$*', '$-', '$between', '$rnd', '$sprite', '$add', '$c=', '$set', '$anchor', '$height=', '$width=', '$[]', '$load_texture', '$to', '$tween', '$x', '$y', '$[]=', '$events', '$time', '$each', '$!=', '$c', '$>=', '$push', '$each_with_index', '$image', '$load', '$worldX', '$mouse_pointer', '$input', '$worldY', '$floor', '$clamp', '$math', '$rotation_position', '$x=', '$y=', '$background_color=', '$stage', '$new', '$graphics', '$line_style', '$draw_circle', '$on', '$rotate', '$find_matches', '$p', '$matches', '$state']);
+  Opal.add_stubs(['$attr_accessor', '$attr_reader', '$map', '$+', '$/', '$*', '$-', '$between', '$rnd', '$sprite', '$add', '$c=', '$set', '$anchor', '$height=', '$width=', '$[]', '$load_texture', '$to', '$tween', '$x', '$y', '$[]=', '$events', '$time', '$each', '$>=', '$push', '$!=', '$c', '$each_with_index', '$image', '$load', '$worldX', '$mouse_pointer', '$input', '$worldY', '$floor', '$clamp', '$math', '$rotation_position', '$x=', '$y=', '$background_color=', '$stage', '$new', '$graphics', '$line_style', '$draw_circle', '$on', '$rotate', '$find_matches', '$p', '$matches', '$state']);
   self.$require("match_3_cats"+ '/../' + "common");
   (function($base, $super) {
     function $Sprite(){};
@@ -35513,10 +35530,10 @@ if (y == null) y = nil;
       t1 = self.grid['$[]']($rb_plus(x, 1))['$[]'](y);
       t2 = self.grid['$[]']($rb_plus(x, 1))['$[]']($rb_plus(y, 1));
       t3 = self.grid['$[]'](x)['$[]']($rb_plus(y, 1));
-      $gvars.game.$add().$tween(t0).$to($hash2(["properties", "duration", "auto_start"], {"properties": $hash2(["x"], {"x": $rb_plus(t0.$x(), 80)}), "duration": 500, "auto_start": true}));
-      $gvars.game.$add().$tween(t1).$to($hash2(["properties", "duration", "auto_start"], {"properties": $hash2(["y"], {"y": $rb_plus(t1.$y(), 80)}), "duration": 500, "auto_start": true}));
-      $gvars.game.$add().$tween(t2).$to($hash2(["properties", "duration", "auto_start"], {"properties": $hash2(["x"], {"x": $rb_minus(t2.$x(), 80)}), "duration": 500, "auto_start": true}));
-      $gvars.game.$add().$tween(t3).$to($hash2(["properties", "duration", "auto_start"], {"properties": $hash2(["y"], {"y": $rb_minus(t3.$y(), 80)}), "duration": 500, "auto_start": true}));
+      $gvars.game.$add().$tween(t0).$to($hash2(["properties", "duration", "auto_start"], {"properties": $hash2(["x"], {"x": $rb_plus(t0.$x(), 80)}), "duration": 200, "auto_start": true}));
+      $gvars.game.$add().$tween(t1).$to($hash2(["properties", "duration", "auto_start"], {"properties": $hash2(["y"], {"y": $rb_plus(t1.$y(), 80)}), "duration": 200, "auto_start": true}));
+      $gvars.game.$add().$tween(t2).$to($hash2(["properties", "duration", "auto_start"], {"properties": $hash2(["x"], {"x": $rb_minus(t2.$x(), 80)}), "duration": 200, "auto_start": true}));
+      $gvars.game.$add().$tween(t3).$to($hash2(["properties", "duration", "auto_start"], {"properties": $hash2(["y"], {"y": $rb_minus(t3.$y(), 80)}), "duration": 200, "auto_start": true}));
       self.grid['$[]'](x)['$[]='](y, t3);
       self.grid['$[]']($rb_plus(x, 1))['$[]='](y, t0);
       self.grid['$[]']($rb_plus(x, 1))['$[]=']($rb_plus(y, 1), t1);
@@ -35545,24 +35562,24 @@ if (x == null) x = nil;
           if (self.size_y == null) self.size_y = nil;
 if (y == null) y = nil;
         ($a = ($b = ($range($rb_plus(x, 1), self.size_x, true))).$each, $a.$$p = (TMP_6 = function(xx){var self = TMP_6.$$s || this, $a;
-            if (self.grid == null) self.grid = nil;
             if (self.matches == null) self.matches = nil;
+            if (self.grid == null) self.grid = nil;
 if (xx == null) xx = nil;
-          if ((($a = self.grid['$[]'](xx)['$[]'](y).$c()['$!='](self.grid['$[]'](x)['$[]'](y).$c())) !== nil && (!$a.$$is_boolean || $a == true))) {
-              return ($breaker.$v = nil, $breaker)};
-            if ((($a = $rb_ge($rb_minus(xx, x), 3)) !== nil && (!$a.$$is_boolean || $a == true))) {
-              return self.matches.$push("" + (x) + "," + (y) + " - " + ($rb_minus(xx, 1)) + "," + (y))
+          if ((($a = $rb_ge($rb_minus(xx, x), 3)) !== nil && (!$a.$$is_boolean || $a == true))) {
+              self.matches.$push("" + (x) + "," + (y) + " - " + ($rb_minus(xx, 1)) + "," + (y))};
+            if ((($a = self.grid['$[]'](xx)['$[]'](y).$c()['$!='](self.grid['$[]'](x)['$[]'](y).$c())) !== nil && (!$a.$$is_boolean || $a == true))) {
+              return ($breaker.$v = nil, $breaker)
               } else {
               return nil
             };}, TMP_6.$$s = self, TMP_6), $a).call($b);
           return ($a = ($c = ($range($rb_plus(y, 1), self.size_y, true))).$each, $a.$$p = (TMP_7 = function(yy){var self = TMP_7.$$s || this, $a;
-            if (self.grid == null) self.grid = nil;
             if (self.matches == null) self.matches = nil;
+            if (self.grid == null) self.grid = nil;
 if (yy == null) yy = nil;
-          if ((($a = self.grid['$[]'](x)['$[]'](yy).$c()['$!='](self.grid['$[]'](x)['$[]'](y).$c())) !== nil && (!$a.$$is_boolean || $a == true))) {
-              return ($breaker.$v = nil, $breaker)};
-            if ((($a = $rb_ge($rb_minus(yy, y), 3)) !== nil && (!$a.$$is_boolean || $a == true))) {
-              return self.matches.$push("" + (x) + "," + (y) + " - " + (x) + "," + ($rb_minus(yy, 1)))
+          if ((($a = $rb_ge($rb_minus(yy, y), 3)) !== nil && (!$a.$$is_boolean || $a == true))) {
+              self.matches.$push("" + (x) + "," + (y) + " - " + (x) + "," + ($rb_minus(yy, 1)))};
+            if ((($a = self.grid['$[]'](x)['$[]'](yy).$c()['$!='](self.grid['$[]'](x)['$[]'](y).$c())) !== nil && (!$a.$$is_boolean || $a == true))) {
+              return ($breaker.$v = nil, $breaker)
               } else {
               return nil
             };}, TMP_7.$$s = self, TMP_7), $a).call($c);}, TMP_5.$$s = self, TMP_5), $a).call($b)}, TMP_4.$$s = self, TMP_4), $a).call($b);

@@ -35082,7 +35082,7 @@ Opal.modules["upstream_fixes"] = function(Opal) {
   }
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $module = Opal.module, $hash2 = Opal.hash2;
 
-  Opal.add_stubs(['$to_enum', '$kind_of?', '$Float', '$raise', '$class', '$Integer', '$!', '$<=', '$<', '$*', '$/', '$+', '$abs', '$-', '$>', '$floor', '$each', '$==', '$%', '$alias_native', '$native_accessor', '$include', '$to_n', '$proc', '$call', '$new', '$to_sym', '$===']);
+  Opal.add_stubs(['$to_enum', '$kind_of?', '$Float', '$raise', '$class', '$Integer', '$!', '$<=', '$<', '$*', '$/', '$+', '$abs', '$-', '$>', '$floor', '$each', '$==', '$%', '$alias_native', '$native_accessor', '$Native', '$include', '$to_n', '$proc', '$new', '$call', '$to_sym', '$===']);
   (function($base, $super) {
     function $Range(){};
     var self = $Range = $klass($base, $super, 'Range', $Range);
@@ -35187,9 +35187,24 @@ if (o == null) o = nil;
 
       var def = self.$$proto, $scope = self.$$scope;
 
-      self.$native_accessor("fontSize");
+      def["native"] = nil;
+      self.$native_accessor("font", "stroke");
 
-      self.$native_accessor("font");
+      self.$alias_native("font_size", "fontSize");
+
+      Opal.defn(self, '$font_size=', function(value) {
+        var self = this;
+
+        return self.$Native(self["native"].fontSize = value);
+      });
+
+      self.$alias_native("stroke_thickness", "strokeThickness");
+
+      Opal.defn(self, '$stroke_thickness=', function(value) {
+        var self = this;
+
+        return self.$Native(self["native"].strokeThickness = value);
+      });
 
       self.$alias_native("events", $hash2(["as"], {"as": (($scope.get('Phaser')).$$scope.get('Events'))}));
 
@@ -35400,9 +35415,11 @@ if (o == null) o = nil;
         var $a, $b, TMP_4, self = this, $iter = TMP_3.$$p, block = $iter || nil, cast_and_yield = nil, $case = nil;
 
         TMP_3.$$p = null;
-        cast_and_yield = ($a = ($b = self).$proc, $a.$$p = (TMP_4 = function(pointer, event){var self = TMP_4.$$s || this;
+        cast_and_yield = ($a = ($b = self).$proc, $a.$$p = (TMP_4 = function(pointer, event){var self = TMP_4.$$s || this, $a;
 if (pointer == null) pointer = nil;if (event == null) event = nil;
-        return block.$call((($scope.get('Phaser')).$$scope.get('Pointer')).$new(pointer), (($scope.get('Phaser')).$$scope.get('MouseEvent')).$new(event))}, TMP_4.$$s = self, TMP_4), $a).call($b);
+        pointer = (($scope.get('Phaser')).$$scope.get('Pointer')).$new(pointer);
+          event = (($a = event !== false && event !== nil) ? (($scope.get('Phaser')).$$scope.get('MouseEvent')).$new(event) : event);
+          return block.$call(pointer, event);}, TMP_4.$$s = self, TMP_4), $a).call($b);
         return (function() {$case = type.$to_sym();if ("down"['$===']($case)) {return self["native"].onDown.add(cast_and_yield.$to_n());}else if ("up"['$===']($case)) {return self["native"].onUp.add(cast_and_yield.$to_n());}else if ("tap"['$===']($case)) {return self["native"].onTap.add(cast_and_yield.$to_n());}else if ("hold"['$===']($case)) {return self["native"].onHold.add(cast_and_yield.$to_n());}else {return self.$raise($scope.get('ArgumentError'), "Unrecognized event type " + (type))}})();
       });
 
@@ -35435,19 +35452,16 @@ Opal.modules["random_shapes"] = function(Opal) {
   function $rb_plus(lhs, rhs) {
     return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs + rhs : lhs['$+'](rhs);
   }
-  function $rb_gt(lhs, rhs) {
-    return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs > rhs : lhs['$>'](rhs);
-  }
   function $rb_lt(lhs, rhs) {
     return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs < rhs : lhs['$<'](rhs);
   }
-  function $rb_ge(lhs, rhs) {
-    return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs >= rhs : lhs['$>='](rhs);
+  function $rb_times(lhs, rhs) {
+    return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs * rhs : lhs['$*'](rhs);
   }
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $gvars = Opal.gvars;
   if ($gvars.game == null) $gvars.game = nil;
 
-  Opal.add_stubs(['$between', '$rnd', '$graphics', '$add', '$line_style', '$begin_fill', '$random_color', '$===', '$draw_circle', '$draw_polygon', '$destroy', '$background_color=', '$stage', '$physics_elapsed', '$time', '$+', '$>', '$<', '$size', '$>=', '$shift', '$<<', '$new', '$state']);
+  Opal.add_stubs(['$between', '$rnd', '$graphics', '$add', '$begin_fill', '$random_color', '$===', '$draw_circle', '$draw_polygon', '$+', '$destroy', '$background_color=', '$stage', '$map', '$new', '$times', '$physics_elapsed', '$time', '$<', '$*', '$rand', '$state']);
   self.$require("random_shapes"+ '/../' + "common");
   (function($base, $super) {
     function $Shape(){};
@@ -35455,7 +35469,7 @@ Opal.modules["random_shapes"] = function(Opal) {
 
     var def = self.$$proto, $scope = self.$$scope;
 
-    def.x = def.y = def.graphics = nil;
+    def.graphics = nil;
     Opal.defn(self, '$random_color', function() {
       var self = this;
       if ($gvars.game == null) $gvars.game = nil;
@@ -35469,13 +35483,9 @@ Opal.modules["random_shapes"] = function(Opal) {
       if ($gvars.size_x == null) $gvars.size_x = nil;
       if ($gvars.size_y == null) $gvars.size_y = nil;
 
-      self.active = true;
-      self.x = $gvars.game.$rnd().$between(0, $gvars.size_x);
-      self.y = $gvars.game.$rnd().$between(0, $gvars.size_y);
-      self.graphics = $gvars.game.$add().$graphics(self.x, self.y);
-      self.graphics.$line_style(0);
+      self.graphics = $gvars.game.$add().$graphics($gvars.game.$rnd().$between(0, $gvars.size_x), $gvars.game.$rnd().$between(0, $gvars.size_y));
       self.graphics.$begin_fill(self.$random_color());
-      return (function() {$case = $gvars.game.$rnd().$between(0, 1);if ((0)['$===']($case)) {return self.graphics.$draw_circle(0, 0, $gvars.game.$rnd().$between(5, 100))}else if ((1)['$===']($case)) {return self.graphics.$draw_polygon([0, 0, $gvars.game.$rnd().$between(-50, 50), $gvars.game.$rnd().$between(-50, 50), $gvars.game.$rnd().$between(-50, 50), $gvars.game.$rnd().$between(-50, 50)])}else { return nil }})();
+      return (function() {$case = $gvars.game.$rnd().$between(0, 1);if ((0)['$===']($case)) {return self.graphics.$draw_circle(0, 0, $gvars.game.$rnd().$between(10, 100))}else if ((1)['$===']($case)) {return self.graphics.$draw_polygon([$rb_plus(30, $gvars.game.$rnd().$between(-20, 20)), $rb_plus(30, $gvars.game.$rnd().$between(-20, 20)), $rb_plus(30, $gvars.game.$rnd().$between(-20, 20)), $rb_plus(-30, $gvars.game.$rnd().$between(-20, 20)), $rb_plus(-30, $gvars.game.$rnd().$between(-20, 20)), $rb_plus(-30, $gvars.game.$rnd().$between(-20, 20)), $rb_plus(-30, $gvars.game.$rnd().$between(-20, 20)), $rb_plus(30, $gvars.game.$rnd().$between(-20, 20))])}else { return nil }})();
     });
 
     return (Opal.defn(self, '$destroy', function() {
@@ -35490,30 +35500,30 @@ Opal.modules["random_shapes"] = function(Opal) {
 
     var def = self.$$proto, $scope = self.$$scope;
 
-    def.shape_timer = def.shapes = nil;
+    def.shapes = nil;
     Opal.defn(self, '$create', function() {
-      var $a, $b, self = this;
+      var $a, $b, TMP_1, self = this;
       if ($gvars.game == null) $gvars.game = nil;
 
       (($a = ["002"]), $b = $gvars.game.$stage(), $b['$background_color='].apply($b, $a), $a[$a.length-1]);
-      self.shapes = [];
-      return self.shape_timer = 0;
+      return self.shapes = ($a = ($b = (200).$times()).$map, $a.$$p = (TMP_1 = function(){var self = TMP_1.$$s || this;
+
+      return $scope.get('Shape').$new()}, TMP_1.$$s = self, TMP_1), $a).call($b);
     });
 
     return (Opal.defn(self, '$update', function() {
-      var $a, $b, self = this, dt = nil;
+      var $a, $b, TMP_2, self = this, dt = nil;
       if ($gvars.game == null) $gvars.game = nil;
 
       dt = $gvars.game.$time().$physics_elapsed();
-      self.shape_timer = $rb_plus(self.shape_timer, dt);
-      if ((($a = ((($b = $rb_gt(self.shape_timer, 0.1)) !== false && $b !== nil) ? $b : $rb_lt(self.shapes.$size(), 50))) !== nil && (!$a.$$is_boolean || $a == true))) {
-        if ((($a = $rb_ge(self.shapes.$size(), 100)) !== nil && (!$a.$$is_boolean || $a == true))) {
-          self.shapes.$shift().$destroy()};
-        self.shapes['$<<']($scope.get('Shape').$new());
-        return self.shape_timer = 0;
-        } else {
-        return nil
-      };
+      return self.shapes = ($a = ($b = self.shapes).$map, $a.$$p = (TMP_2 = function(shape){var self = TMP_2.$$s || this, $a;
+if (shape == null) shape = nil;
+      if ((($a = $rb_lt($rb_times(self.$rand(), 2), dt)) !== nil && (!$a.$$is_boolean || $a == true))) {
+          shape.$destroy();
+          return $scope.get('Shape').$new();
+          } else {
+          return shape
+        }}, TMP_2.$$s = self, TMP_2), $a).call($b);
     }), nil) && 'update';
   })($scope.base, (($scope.get('Phaser')).$$scope.get('State')));
   return $gvars.game.$state().$add("main", $scope.get('MainState').$new(), true);

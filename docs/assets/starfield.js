@@ -35082,7 +35082,7 @@ Opal.modules["upstream_fixes"] = function(Opal) {
   }
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $module = Opal.module, $hash2 = Opal.hash2;
 
-  Opal.add_stubs(['$to_enum', '$kind_of?', '$Float', '$raise', '$class', '$Integer', '$!', '$<=', '$<', '$*', '$/', '$+', '$abs', '$-', '$>', '$floor', '$each', '$==', '$%', '$alias_native', '$native_accessor', '$include', '$to_n', '$proc', '$call', '$new', '$to_sym', '$===']);
+  Opal.add_stubs(['$to_enum', '$kind_of?', '$Float', '$raise', '$class', '$Integer', '$!', '$<=', '$<', '$*', '$/', '$+', '$abs', '$-', '$>', '$floor', '$each', '$==', '$%', '$alias_native', '$native_accessor', '$Native', '$include', '$to_n', '$proc', '$new', '$call', '$to_sym', '$===']);
   (function($base, $super) {
     function $Range(){};
     var self = $Range = $klass($base, $super, 'Range', $Range);
@@ -35187,9 +35187,24 @@ if (o == null) o = nil;
 
       var def = self.$$proto, $scope = self.$$scope;
 
-      self.$native_accessor("fontSize");
+      def["native"] = nil;
+      self.$native_accessor("font", "stroke");
 
-      self.$native_accessor("font");
+      self.$alias_native("font_size", "fontSize");
+
+      Opal.defn(self, '$font_size=', function(value) {
+        var self = this;
+
+        return self.$Native(self["native"].fontSize = value);
+      });
+
+      self.$alias_native("stroke_thickness", "strokeThickness");
+
+      Opal.defn(self, '$stroke_thickness=', function(value) {
+        var self = this;
+
+        return self.$Native(self["native"].strokeThickness = value);
+      });
 
       self.$alias_native("events", $hash2(["as"], {"as": (($scope.get('Phaser')).$$scope.get('Events'))}));
 
@@ -35400,9 +35415,11 @@ if (o == null) o = nil;
         var $a, $b, TMP_4, self = this, $iter = TMP_3.$$p, block = $iter || nil, cast_and_yield = nil, $case = nil;
 
         TMP_3.$$p = null;
-        cast_and_yield = ($a = ($b = self).$proc, $a.$$p = (TMP_4 = function(pointer, event){var self = TMP_4.$$s || this;
+        cast_and_yield = ($a = ($b = self).$proc, $a.$$p = (TMP_4 = function(pointer, event){var self = TMP_4.$$s || this, $a;
 if (pointer == null) pointer = nil;if (event == null) event = nil;
-        return block.$call((($scope.get('Phaser')).$$scope.get('Pointer')).$new(pointer), (($scope.get('Phaser')).$$scope.get('MouseEvent')).$new(event))}, TMP_4.$$s = self, TMP_4), $a).call($b);
+        pointer = (($scope.get('Phaser')).$$scope.get('Pointer')).$new(pointer);
+          event = (($a = event !== false && event !== nil) ? (($scope.get('Phaser')).$$scope.get('MouseEvent')).$new(event) : event);
+          return block.$call(pointer, event);}, TMP_4.$$s = self, TMP_4), $a).call($b);
         return (function() {$case = type.$to_sym();if ("down"['$===']($case)) {return self["native"].onDown.add(cast_and_yield.$to_n());}else if ("up"['$===']($case)) {return self["native"].onUp.add(cast_and_yield.$to_n());}else if ("tap"['$===']($case)) {return self["native"].onTap.add(cast_and_yield.$to_n());}else if ("hold"['$===']($case)) {return self["native"].onHold.add(cast_and_yield.$to_n());}else {return self.$raise($scope.get('ArgumentError'), "Unrecognized event type " + (type))}})();
       });
 
@@ -35441,19 +35458,19 @@ Opal.modules["starfield"] = function(Opal) {
   function $rb_times(lhs, rhs) {
     return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs * rhs : lhs['$*'](rhs);
   }
-  function $rb_minus(lhs, rhs) {
-    return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs - rhs : lhs['$-'](rhs);
-  }
   function $rb_lt(lhs, rhs) {
     return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs < rhs : lhs['$<'](rhs);
   }
   function $rb_ge(lhs, rhs) {
     return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs >= rhs : lhs['$>='](rhs);
   }
+  function $rb_minus(lhs, rhs) {
+    return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs - rhs : lhs['$-'](rhs);
+  }
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $gvars = Opal.gvars;
   if ($gvars.game == null) $gvars.game = nil;
 
-  Opal.add_stubs(['$background_color=', '$stage', '$start_system', '$physics', '$map', '$new_star', '$times', '$x=', '$+', '$/', '$between', '$rnd', '$y=', '$graphics', '$add', '$begin_fill', '$draw_circle', '$sprite', '$add_child', '$enable_body', '$arcade', '$each', '$*', '$-', '$x', '$velocity', '$body', '$y', '$<', '$>=', '$reset_star_position', '$state', '$new']);
+  Opal.add_stubs(['$image', '$load', '$background_color=', '$stage', '$start_system', '$physics', '$map', '$new_star', '$times', '$x=', '$+', '$/', '$between', '$rnd', '$y=', '$sprite', '$add', '$enable_body', '$arcade', '$*', '$sample', '$**', '$each', '$<', '$x', '$y', '$>=', '$reset_star_position', '$-', '$min', '$abs', '$velocity', '$body', '$width=', '$height=', '$state', '$new']);
   self.$require("starfield"+ '/../' + "common");
   (function($base, $super) {
     function $MainState(){};
@@ -35462,58 +35479,62 @@ Opal.modules["starfield"] = function(Opal) {
     var def = self.$$proto, $scope = self.$$scope;
 
     def.stars = nil;
+    Opal.defn(self, '$preload', function() {
+      var self = this;
+      if ($gvars.game == null) $gvars.game = nil;
+
+      return $gvars.game.$load().$image("star", "../images/star.png");
+    });
+
     Opal.defn(self, '$create', function() {
       var $a, $b, TMP_1, self = this;
       if ($gvars.game == null) $gvars.game = nil;
 
       (($a = ["008"]), $b = $gvars.game.$stage(), $b['$background_color='].apply($b, $a), $a[$a.length-1]);
       $gvars.game.$physics().$start_system((((($scope.get('Phaser')).$$scope.get('Physics'))).$$scope.get('ARCADE')));
-      return self.stars = ($a = ($b = (100).$times()).$map, $a.$$p = (TMP_1 = function(){var self = TMP_1.$$s || this;
+      return self.stars = ($a = ($b = (200).$times()).$map, $a.$$p = (TMP_1 = function(){var self = TMP_1.$$s || this;
 
       return self.$new_star()}, TMP_1.$$s = self, TMP_1), $a).call($b);
     });
 
-    Opal.defn(self, '$reset_star_position', function(star_sprite) {
+    Opal.defn(self, '$reset_star_position', function(star) {
       var $a, $b, self = this;
       if ($gvars.size_x == null) $gvars.size_x = nil;
       if ($gvars.game == null) $gvars.game = nil;
       if ($gvars.size_y == null) $gvars.size_y = nil;
 
-      (($a = [$rb_plus($rb_divide($gvars.size_x, 2), $gvars.game.$rnd().$between(-50, 50))]), $b = star_sprite, $b['$x='].apply($b, $a), $a[$a.length-1]);
-      return (($a = [$rb_plus($rb_divide($gvars.size_y, 2), $gvars.game.$rnd().$between(-50, 50))]), $b = star_sprite, $b['$y='].apply($b, $a), $a[$a.length-1]);
+      (($a = [$rb_plus($rb_divide($gvars.size_x, 2), $gvars.game.$rnd().$between(-20, 20))]), $b = star, $b['$x='].apply($b, $a), $a[$a.length-1]);
+      return (($a = [$rb_plus($rb_divide($gvars.size_y, 2), $gvars.game.$rnd().$between(-20, 20))]), $b = star, $b['$y='].apply($b, $a), $a[$a.length-1]);
     });
 
     Opal.defn(self, '$new_star', function() {
-      var $a, $b, self = this, star = nil, star_sprite = nil;
+      var $a, $b, self = this, star = nil;
       if ($gvars.game == null) $gvars.game = nil;
-      if ($gvars.size_x == null) $gvars.size_x = nil;
       if ($gvars.size_y == null) $gvars.size_y = nil;
+      if ($gvars.size_x == null) $gvars.size_x = nil;
 
-      star = $gvars.game.$add().$graphics(0, 0);
-      star.$begin_fill(16777198);
-      star.$draw_circle(0, 0, 5);
-      star_sprite = $gvars.game.$add().$sprite(0, 0);
-      star_sprite.$add_child(star);
-      $gvars.game.$physics().$arcade().$enable_body(star_sprite);
-      (($a = [$gvars.game.$rnd().$between(0, $gvars.size_x)]), $b = star_sprite, $b['$x='].apply($b, $a), $a[$a.length-1]);
-      (($a = [$gvars.game.$rnd().$between(0, $gvars.size_y)]), $b = star_sprite, $b['$y='].apply($b, $a), $a[$a.length-1]);
-      return star_sprite;
+      star = $gvars.game.$add().$sprite(0, 0, "star");
+      $gvars.game.$physics().$arcade().$enable_body(star);
+      (($a = [$rb_plus($rb_divide($gvars.size_y, 2), $rb_times([1, -1].$sample(), $gvars.game.$rnd().$between(0, ($rb_divide($gvars.size_x, 2))['$**'](0.5))['$**'](2)))]), $b = star, $b['$x='].apply($b, $a), $a[$a.length-1]);
+      (($a = [$rb_plus($rb_divide($gvars.size_y, 2), $rb_times([1, -1].$sample(), $gvars.game.$rnd().$between(0, ($rb_divide($gvars.size_y, 2))['$**'](0.5))['$**'](2)))]), $b = star, $b['$y='].apply($b, $a), $a[$a.length-1]);
+      return star;
     });
 
     return (Opal.defn(self, '$update', function() {
       var $a, $b, TMP_2, self = this;
 
-      return ($a = ($b = self.stars).$each, $a.$$p = (TMP_2 = function(star_sprite){var self = TMP_2.$$s || this, $a, $b, $c, $d;
+      return ($a = ($b = self.stars).$each, $a.$$p = (TMP_2 = function(star){var self = TMP_2.$$s || this, $a, $b, $c, $d, rx = nil, ry = nil, size = nil;
         if ($gvars.size_x == null) $gvars.size_x = nil;
         if ($gvars.size_y == null) $gvars.size_y = nil;
-if (star_sprite == null) star_sprite = nil;
-      (($a = [$rb_times(1, ($rb_minus(star_sprite.$x(), $rb_divide($gvars.size_x, 2))))]), $b = star_sprite.$body().$velocity(), $b['$x='].apply($b, $a), $a[$a.length-1]);
-        (($a = [$rb_times(1, ($rb_minus(star_sprite.$y(), $rb_divide($gvars.size_y, 2))))]), $b = star_sprite.$body().$velocity(), $b['$y='].apply($b, $a), $a[$a.length-1]);
-        if ((($a = ((($b = ((($c = ((($d = $rb_lt(star_sprite.$x(), 0)) !== false && $d !== nil) ? $d : $rb_lt(star_sprite.$y(), 0))) !== false && $c !== nil) ? $c : $rb_ge(star_sprite.$x(), $gvars.size_x))) !== false && $b !== nil) ? $b : $rb_ge(star_sprite.$y(), $gvars.size_y))) !== nil && (!$a.$$is_boolean || $a == true))) {
-          return self.$reset_star_position(star_sprite)
-          } else {
-          return nil
-        };}, TMP_2.$$s = self, TMP_2), $a).call($b);
+if (star == null) star = nil;
+      if ((($a = ((($b = ((($c = ((($d = $rb_lt(star.$x(), 0)) !== false && $d !== nil) ? $d : $rb_lt(star.$y(), 0))) !== false && $c !== nil) ? $c : $rb_ge(star.$x(), $gvars.size_x))) !== false && $b !== nil) ? $b : $rb_ge(star.$y(), $gvars.size_y))) !== nil && (!$a.$$is_boolean || $a == true))) {
+          self.$reset_star_position(star)};
+        rx = $rb_minus(star.$x(), $rb_divide($gvars.size_x, 2));
+        ry = $rb_minus(star.$y(), $rb_divide($gvars.size_y, 2));
+        size = $rb_plus(4, $rb_times(60, [($rb_divide(rx, $gvars.size_x)).$abs(), ($rb_divide(ry, $gvars.size_y)).$abs()].$min()));
+        (($a = [$rb_times(1, ($rb_minus(star.$x(), $rb_divide($gvars.size_x, 2))))]), $b = star.$body().$velocity(), $b['$x='].apply($b, $a), $a[$a.length-1]);
+        (($a = [$rb_times(1, ($rb_minus(star.$y(), $rb_divide($gvars.size_y, 2))))]), $b = star.$body().$velocity(), $b['$y='].apply($b, $a), $a[$a.length-1]);
+        return (($a = [(($c = [size]), $d = star, $d['$height='].apply($d, $c), $c[$c.length-1])]), $b = star, $b['$width='].apply($b, $a), $a[$a.length-1]);}, TMP_2.$$s = self, TMP_2), $a).call($b);
     }), nil) && 'update';
   })($scope.base, (($scope.get('Phaser')).$$scope.get('State')));
   return $gvars.game.$state().$add("main", $scope.get('MainState').$new(), true);

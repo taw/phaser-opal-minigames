@@ -35082,7 +35082,7 @@ Opal.modules["upstream_fixes"] = function(Opal) {
   }
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $module = Opal.module, $hash2 = Opal.hash2;
 
-  Opal.add_stubs(['$to_enum', '$kind_of?', '$Float', '$raise', '$class', '$Integer', '$!', '$<=', '$<', '$*', '$/', '$+', '$abs', '$-', '$>', '$floor', '$each', '$==', '$%', '$alias_native', '$native_accessor', '$include', '$to_n', '$proc', '$call', '$new', '$to_sym', '$===']);
+  Opal.add_stubs(['$to_enum', '$kind_of?', '$Float', '$raise', '$class', '$Integer', '$!', '$<=', '$<', '$*', '$/', '$+', '$abs', '$-', '$>', '$floor', '$each', '$==', '$%', '$alias_native', '$native_accessor', '$Native', '$include', '$to_n', '$proc', '$new', '$call', '$to_sym', '$===']);
   (function($base, $super) {
     function $Range(){};
     var self = $Range = $klass($base, $super, 'Range', $Range);
@@ -35187,9 +35187,24 @@ if (o == null) o = nil;
 
       var def = self.$$proto, $scope = self.$$scope;
 
-      self.$native_accessor("fontSize");
+      def["native"] = nil;
+      self.$native_accessor("font", "stroke");
 
-      self.$native_accessor("font");
+      self.$alias_native("font_size", "fontSize");
+
+      Opal.defn(self, '$font_size=', function(value) {
+        var self = this;
+
+        return self.$Native(self["native"].fontSize = value);
+      });
+
+      self.$alias_native("stroke_thickness", "strokeThickness");
+
+      Opal.defn(self, '$stroke_thickness=', function(value) {
+        var self = this;
+
+        return self.$Native(self["native"].strokeThickness = value);
+      });
 
       self.$alias_native("events", $hash2(["as"], {"as": (($scope.get('Phaser')).$$scope.get('Events'))}));
 
@@ -35400,9 +35415,11 @@ if (o == null) o = nil;
         var $a, $b, TMP_4, self = this, $iter = TMP_3.$$p, block = $iter || nil, cast_and_yield = nil, $case = nil;
 
         TMP_3.$$p = null;
-        cast_and_yield = ($a = ($b = self).$proc, $a.$$p = (TMP_4 = function(pointer, event){var self = TMP_4.$$s || this;
+        cast_and_yield = ($a = ($b = self).$proc, $a.$$p = (TMP_4 = function(pointer, event){var self = TMP_4.$$s || this, $a;
 if (pointer == null) pointer = nil;if (event == null) event = nil;
-        return block.$call((($scope.get('Phaser')).$$scope.get('Pointer')).$new(pointer), (($scope.get('Phaser')).$$scope.get('MouseEvent')).$new(event))}, TMP_4.$$s = self, TMP_4), $a).call($b);
+        pointer = (($scope.get('Phaser')).$$scope.get('Pointer')).$new(pointer);
+          event = (($a = event !== false && event !== nil) ? (($scope.get('Phaser')).$$scope.get('MouseEvent')).$new(event) : event);
+          return block.$call(pointer, event);}, TMP_4.$$s = self, TMP_4), $a).call($b);
         return (function() {$case = type.$to_sym();if ("down"['$===']($case)) {return self["native"].onDown.add(cast_and_yield.$to_n());}else if ("up"['$===']($case)) {return self["native"].onUp.add(cast_and_yield.$to_n());}else if ("tap"['$===']($case)) {return self["native"].onTap.add(cast_and_yield.$to_n());}else if ("hold"['$===']($case)) {return self["native"].onHold.add(cast_and_yield.$to_n());}else {return self.$raise($scope.get('ArgumentError'), "Unrecognized event type " + (type))}})();
       });
 
@@ -35450,7 +35467,7 @@ Opal.modules["star_cat"] = function(Opal) {
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $gvars = Opal.gvars;
   if ($gvars.game == null) $gvars.game = nil;
 
-  Opal.add_stubs(['$sprite', '$add', '$*', '$between', '$rnd', '$set', '$anchor', '$x=', '$+', '$x', '$>', '$-', '$y=', '$sin', '$cos', '$y', '$emitter', '$make_particles', '$gravity=', '$maxParticleSpeed', '$minParticleSpeed', '$set_alpha', '$start', '$image', '$load', '$audio', '$background_color=', '$stage', '$play', '$loop=', '$map', '$new', '$/', '$times', '$physics_elapsed', '$time', '$update', '$each', '$state']);
+  Opal.add_stubs(['$sprite', '$add', '$*', '$between', '$rnd', '$angle=', '$sample', '$set', '$anchor', '$x=', '$+', '$x', '$angle', '$>', '$-', '$y=', '$sin', '$cos', '$y', '$emitter', '$make_particles', '$gravity=', '$maxParticleSpeed', '$minParticleSpeed', '$set_alpha', '$start', '$image', '$load', '$audio', '$background_color=', '$stage', '$play', '$loop=', '$map', '$new', '$/', '$times', '$physics_elapsed', '$time', '$update', '$each', '$state']);
   self.$require("star_cat"+ '/../' + "common");
   (function($base, $super) {
     function $Star(){};
@@ -35458,14 +35475,16 @@ Opal.modules["star_cat"] = function(Opal) {
 
     var def = self.$$proto, $scope = self.$$scope;
 
-    def.star = nil;
+    def.star = def.rotation_speed = nil;
     Opal.defn(self, '$initialize', function(pos) {
-      var self = this;
+      var $a, $b, self = this;
       if ($gvars.game == null) $gvars.game = nil;
       if ($gvars.size_x == null) $gvars.size_x = nil;
       if ($gvars.size_y == null) $gvars.size_y = nil;
 
       self.star = $gvars.game.$add().$sprite($rb_times(pos, $gvars.size_x), $gvars.game.$rnd().$between(0, $gvars.size_y), "star");
+      (($a = [$gvars.game.$rnd().$between(0, 360)]), $b = self.star, $b['$angle='].apply($b, $a), $a[$a.length-1]);
+      self.rotation_speed = $rb_times($gvars.game.$rnd().$between(30, 120), [1, -1].$sample());
       return self.star.$anchor().$set(0.5, 0.5);
     });
 
@@ -35475,7 +35494,8 @@ Opal.modules["star_cat"] = function(Opal) {
       if ($gvars.game == null) $gvars.game = nil;
       if ($gvars.size_y == null) $gvars.size_y = nil;
 
-      ($a = self.star, $a['$x=']($rb_plus($a.$x(), $rb_times(dt, 100))));
+      ($a = self.star, $a['$x=']($rb_plus($a.$x(), $rb_times(100, dt))));
+      ($a = self.star, $a['$angle=']($rb_plus($a.$angle(), $rb_times(self.rotation_speed, dt))));
       if ((($a = $rb_gt(self.star.$x(), $gvars.size_x)) !== nil && (!$a.$$is_boolean || $a == true))) {
         ($a = self.star, $a['$x=']($rb_minus($a.$x(), $gvars.size_x)));
         return (($a = [$gvars.game.$rnd().$between(0, $gvars.size_y)]), $b = self.star, $b['$y='].apply($b, $a), $a[$a.length-1]);
@@ -35579,7 +35599,7 @@ Opal.modules["star_cat"] = function(Opal) {
       var $a, $b, TMP_1, self = this;
       if ($gvars.game == null) $gvars.game = nil;
 
-      (($a = ["006"]), $b = $gvars.game.$stage(), $b['$background_color='].apply($b, $a), $a[$a.length-1]);
+      (($a = ["005"]), $b = $gvars.game.$stage(), $b['$background_color='].apply($b, $a), $a[$a.length-1]);
       self.nyan_music = $gvars.game.$add().$audio("nyan");
       self.nyan_music.$play();
       (($a = [true]), $b = self.nyan_music, $b['$loop='].apply($b, $a), $a[$a.length-1]);

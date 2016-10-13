@@ -35082,7 +35082,7 @@ Opal.modules["upstream_fixes"] = function(Opal) {
   }
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $module = Opal.module, $hash2 = Opal.hash2;
 
-  Opal.add_stubs(['$to_enum', '$kind_of?', '$Float', '$raise', '$class', '$Integer', '$!', '$<=', '$<', '$*', '$/', '$+', '$abs', '$-', '$>', '$floor', '$each', '$==', '$%', '$alias_native', '$native_accessor', '$include', '$to_n', '$proc', '$call', '$new', '$to_sym', '$===']);
+  Opal.add_stubs(['$to_enum', '$kind_of?', '$Float', '$raise', '$class', '$Integer', '$!', '$<=', '$<', '$*', '$/', '$+', '$abs', '$-', '$>', '$floor', '$each', '$==', '$%', '$alias_native', '$native_accessor', '$Native', '$include', '$to_n', '$proc', '$new', '$call', '$to_sym', '$===']);
   (function($base, $super) {
     function $Range(){};
     var self = $Range = $klass($base, $super, 'Range', $Range);
@@ -35187,9 +35187,24 @@ if (o == null) o = nil;
 
       var def = self.$$proto, $scope = self.$$scope;
 
-      self.$native_accessor("fontSize");
+      def["native"] = nil;
+      self.$native_accessor("font", "stroke");
 
-      self.$native_accessor("font");
+      self.$alias_native("font_size", "fontSize");
+
+      Opal.defn(self, '$font_size=', function(value) {
+        var self = this;
+
+        return self.$Native(self["native"].fontSize = value);
+      });
+
+      self.$alias_native("stroke_thickness", "strokeThickness");
+
+      Opal.defn(self, '$stroke_thickness=', function(value) {
+        var self = this;
+
+        return self.$Native(self["native"].strokeThickness = value);
+      });
 
       self.$alias_native("events", $hash2(["as"], {"as": (($scope.get('Phaser')).$$scope.get('Events'))}));
 
@@ -35400,9 +35415,11 @@ if (o == null) o = nil;
         var $a, $b, TMP_4, self = this, $iter = TMP_3.$$p, block = $iter || nil, cast_and_yield = nil, $case = nil;
 
         TMP_3.$$p = null;
-        cast_and_yield = ($a = ($b = self).$proc, $a.$$p = (TMP_4 = function(pointer, event){var self = TMP_4.$$s || this;
+        cast_and_yield = ($a = ($b = self).$proc, $a.$$p = (TMP_4 = function(pointer, event){var self = TMP_4.$$s || this, $a;
 if (pointer == null) pointer = nil;if (event == null) event = nil;
-        return block.$call((($scope.get('Phaser')).$$scope.get('Pointer')).$new(pointer), (($scope.get('Phaser')).$$scope.get('MouseEvent')).$new(event))}, TMP_4.$$s = self, TMP_4), $a).call($b);
+        pointer = (($scope.get('Phaser')).$$scope.get('Pointer')).$new(pointer);
+          event = (($a = event !== false && event !== nil) ? (($scope.get('Phaser')).$$scope.get('MouseEvent')).$new(event) : event);
+          return block.$call(pointer, event);}, TMP_4.$$s = self, TMP_4), $a).call($b);
         return (function() {$case = type.$to_sym();if ("down"['$===']($case)) {return self["native"].onDown.add(cast_and_yield.$to_n());}else if ("up"['$===']($case)) {return self["native"].onUp.add(cast_and_yield.$to_n());}else if ("tap"['$===']($case)) {return self["native"].onTap.add(cast_and_yield.$to_n());}else if ("hold"['$===']($case)) {return self["native"].onHold.add(cast_and_yield.$to_n());}else {return self.$raise($scope.get('ArgumentError'), "Unrecognized event type " + (type))}})();
       });
 
@@ -35447,7 +35464,7 @@ Opal.modules["cat_platformer"] = function(Opal) {
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $gvars = Opal.gvars;
   if ($gvars.game == null) $gvars.game = nil;
 
-  Opal.add_stubs(['$image', '$load', '$create', '$height=', '$width=', '$set', '$anchor', '$immovable=', '$body', '$collide', '$arcade', '$physics', '$x=', '$velocity', '$down?', '$left', '$right', '$down', '$blocked', '$touching', '$y=', '$-', '$x', '$/', '$camera', '$background_color=', '$stage', '$start_system', '$set_bounds', '$world', '$create_cursor_keys', '$keyboard', '$input', '$add_key', '$sprite', '$add', '$enable', '$gravity', '$collide_world_bounds=', '$group', '$enable_body=', '$times', '$add_platform', '$+', '$*', '$%', '$state', '$new']);
+  Opal.add_stubs(['$image', '$load', '$create', '$height=', '$width=', '$set', '$anchor', '$immovable=', '$body', '$collide', '$arcade', '$physics', '$x=', '$velocity', '$down?', '$left', '$abs', '$x', '$scale', '$right', '$-@', '$down', '$blocked', '$touching', '$y=', '$-', '$/', '$camera', '$background_color=', '$stage', '$start_system', '$set_bounds', '$world', '$create_cursor_keys', '$keyboard', '$input', '$add_key', '$sprite', '$add', '$enable', '$gravity', '$collide_world_bounds=', '$group', '$enable_body=', '$times', '$add_platform', '$+', '$*', '$%', '$state', '$new']);
   self.$require("cat_platformer"+ '/../' + "common");
   (function($base, $super) {
     function $MainState(){};
@@ -35482,9 +35499,11 @@ Opal.modules["cat_platformer"] = function(Opal) {
       $gvars.game.$physics().$arcade().$collide(self.player, self.platforms);
       (($a = [0]), $b = self.player.$body().$velocity(), $b['$x='].apply($b, $a), $a[$a.length-1]);
       if ((($a = self.cursors.$left()['$down?']()) !== nil && (!$a.$$is_boolean || $a == true))) {
-        (($a = [-250]), $b = self.player.$body().$velocity(), $b['$x='].apply($b, $a), $a[$a.length-1])};
+        (($a = [-250]), $b = self.player.$body().$velocity(), $b['$x='].apply($b, $a), $a[$a.length-1]);
+        (($a = [(self.player.$scale().$x().$abs())]), $b = self.player.$scale(), $b['$x='].apply($b, $a), $a[$a.length-1]);};
       if ((($a = self.cursors.$right()['$down?']()) !== nil && (!$a.$$is_boolean || $a == true))) {
-        (($a = [250]), $b = self.player.$body().$velocity(), $b['$x='].apply($b, $a), $a[$a.length-1])};
+        (($a = [250]), $b = self.player.$body().$velocity(), $b['$x='].apply($b, $a), $a[$a.length-1]);
+        (($a = [(self.player.$scale().$x().$abs())['$-@']()]), $b = self.player.$scale(), $b['$x='].apply($b, $a), $a[$a.length-1]);};
       if ((($a = ($b = self.jumpButton['$down?'](), $b !== false && $b !== nil ?(((($c = self.player.$body().$blocked().$down()) !== false && $c !== nil) ? $c : self.player.$body().$touching().$down())) : $b)) !== nil && (!$a.$$is_boolean || $a == true))) {
         (($a = [-250]), $b = self.player.$body().$velocity(), $b['$y='].apply($b, $a), $a[$a.length-1])};
       return (($a = [$rb_minus(self.player.$x(), $rb_divide($gvars.size_x, 2))]), $b = $gvars.game.$camera(), $b['$x='].apply($b, $a), $a[$a.length-1]);

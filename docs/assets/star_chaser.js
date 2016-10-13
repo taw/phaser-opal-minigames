@@ -35082,7 +35082,7 @@ Opal.modules["upstream_fixes"] = function(Opal) {
   }
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $module = Opal.module, $hash2 = Opal.hash2;
 
-  Opal.add_stubs(['$to_enum', '$kind_of?', '$Float', '$raise', '$class', '$Integer', '$!', '$<=', '$<', '$*', '$/', '$+', '$abs', '$-', '$>', '$floor', '$each', '$==', '$%', '$alias_native', '$native_accessor', '$include', '$to_n', '$proc', '$call', '$new', '$to_sym', '$===']);
+  Opal.add_stubs(['$to_enum', '$kind_of?', '$Float', '$raise', '$class', '$Integer', '$!', '$<=', '$<', '$*', '$/', '$+', '$abs', '$-', '$>', '$floor', '$each', '$==', '$%', '$alias_native', '$native_accessor', '$Native', '$include', '$to_n', '$proc', '$new', '$call', '$to_sym', '$===']);
   (function($base, $super) {
     function $Range(){};
     var self = $Range = $klass($base, $super, 'Range', $Range);
@@ -35187,9 +35187,24 @@ if (o == null) o = nil;
 
       var def = self.$$proto, $scope = self.$$scope;
 
-      self.$native_accessor("fontSize");
+      def["native"] = nil;
+      self.$native_accessor("font", "stroke");
 
-      self.$native_accessor("font");
+      self.$alias_native("font_size", "fontSize");
+
+      Opal.defn(self, '$font_size=', function(value) {
+        var self = this;
+
+        return self.$Native(self["native"].fontSize = value);
+      });
+
+      self.$alias_native("stroke_thickness", "strokeThickness");
+
+      Opal.defn(self, '$stroke_thickness=', function(value) {
+        var self = this;
+
+        return self.$Native(self["native"].strokeThickness = value);
+      });
 
       self.$alias_native("events", $hash2(["as"], {"as": (($scope.get('Phaser')).$$scope.get('Events'))}));
 
@@ -35400,9 +35415,11 @@ if (o == null) o = nil;
         var $a, $b, TMP_4, self = this, $iter = TMP_3.$$p, block = $iter || nil, cast_and_yield = nil, $case = nil;
 
         TMP_3.$$p = null;
-        cast_and_yield = ($a = ($b = self).$proc, $a.$$p = (TMP_4 = function(pointer, event){var self = TMP_4.$$s || this;
+        cast_and_yield = ($a = ($b = self).$proc, $a.$$p = (TMP_4 = function(pointer, event){var self = TMP_4.$$s || this, $a;
 if (pointer == null) pointer = nil;if (event == null) event = nil;
-        return block.$call((($scope.get('Phaser')).$$scope.get('Pointer')).$new(pointer), (($scope.get('Phaser')).$$scope.get('MouseEvent')).$new(event))}, TMP_4.$$s = self, TMP_4), $a).call($b);
+        pointer = (($scope.get('Phaser')).$$scope.get('Pointer')).$new(pointer);
+          event = (($a = event !== false && event !== nil) ? (($scope.get('Phaser')).$$scope.get('MouseEvent')).$new(event) : event);
+          return block.$call(pointer, event);}, TMP_4.$$s = self, TMP_4), $a).call($b);
         return (function() {$case = type.$to_sym();if ("down"['$===']($case)) {return self["native"].onDown.add(cast_and_yield.$to_n());}else if ("up"['$===']($case)) {return self["native"].onUp.add(cast_and_yield.$to_n());}else if ("tap"['$===']($case)) {return self["native"].onTap.add(cast_and_yield.$to_n());}else if ("hold"['$===']($case)) {return self["native"].onHold.add(cast_and_yield.$to_n());}else {return self.$raise($scope.get('ArgumentError'), "Unrecognized event type " + (type))}})();
       });
 
@@ -35444,13 +35461,16 @@ Opal.modules["star_chaser"] = function(Opal) {
   function $rb_plus(lhs, rhs) {
     return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs + rhs : lhs['$+'](rhs);
   }
+  function $rb_gt(lhs, rhs) {
+    return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs > rhs : lhs['$>'](rhs);
+  }
   function $rb_lt(lhs, rhs) {
     return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs < rhs : lhs['$<'](rhs);
   }
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $gvars = Opal.gvars;
   if ($gvars.game == null) $gvars.game = nil;
 
-  Opal.add_stubs(['$image', '$load', '$audio', '$spritesheet', '$between', '$rnd', '$-', '$create', '$immovable=', '$body', '$<<', '$kill', '$delete_if', '$==', '$x', '$y', '$play', '$background_color=', '$stage', '$start_system', '$physics', '$group', '$add', '$enable_body=', '$times', '$add_star', '$on', '$input', '$sprite', '$/', '$set', '$anchor', '$animations', '$width=', '$*', '$width', '$height=', '$height', '$enable', '$collide_world_bounds=', '$emitter', '$make_particles', '$gravity=', '$set_alpha', '$**', '$+', '$min_by', '$clamped_vector', '$x=', '$velocity', '$y=', '$overlap', '$eat_star', '$arcade', '$<', '$rand', '$physics_elapsed', '$time', '$!=', '$minParticleSpeed', '$maxParticleSpeed', '$start', '$state', '$new']);
+  Opal.add_stubs(['$image', '$load', '$audio', '$spritesheet', '$between', '$rnd', '$-', '$create', '$immovable=', '$body', '$<<', '$kill', '$delete_if', '$==', '$x', '$y', '$play', '$background_color=', '$stage', '$start_system', '$physics', '$group', '$add', '$enable_body=', '$times', '$add_star', '$on', '$input', '$sprite', '$/', '$set', '$anchor', '$animations', '$width=', '$*', '$width', '$height=', '$height', '$enable', '$collide_world_bounds=', '$emitter', '$make_particles', '$gravity=', '$set_alpha', '$**', '$+', '$min_by', '$clamped_vector', '$x=', '$velocity', '$y=', '$overlap', '$eat_star', '$arcade', '$>', '$scale', '$<', '$rand', '$physics_elapsed', '$time', '$!=', '$minParticleSpeed', '$maxParticleSpeed', '$start', '$state', '$new']);
   self.$require("star_chaser"+ '/../' + "common");
   (function($base, $super) {
     function $MainState(){};
@@ -35557,6 +35577,10 @@ if (star == null) star = nil;
       ($a = ($c = $gvars.game.$physics().$arcade()).$overlap, $a.$$p = (TMP_5 = function(c, s){var self = TMP_5.$$s || this;
 if (c == null) c = nil;if (s == null) s = nil;
       return self.$eat_star(s)}, TMP_5.$$s = self, TMP_5), $a).call($c, self.chaser, self.star_group);
+      if ((($a = $rb_gt(self.chaser.$body().$velocity().$x(), 0)) !== nil && (!$a.$$is_boolean || $a == true))) {
+        (($a = [-0.5]), $d = self.chaser.$scale(), $d['$x='].apply($d, $a), $a[$a.length-1])
+      } else if ((($a = $rb_lt(self.chaser.$body().$velocity().$x(), 0)) !== nil && (!$a.$$is_boolean || $a == true))) {
+        (($a = [0.5]), $d = self.chaser.$scale(), $d['$x='].apply($d, $a), $a[$a.length-1])};
       if ((($a = ($d = $rb_lt(self.$rand(), $rb_times($gvars.game.$time().$physics_elapsed(), 10)), $d !== false && $d !== nil ?(((($e = dx['$!='](0)) !== false && $e !== nil) ? $e : dy['$!='](0))) : $d)) !== nil && (!$a.$$is_boolean || $a == true))) {
         (($a = [self.chaser.$x()]), $d = self.emitter, $d['$x='].apply($d, $a), $a[$a.length-1]);
         (($a = [self.chaser.$y()]), $d = self.emitter, $d['$y='].apply($d, $a), $a[$a.length-1]);

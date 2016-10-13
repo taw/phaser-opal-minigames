@@ -35082,7 +35082,7 @@ Opal.modules["upstream_fixes"] = function(Opal) {
   }
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $module = Opal.module, $hash2 = Opal.hash2;
 
-  Opal.add_stubs(['$to_enum', '$kind_of?', '$Float', '$raise', '$class', '$Integer', '$!', '$<=', '$<', '$*', '$/', '$+', '$abs', '$-', '$>', '$floor', '$each', '$==', '$%', '$alias_native', '$native_accessor', '$include', '$to_n', '$proc', '$call', '$new', '$to_sym', '$===']);
+  Opal.add_stubs(['$to_enum', '$kind_of?', '$Float', '$raise', '$class', '$Integer', '$!', '$<=', '$<', '$*', '$/', '$+', '$abs', '$-', '$>', '$floor', '$each', '$==', '$%', '$alias_native', '$native_accessor', '$Native', '$include', '$to_n', '$proc', '$new', '$call', '$to_sym', '$===']);
   (function($base, $super) {
     function $Range(){};
     var self = $Range = $klass($base, $super, 'Range', $Range);
@@ -35187,9 +35187,24 @@ if (o == null) o = nil;
 
       var def = self.$$proto, $scope = self.$$scope;
 
-      self.$native_accessor("fontSize");
+      def["native"] = nil;
+      self.$native_accessor("font", "stroke");
 
-      self.$native_accessor("font");
+      self.$alias_native("font_size", "fontSize");
+
+      Opal.defn(self, '$font_size=', function(value) {
+        var self = this;
+
+        return self.$Native(self["native"].fontSize = value);
+      });
+
+      self.$alias_native("stroke_thickness", "strokeThickness");
+
+      Opal.defn(self, '$stroke_thickness=', function(value) {
+        var self = this;
+
+        return self.$Native(self["native"].strokeThickness = value);
+      });
 
       self.$alias_native("events", $hash2(["as"], {"as": (($scope.get('Phaser')).$$scope.get('Events'))}));
 
@@ -35400,9 +35415,11 @@ if (o == null) o = nil;
         var $a, $b, TMP_4, self = this, $iter = TMP_3.$$p, block = $iter || nil, cast_and_yield = nil, $case = nil;
 
         TMP_3.$$p = null;
-        cast_and_yield = ($a = ($b = self).$proc, $a.$$p = (TMP_4 = function(pointer, event){var self = TMP_4.$$s || this;
+        cast_and_yield = ($a = ($b = self).$proc, $a.$$p = (TMP_4 = function(pointer, event){var self = TMP_4.$$s || this, $a;
 if (pointer == null) pointer = nil;if (event == null) event = nil;
-        return block.$call((($scope.get('Phaser')).$$scope.get('Pointer')).$new(pointer), (($scope.get('Phaser')).$$scope.get('MouseEvent')).$new(event))}, TMP_4.$$s = self, TMP_4), $a).call($b);
+        pointer = (($scope.get('Phaser')).$$scope.get('Pointer')).$new(pointer);
+          event = (($a = event !== false && event !== nil) ? (($scope.get('Phaser')).$$scope.get('MouseEvent')).$new(event) : event);
+          return block.$call(pointer, event);}, TMP_4.$$s = self, TMP_4), $a).call($b);
         return (function() {$case = type.$to_sym();if ("down"['$===']($case)) {return self["native"].onDown.add(cast_and_yield.$to_n());}else if ("up"['$===']($case)) {return self["native"].onUp.add(cast_and_yield.$to_n());}else if ("tap"['$===']($case)) {return self["native"].onTap.add(cast_and_yield.$to_n());}else if ("hold"['$===']($case)) {return self["native"].onHold.add(cast_and_yield.$to_n());}else {return self.$raise($scope.get('ArgumentError'), "Unrecognized event type " + (type))}})();
       });
 
@@ -35456,10 +35473,10 @@ Opal.modules["bricks"] = function(Opal) {
   function $rb_gt(lhs, rhs) {
     return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs > rhs : lhs['$>'](rhs);
   }
-  var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $gvars = Opal.gvars, $range = Opal.range;
+  var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $hash = Opal.hash, $gvars = Opal.gvars, $range = Opal.range;
   if ($gvars.game == null) $gvars.game = nil;
 
-  Opal.add_stubs(['$attr_reader', '$/', '$*', '$graphics', '$add', '$begin_fill', '$draw_rect', '$-@', '$destroy', '$attr_accessor', '$x=', '$+', '$x', '$y=', '$y', '$<=', '$<', '$>=', '$-', '$>', '$clamp', '$math', '$background_color=', '$stage', '$new', '$flatten', '$map', '$destroyed', '$brick_x_size', '$brick_y_size', '$abs', '$physics_elapsed', '$time', '$update', '$down?', '$keyboard', '$input', '$each', '$handle_brick_colission', '$dx=', '$dx', '$dy=', '$dy', '$all?', '$to_proc', '$state']);
+  Opal.add_stubs(['$attr_reader', '$/', '$*', '$graphics', '$add', '$begin_fill', '$[]', '$draw_rect', '$-@', '$destroy', '$attr_accessor', '$x=', '$+', '$x', '$y=', '$y', '$<=', '$<', '$>=', '$-', '$>', '$clamp', '$math', '$background_color=', '$stage', '$new', '$flatten', '$map', '$destroyed', '$brick_x_size', '$brick_y_size', '$abs', '$physics_elapsed', '$time', '$update', '$down?', '$keyboard', '$input', '$each', '$handle_brick_colission', '$dx=', '$dx', '$dy=', '$dy', '$all?', '$to_proc', '$state']);
   self.$require("bricks"+ '/../' + "common");
   (function($base, $super) {
     function $Brick(){};
@@ -35473,18 +35490,19 @@ Opal.modules["bricks"] = function(Opal) {
     self.$attr_reader("x", "y", "destroyed");
 
     Opal.defn(self, '$initialize', function(x, y) {
-      var self = this;
+      var self = this, colors_by_row = nil;
       if ($gvars.size_x == null) $gvars.size_x = nil;
       if ($gvars.size_y == null) $gvars.size_y = nil;
       if ($gvars.game == null) $gvars.game = nil;
 
+      colors_by_row = $hash(2, 16711680, 3, 16711808, 4, 16711935, 5, 16744703, 6, 8421631, 7, 8454143);
       self.destroyed = false;
       self.brick_x_size = $rb_divide($gvars.size_x, 18);
       self.brick_y_size = $rb_divide($gvars.size_y, 30);
       self.x = $rb_divide($rb_times(x, $gvars.size_x), 12);
       self.y = $rb_divide($rb_times(y, $gvars.size_y), 20);
       self.brick = $gvars.game.$add().$graphics(self.x, self.y);
-      self.brick.$begin_fill(16711680);
+      self.brick.$begin_fill(colors_by_row['$[]'](y));
       return self.brick.$draw_rect($rb_divide(self.brick_x_size['$-@'](), 2), $rb_divide(self.brick_y_size['$-@'](), 2), self.brick_x_size, self.brick_y_size);
     });
 
