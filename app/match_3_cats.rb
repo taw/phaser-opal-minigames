@@ -38,10 +38,10 @@ class Board
     t1 = @grid[x+1][y]
     t2 = @grid[x+1][y+1]
     t3 = @grid[x][y+1]
-    $game.add.tween(t0).to(properties: {x: t0.x+80}, duration: 500, auto_start: true)
-    $game.add.tween(t1).to(properties: {y: t1.y+80}, duration: 500, auto_start: true)
-    $game.add.tween(t2).to(properties: {x: t2.x-80}, duration: 500, auto_start: true)
-    $game.add.tween(t3).to(properties: {y: t3.y-80}, duration: 500, auto_start: true)
+    $game.add.tween(t0).to(properties: {x: t0.x+80}, duration: 200, auto_start: true)
+    $game.add.tween(t1).to(properties: {y: t1.y+80}, duration: 200, auto_start: true)
+    $game.add.tween(t2).to(properties: {x: t2.x-80}, duration: 200, auto_start: true)
+    $game.add.tween(t3).to(properties: {y: t3.y-80}, duration: 200, auto_start: true)
     @grid[x][y]     = t3
     @grid[x+1][y]   = t0
     @grid[x+1][y+1] = t1
@@ -62,16 +62,16 @@ class Board
     (0...@size_x).each do |x|
       (0...@size_y).each do |y|
         (x+1...@size_x).each do |xx|
-          break if @grid[xx][y].c != @grid[x][y].c
           if xx - x >= 3
             @matches.push("#{x},#{y} - #{xx-1},#{y}")
           end
+          break if @grid[xx][y].c != @grid[x][y].c
         end
         (y+1...@size_y).each do |yy|
-          break if @grid[x][yy].c != @grid[x][y].c
           if yy - y >= 3
             @matches.push("#{x},#{y} - #{x},#{yy-1}")
           end
+          break if @grid[x][yy].c != @grid[x][y].c
         end
       end
     end

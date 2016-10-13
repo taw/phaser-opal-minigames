@@ -189,7 +189,9 @@ module Phaser
   class Input
     def on(type, &block)
       cast_and_yield = proc do |pointer, event|
-        block.call(Phaser::Pointer.new(pointer), Phaser::MouseEvent.new(event))
+        pointer = Phaser::Pointer.new(pointer)
+        event = event && Phaser::MouseEvent.new(event)
+        block.call(pointer, event)
       end
       case type.to_sym
       when :down
