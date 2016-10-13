@@ -4,13 +4,22 @@ class Brick
   attr_reader :brick_x_size, :brick_y_size
   attr_reader :x, :y, :destroyed
   def initialize(x,y)
+    colors_by_row = {
+      2 => 0xFF0000,
+      3 => 0xFF0080,
+      4 => 0xFF00FF,
+      5 => 0xFF80FF,
+      6 => 0x8080FF,
+      7 => 0x80FFFF,
+    }
+
     @destroyed = false
     @brick_x_size = $size_x/18
     @brick_y_size = $size_y/30
     @x = x*$size_x/12
     @y = y*$size_y/20
     @brick = $game.add.graphics(@x, @y)
-    @brick.begin_fill(0xFF0000)
+    @brick.begin_fill(colors_by_row[y])
     @brick.draw_rect(-@brick_x_size/2, -@brick_y_size/2, @brick_x_size, @brick_y_size)
   end
 
