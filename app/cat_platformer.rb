@@ -36,9 +36,6 @@ class MainState < Phaser::State
     $game.stage.background_color = "8F8"
     $game.physics.start_system(Phaser::Physics::ARCADE)
     $game.world.set_bounds(0, 0, 3200, $size_y)
-    # Wrappers for this are not consistent with the rest of interface
-    # thus isDown vs down?
-    # This ought to be fixed upstream
     @cursors = $game.input.keyboard.create_cursor_keys
     @jumpButton = $game.input.keyboard.add_key(`Phaser.Keyboard.SPACEBAR`)
 
