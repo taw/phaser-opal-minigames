@@ -24,7 +24,7 @@ class MainState < Phaser::State
 
   def create
     @last_time = nil
-    $game.stage.background_color = "88F"
+    $game.stage.background_color = "226"
     @hours   = 24.times.map{|i| create_label(i) }
     @minutes = 60.times.map{|i| create_label(i) }
     @seconds = 60.times.map{|i| create_label(i) }
