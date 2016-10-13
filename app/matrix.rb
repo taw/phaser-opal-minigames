@@ -3,15 +3,19 @@ require_relative "common"
 class Character
   def initialize
     @graphics = $game.add.text(0, 0, "", {})
-    reset_character
-    # Start with characters scattered all over the screen
-    @y = $game.rnd.between(0, $size_y)
+    reset_character(false)
   end
 
   # When we reset, we place it on top
-  def reset_character
-    @y = -24
-    @x = $game.rnd.between(0, $size_x)
+  def reset_character(top_of_screen_only)
+    if top_of_screen_only
+      # New characters all start on top
+      @graphics.y = -24
+    else
+      # When starting the game, scatter characters all over the screen
+      @graphics.y = $game.rnd.between(0, $size_y)
+    end
+    @graphics.x = $game.rnd.between(0, $size_x)
     # Between 4s to 10s to fall all the way
     @speed = $game.rnd.between($size_y/10, $size_y/4)
     @graphics.text = $game.rnd.between(0x30A0, 0x30FF).chr
@@ -22,11 +26,9 @@ class Character
   end
 
   def update(dt)
-    @y += @speed*dt
-    @graphics.x = @x
-    @graphics.y = @y
-    if @y >= $size_y
-      reset_character
+    @graphics.y += @speed*dt
+    if @graphics.y >= $size_y
+      reset_character(true)
     end
   end
 
@@ -52,18 +54,18 @@ class Character
 end
 
 class MainState < Phaser::State
+  def create
+    $game.stage.background_color = "020"
+    @characters = 1000.times.map do
+      Character.new
+    end
+  end
+
   def update
     dt = $game.time.physics_elapsed
     @characters.each do |character|
       character.update(dt)
     end
-  end
-
-  def create
-    @characters = 1000.times.map do
-      Character.new
-    end
-    $game.stage.background_color = "020"
   end
 end
 
