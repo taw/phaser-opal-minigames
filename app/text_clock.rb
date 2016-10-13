@@ -9,10 +9,10 @@ class MainState < Phaser::State
     label.angle = angle_deg
     if a == 0
       label.fill = "#44ff00"
-      label.fontSize = 15
+      label.font_size = 15
     else
       label.fill = "#ff0044"
-      label.fontSize = 10
+      label.font_size = 10
     end
   end
 

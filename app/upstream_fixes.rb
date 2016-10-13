@@ -72,8 +72,18 @@ module Phaser
   end
 
   class Text
-    native_accessor :fontSize
-    native_accessor :font
+    native_accessor :font, :stroke
+
+    alias_native :font_size, :fontSize
+    def font_size=(value)
+      Native(`#@native.fontSize = value`)
+    end
+
+    alias_native :stroke_thickness, :strokeThickness
+    def stroke_thickness=(value)
+      Native(`#@native.strokeThickness = value`)
+    end
+
     alias_native :events, as: Phaser::Events
     native_accessor :inputEnabled
   end

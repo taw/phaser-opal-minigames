@@ -1,20 +1,24 @@
 require_relative "common"
 
 class Character
-  attr_reader :active
-
   def initialize
-    @active = true
-    @c = $game.rnd.between(0x30A0, 0x30FF).chr
+    @graphics = $game.add.text(0, 0, "", {})
+    reset_character
+    # Start with characters scattered all over the screen
+    @y = $game.rnd.between(0, $size_y)
+  end
+
+  # When we reset, we place it on top
+  def reset_character
+    @y = -24
     @x = $game.rnd.between(0, $size_x)
-    @y = $game.rnd.between(0, $size_y/4)
-    @speed = $game.rnd.between(30, 200)
-    @graphics = $game.add.text(@x, @y, @c, {
-      fontSize: random_size,
-      fill: random_color,
-      stroke: random_outline_color,
-      strokeThickness: $game.rnd.between(0, 5),
-    })
+    # Between 4s to 10s to fall all the way
+    @speed = $game.rnd.between($size_y/10, $size_y/4)
+    @graphics.text = $game.rnd.between(0x30A0, 0x30FF).chr
+    @graphics.font_size = random_size
+    @graphics.fill = random_color
+    @graphics.stroke = random_outline_color
+    @graphics.stroke_thickness = $game.rnd.between(0, 3)
   end
 
   def update(dt)
@@ -22,8 +26,7 @@ class Character
     @graphics.x = @x
     @graphics.y = @y
     if @y >= $size_y
-      @active = false
-      @graphics.destroy
+      reset_character
     end
   end
 
@@ -51,18 +54,16 @@ end
 class MainState < Phaser::State
   def update
     dt = $game.time.physics_elapsed
-    if @characters.length < 1000
-      @characters << Character.new
-    end
     @characters.each do |character|
       character.update(dt)
     end
-    @characters.select!(&:active)
   end
 
   def create
-    @characters = []
-    $game.stage.background_color = "444"
+    @characters = 1000.times.map do
+      Character.new
+    end
+    $game.stage.background_color = "020"
   end
 end
 
