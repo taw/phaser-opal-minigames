@@ -6,23 +6,21 @@ class Shape
   end
 
   def initialize
-    @active = true
-    @x = $game.rnd.between(0, $size_x)
-    @y = $game.rnd.between(0, $size_y)
-    @graphics = $game.add.graphics(@x, @y)
-    @graphics.line_style(0)
+    @graphics = $game.add.graphics(
+      $game.rnd.between(0, $size_x),
+      $game.rnd.between(0, $size_y)
+    )
     @graphics.begin_fill(random_color)
     case $game.rnd.between(0, 1)
     when 0
-      @graphics.draw_circle(0, 0, $game.rnd.between(5, 100))
+      @graphics.draw_circle(0, 0, $game.rnd.between(10, 100))
     when 1
+      # Randomly deformed 60x60 square
       @graphics.draw_polygon([
-        0,
-        0,
-        $game.rnd.between(-50, 50),
-        $game.rnd.between(-50, 50),
-        $game.rnd.between(-50, 50),
-        $game.rnd.between(-50, 50),
+         30 + $game.rnd.between(-20, 20),  30 + $game.rnd.between(-20, 20),
+         30 + $game.rnd.between(-20, 20), -30 + $game.rnd.between(-20, 20),
+        -30 + $game.rnd.between(-20, 20), -30 + $game.rnd.between(-20, 20),
+        -30 + $game.rnd.between(-20, 20),  30 + $game.rnd.between(-20, 20),
       ])
     end
   end
@@ -35,20 +33,19 @@ end
 class MainState < Phaser::State
   def create
     $game.stage.background_color = "002"
-    @shapes = []
-    @shape_timer = 0
+    @shapes = 200.times.map{ Shape.new }
   end
 
   def update
     dt = $game.time.physics_elapsed
-    @shape_timer += dt
-    # Only update after enough time elapsed, not every frame
-    if @shape_timer > 0.1 or @shapes.size < 50
-      if @shapes.size >= 100
-        @shapes.shift.destroy
+    # Every shape lives on average 2s
+    @shapes = @shapes.map do |shape|
+      if rand*2 < dt
+        shape.destroy
+        Shape.new
+      else
+        shape
       end
-      @shapes << Shape.new
-      @shape_timer = 0
     end
   end
 end
