@@ -12,15 +12,19 @@ class MainState < Phaser::State
   end
 
   def reset_star_position(star)
-    star.x = $size_x/2 + $game.rnd.between(-20, 20)
-    star.y = $size_y/2 + $game.rnd.between(-20, 20)
+    angle = $game.rnd.between(0, 360)
+    dist = rand*0.01 + 0.01
+    star.x = $size_x * (0.5 + Math.sin(angle) * dist)
+    star.y = $size_y * (0.5 + Math.cos(angle) * dist)
   end
 
   def new_star
     star = $game.add.sprite(0, 0, "star")
     $game.physics.arcade.enable_body(star)
-    star.x = $size_y/2 + [1,-1].sample * $game.rnd.between(0, ($size_x/2)**0.5)**2
-    star.y = $size_y/2 + [1,-1].sample * $game.rnd.between(0, ($size_y/2)**0.5)**2
+    angle = $game.rnd.between(0, 360)
+    dist = rand**2
+    star.x = $size_x * (0.5 + Math.sin(angle) * dist)
+    star.y = $size_y * (0.5 + Math.cos(angle) * dist)
     star
   end
 
