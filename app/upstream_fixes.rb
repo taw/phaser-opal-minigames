@@ -186,6 +186,17 @@ module Phaser
     alias_native :y
   end
 
+  class Rope
+    include Native
+    # This is bad wrapper and would be nice to make it better
+    native_accessor :updateAnimation
+    alias_native :points
+  end
+
+  class GameObjectFactory
+    alias_native :rope, :rope, as: Rope
+  end
+
   class Input
     def on(type, &block)
       cast_and_yield = proc do |pointer, event|
