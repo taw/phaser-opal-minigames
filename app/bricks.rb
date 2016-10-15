@@ -1,5 +1,24 @@
 require_relative "common"
 
+class StarEmitter
+  def initialize
+    @emitter = $game.add.emitter(0, 0, 1000)
+    @emitter.make_particles("star3")
+    @emitter.gravity = -50
+    @emitter.maxParticleSpeed.x = 50
+    @emitter.minParticleSpeed.x = -50
+    @emitter.maxParticleSpeed.y = 50
+    @emitter.minParticleSpeed.y = -50
+    @emitter.set_alpha(0.2, 0.5, 0)
+  end
+
+  def burst_at(x, y)
+    @emitter.x = x
+    @emitter.y = y
+    @emitter.start true, 2000, nil, 40
+  end
+end
+
 class Brick
   attr_reader :brick_x_size, :brick_y_size
   attr_reader :x, :y, :destroyed
@@ -70,7 +89,7 @@ class Paddle
   end
 
   def update(dt, direction)
-    @paddle.x += dt * direction * 300
+    @paddle.x += dt * direction * 500
     @paddle.x = $game.math.clamp(@paddle.x, 55, $size_x-55)
   end
 
@@ -80,6 +99,10 @@ class Paddle
 end
 
 class MainState < Phaser::State
+  def preload
+    $game.load.image("star3", "../images/star3.png")
+  end
+
   def create
     @active = true
     $game.stage.background_color = "AAF"
@@ -90,6 +113,7 @@ class MainState < Phaser::State
         Brick.new(x,y)
       }
     }.flatten
+    @emitter = StarEmitter.new
   end
 
   def handle_brick_colission(brick)
@@ -98,6 +122,7 @@ class MainState < Phaser::State
     distance_y = (brick.y - @ball.y) / (10 + brick.brick_y_size/2)
     if distance_x.abs <= 1.0 and distance_y.abs <= 1.0
       brick.destroy
+      @emitter.burst_at(@ball.x, @ball.y)
       if distance_x.abs < distance_y.abs
         @ball_bounce_x = true
       else
