@@ -35178,7 +35178,9 @@ if (o == null) o = nil;
 
       self.$native_accessor("angle");
 
-      return self.$native_accessor("frame");
+      self.$native_accessor("frame");
+
+      return self.$native_accessor("name");
     })($scope.base, null);
 
     (function($base, $super) {
