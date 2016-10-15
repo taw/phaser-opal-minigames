@@ -4,3 +4,4 @@ free resources used.
 Some of the sources include:
 
 * rocket.png - http://www.flaticon.com/free-icon/rocket_123369
+* ufo.png - http://www.flaticon.com/free-icon/ufo_179595

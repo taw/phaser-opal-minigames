@@ -11,6 +11,28 @@ class Star
   end
 end
 
+class Alien
+  def initialize
+    @graphics = $game.add.sprite(
+      $game.rnd.between(0, 5_000),
+      $game.rnd.between(0, 5_000),
+      "ufo"
+    )
+    @graphics.anchor.set(0.5)
+  end
+end
+
+class Donut
+  def initialize
+    @graphics = $game.add.sprite(
+      $game.rnd.between(0, 5_000),
+      $game.rnd.between(0, 5_000),
+      "doughnut"
+    )
+    @graphics.anchor.set(0.5)
+  end
+end
+
 class SpaceShip
   def initialize
     @graphics = $game.add.sprite(2500, 2500, "rocket")
@@ -34,16 +56,16 @@ class SpaceShip
   end
 
   def speed_up(dt)
-    @speed += dt * 250
+    @speed += dt * 500
   end
 
   def slow_down(dt)
-    @speed -= dt * 250
+    @speed -= dt * 300
   end
 
   def update(dt)
-    @speed -= dt * 125 # 4s to autostop anyway
-    @speed = $game.math.clamp(@speed, 0, 500)
+    @speed -= dt * 100 # 4s to autostop
+    @speed = $game.math.clamp(@speed, 0, 400)
     @graphics.angle = @angle
     @graphics.body.velocity.x =  Math.sin($game.math.deg_to_rad(@angle)) * @speed
     @graphics.body.velocity.y = -Math.cos($game.math.deg_to_rad(@angle)) * @speed
@@ -55,6 +77,7 @@ class MainState < Phaser::State
     $game.load.image("star", "../images/star.png")
     $game.load.image("rocket", "../images/rocket.png")
     $game.load.image("doughnut", "../images/doughnut.png")
+    $game.load.image("ufo", "../images/ufo.png")
   end
 
   def create
@@ -62,6 +85,12 @@ class MainState < Phaser::State
     $game.physics.start_system(Phaser::Physics::ARCADE)
     @stars = 200.times.map do
       Star.new
+    end
+    @donuts = 50.times.map do
+      Donut.new
+    end
+    @aliens = 20.times.map do
+      Alien.new
     end
     $game.world.set_bounds(0, 0, 5_000, 5_000)
     @spaceship = SpaceShip.new
