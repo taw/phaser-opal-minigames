@@ -30,16 +30,19 @@ class MainState < Phaser::State
     end
 
     $game.camera.x = @player.x-$size_x/2
+    $game.camera.y = @player.y-$size_y/2
   end
 
   def create
+    @world_size_y = 1500
+
     $game.stage.background_color = "8F8"
     $game.physics.start_system(Phaser::Physics::ARCADE)
-    $game.world.set_bounds(0, 0, 3200, $size_y)
+    $game.world.set_bounds(0, 0, 3200, 1500)
     @cursors = $game.input.keyboard.create_cursor_keys
     @jumpButton = $game.input.keyboard.add_key(`Phaser.Keyboard.SPACEBAR`)
 
-    @player = $game.add.sprite($size_x/2, $size_y-100, 'cat')
+    @player = $game.add.sprite($size_x/2, @world_size_y-100, 'cat')
     @player.anchor.set(0.5)
     @player.height = 64
     @player.width = 64
@@ -51,9 +54,9 @@ class MainState < Phaser::State
     @platforms = $game.add.group()
     @platforms.enable_body = true
     10.times do  |i|
-      add_platform 200+i*300, $size_y-100-100*(i%2)
-      add_platform 200+i*300, $size_y-300-100*(i%2)
-      add_platform 200+i*300, $size_y-500-100*(i%2)
+      (0..5).to_a.sample(4).each do |j|
+        add_platform 200+i*300, @world_size_y-100-200*j-(i%2)*100
+      end
     end
   end
 end
