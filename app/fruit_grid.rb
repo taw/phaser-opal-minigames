@@ -36,6 +36,23 @@ class FruitGrid
   def grid_y_to_screen_y(y)
     @spacing*(y-9.5) + $size_y/2
   end
+
+  def screen_x_to_grid_x(x)
+    ((x - $size_x/2) / @spacing + 9.5).round
+  end
+
+  def screen_y_to_grid_y(y)
+    ((y - $size_y/2) / @spacing + 9.5).round
+  end
+
+  def set_highlight(mouse_x, mouse_y)
+    x = screen_x_to_grid_x(mouse_x)
+    y = screen_y_to_grid_y(mouse_y)
+    @cells.flatten.each do |cell|
+      cell.visible = false
+    end
+    @cells[y][x].visible = true
+  end
 end
 
 class MainState < Phaser::State
@@ -57,6 +74,13 @@ class MainState < Phaser::State
   def create
     $game.stage.background_color = "2A6"
     @grid = FruitGrid.new
+  end
+
+  def update
+    @grid.set_highlight(
+      $game.input.mouse_pointer.worldX,
+      $game.input.mouse_pointer.worldY
+    )
   end
 end
 
