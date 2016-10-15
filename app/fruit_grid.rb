@@ -2,17 +2,39 @@ require_relative "common"
 
 class FruitGrid
   def initialize
-    @size    = [$size_x, $size_y].min / 30.0
     @spacing = [$size_x, $size_y].min / 24.0
+    @cells = 20.times.map do |y|
+      20.times.map do |x|
+        graphics = $game.add.graphics(
+          grid_x_to_screen_x(x),
+          grid_y_to_screen_y(y),
+        )
+        graphics.begin_fill(0x55FFCC)
+        graphics.draw_rect(-@spacing*0.45, -@spacing*0.45, @spacing*0.9, @spacing*0.9)
+        graphics
+      end
+    end
     @fruits = 20.times.map do |y|
       20.times.map do |x|
         n = $game.rnd.between(1, 12)
-        sprite = $game.add.sprite(@spacing*(x-9.5) + $size_x/2, @spacing*(y-9.5) + $size_y/2, "fruit-#{n}")
+        sprite = $game.add.sprite(
+          grid_x_to_screen_x(x),
+          grid_y_to_screen_y(y),
+          "fruit-#{n}"
+        )
         sprite.anchor.set(0.5)
-        sprite.height = sprite.width = @size
+        sprite.height = sprite.width = @spacing * 0.8
         sprite
       end
     end
+  end
+
+  def grid_x_to_screen_x(x)
+    @spacing*(x-9.5) + $size_x/2
+  end
+
+  def grid_y_to_screen_y(y)
+    @spacing*(y-9.5) + $size_y/2
   end
 end
 
