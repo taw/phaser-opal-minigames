@@ -1,9 +1,12 @@
 require_relative "common"
+require "set"
 
 class FruitGrid
   def initialize
     @spacing = [$size_x, $size_y].min / 24.0
-    @cells = 20.times.map do |y|
+    @cells = {}
+    @fruits = {}
+    20.times.map do |y|
       20.times.map do |x|
         graphics = $game.add.graphics(
           grid_x_to_screen_x(x),
@@ -11,12 +14,15 @@ class FruitGrid
         )
         graphics.begin_fill(0x55FFCC)
         graphics.draw_rect(-@spacing*0.45, -@spacing*0.45, @spacing*0.9, @spacing*0.9)
-        graphics
+        graphics.visible = false
+        @cells[[x,y]] = graphics
       end
     end
-    @fruits = 20.times.map do |y|
+    # Don't use all fruit every time
+    fruit_selection = (1..12).to_a.sample(6)
+    20.times.map do |y|
       20.times.map do |x|
-        n = $game.rnd.between(1, 12)
+        n = fruit_selection.sample
         sprite = $game.add.sprite(
           grid_x_to_screen_x(x),
           grid_y_to_screen_y(y),
@@ -24,9 +30,11 @@ class FruitGrid
         )
         sprite.anchor.set(0.5)
         sprite.height = sprite.width = @spacing * 0.8
-        sprite
+        @fruits[[x,y]] = sprite
       end
     end
+
+    @highlighted = Set[]
   end
 
   def grid_x_to_screen_x(x)
@@ -45,13 +53,29 @@ class FruitGrid
     ((y - $size_y/2) / @spacing + 9.5).round
   end
 
+  def find_cells_to_highlight(x,y)
+    @highlighted << [x,y]
+    [[x-1,y], [x+1,y], [x,y-1], [x,y+1]].each do |xx,yy|
+      next unless @cells.has_key? [xx,yy]
+      next if @highlighted.include? [xx,yy]
+      if @fruits[[xx,yy]].key == @fruits[[x,y]].key
+        find_cells_to_highlight(xx,yy)
+      end
+    end
+  end
+
   def set_highlight(mouse_x, mouse_y)
     x = screen_x_to_grid_x(mouse_x)
     y = screen_y_to_grid_y(mouse_y)
-    @cells.flatten.each do |cell|
+    @cells.each_value do |cell|
       cell.visible = false
     end
-    @cells[y][x].visible = true
+    return unless x.between?(0, 19) and y.between?(0, 19)
+    @highlighted = []
+    find_cells_to_highlight(x, y)
+    @highlighted.each do |x,y|
+      @cells[[x,y]].visible = true
+    end
   end
 end
 

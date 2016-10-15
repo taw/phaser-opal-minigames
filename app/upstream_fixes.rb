@@ -69,6 +69,7 @@ module Phaser
     alias_native :add_child, :addChild
     native_accessor :angle
     native_accessor :frame
+    native_accessor :name
   end
 
   class Text
