@@ -1,7 +1,7 @@
 require_relative "common"
 
 class Cell
-  attr_reader :c, :revealed, :marked_mine
+  attr_reader :revealed, :marked_mine
   def initialize(x,y,c)
     @x = x
     @y = y
@@ -11,13 +11,7 @@ class Cell
     @grid_hidden = $game.add.graphics(@x, @y)
     @grid_hidden.line_style(2, 0x000000, 1)
     @grid_hidden.begin_fill(0x888888)
-    @grid_hidden.draw_polygon(
-      -20, -20,
-      -20,  20,
-       20,  20,
-       20, -20,
-      -20, -20,
-    )
+    @grid_hidden.draw_rect(-20, -20, 40, 40)
 
     @grid_visible = $game.add.graphics(@x, @y)
     @grid_visible.line_style(2, 0x000000, 1)
@@ -26,13 +20,7 @@ class Cell
     else
       @grid_visible.begin_fill(0xAAAAAA)
     end
-    @grid_visible.draw_polygon(
-      -20, -20,
-      -20,  20,
-       20,  20,
-       20, -20,
-      -20, -20,
-    )
+    @grid_visible.draw_rect(-20, -20, 40,  40)
     @grid_visible.visible = false
 
     label = @c
@@ -69,6 +57,10 @@ class Cell
     @marked_mine = !@marked_mine
     @mine_mark.visible = !@mine_mark.visible
   end
+
+  def empty?
+    @c == 0
+  end
 end
 
 class Board
@@ -94,7 +86,7 @@ class Board
     return if @grid[x][y].revealed
     return if @grid[x][y].marked_mine
     @grid[x][y].reveal()
-    if @grid[x][y].c == 0
+    if @grid[x][y].empty?
       auto_propagate_reveal(x-1, y-1)
       auto_propagate_reveal(x-1, y  )
       auto_propagate_reveal(x-1, y+1)
