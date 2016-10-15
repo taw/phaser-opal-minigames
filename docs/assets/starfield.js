@@ -35405,6 +35405,28 @@ if (o == null) o = nil;
     })($scope.base, null);
 
     (function($base, $super) {
+      function $Rope(){};
+      var self = $Rope = $klass($base, $super, 'Rope', $Rope);
+
+      var def = self.$$proto, $scope = self.$$scope;
+
+      self.$include($scope.get('Native'));
+
+      self.$native_accessor("updateAnimation");
+
+      return self.$alias_native("points");
+    })($scope.base, null);
+
+    (function($base, $super) {
+      function $GameObjectFactory(){};
+      var self = $GameObjectFactory = $klass($base, $super, 'GameObjectFactory', $GameObjectFactory);
+
+      var def = self.$$proto, $scope = self.$$scope;
+
+      return self.$alias_native("rope", "rope", $hash2(["as"], {"as": $scope.get('Rope')}))
+    })($scope.base, null);
+
+    (function($base, $super) {
       function $Input(){};
       var self = $Input = $klass($base, $super, 'Input', $Input);
 
@@ -35452,9 +35474,6 @@ Opal.modules["starfield"] = function(Opal) {
   function $rb_plus(lhs, rhs) {
     return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs + rhs : lhs['$+'](rhs);
   }
-  function $rb_divide(lhs, rhs) {
-    return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs / rhs : lhs['$/'](rhs);
-  }
   function $rb_times(lhs, rhs) {
     return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs * rhs : lhs['$*'](rhs);
   }
@@ -35467,10 +35486,13 @@ Opal.modules["starfield"] = function(Opal) {
   function $rb_minus(lhs, rhs) {
     return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs - rhs : lhs['$-'](rhs);
   }
+  function $rb_divide(lhs, rhs) {
+    return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs / rhs : lhs['$/'](rhs);
+  }
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $gvars = Opal.gvars;
   if ($gvars.game == null) $gvars.game = nil;
 
-  Opal.add_stubs(['$image', '$load', '$background_color=', '$stage', '$start_system', '$physics', '$map', '$new_star', '$times', '$x=', '$+', '$/', '$between', '$rnd', '$y=', '$sprite', '$add', '$enable_body', '$arcade', '$*', '$sample', '$**', '$each', '$<', '$x', '$y', '$>=', '$reset_star_position', '$-', '$min', '$abs', '$velocity', '$body', '$width=', '$height=', '$state', '$new']);
+  Opal.add_stubs(['$image', '$load', '$background_color=', '$stage', '$start_system', '$physics', '$map', '$new_star', '$times', '$between', '$rnd', '$+', '$*', '$rand', '$x=', '$sin', '$y=', '$cos', '$sprite', '$add', '$enable_body', '$arcade', '$**', '$each', '$<', '$x', '$y', '$>=', '$reset_star_position', '$-', '$/', '$min', '$abs', '$velocity', '$body', '$width=', '$height=', '$state', '$new']);
   self.$require("starfield"+ '/../' + "common");
   (function($base, $super) {
     function $MainState(){};
@@ -35498,25 +35520,29 @@ Opal.modules["starfield"] = function(Opal) {
     });
 
     Opal.defn(self, '$reset_star_position', function(star) {
-      var $a, $b, self = this;
-      if ($gvars.size_x == null) $gvars.size_x = nil;
+      var $a, $b, self = this, angle = nil, dist = nil;
       if ($gvars.game == null) $gvars.game = nil;
+      if ($gvars.size_x == null) $gvars.size_x = nil;
       if ($gvars.size_y == null) $gvars.size_y = nil;
 
-      (($a = [$rb_plus($rb_divide($gvars.size_x, 2), $gvars.game.$rnd().$between(-20, 20))]), $b = star, $b['$x='].apply($b, $a), $a[$a.length-1]);
-      return (($a = [$rb_plus($rb_divide($gvars.size_y, 2), $gvars.game.$rnd().$between(-20, 20))]), $b = star, $b['$y='].apply($b, $a), $a[$a.length-1]);
+      angle = $gvars.game.$rnd().$between(0, 360);
+      dist = $rb_plus($rb_times(self.$rand(), 0.01), 0.01);
+      (($a = [$rb_times($gvars.size_x, ($rb_plus(0.5, $rb_times($scope.get('Math').$sin(angle), dist))))]), $b = star, $b['$x='].apply($b, $a), $a[$a.length-1]);
+      return (($a = [$rb_times($gvars.size_y, ($rb_plus(0.5, $rb_times($scope.get('Math').$cos(angle), dist))))]), $b = star, $b['$y='].apply($b, $a), $a[$a.length-1]);
     });
 
     Opal.defn(self, '$new_star', function() {
-      var $a, $b, self = this, star = nil;
+      var $a, $b, self = this, star = nil, angle = nil, dist = nil;
       if ($gvars.game == null) $gvars.game = nil;
-      if ($gvars.size_y == null) $gvars.size_y = nil;
       if ($gvars.size_x == null) $gvars.size_x = nil;
+      if ($gvars.size_y == null) $gvars.size_y = nil;
 
       star = $gvars.game.$add().$sprite(0, 0, "star");
       $gvars.game.$physics().$arcade().$enable_body(star);
-      (($a = [$rb_plus($rb_divide($gvars.size_y, 2), $rb_times([1, -1].$sample(), $gvars.game.$rnd().$between(0, ($rb_divide($gvars.size_x, 2))['$**'](0.5))['$**'](2)))]), $b = star, $b['$x='].apply($b, $a), $a[$a.length-1]);
-      (($a = [$rb_plus($rb_divide($gvars.size_y, 2), $rb_times([1, -1].$sample(), $gvars.game.$rnd().$between(0, ($rb_divide($gvars.size_y, 2))['$**'](0.5))['$**'](2)))]), $b = star, $b['$y='].apply($b, $a), $a[$a.length-1]);
+      angle = $gvars.game.$rnd().$between(0, 360);
+      dist = self.$rand()['$**'](2);
+      (($a = [$rb_times($gvars.size_x, ($rb_plus(0.5, $rb_times($scope.get('Math').$sin(angle), dist))))]), $b = star, $b['$x='].apply($b, $a), $a[$a.length-1]);
+      (($a = [$rb_times($gvars.size_y, ($rb_plus(0.5, $rb_times($scope.get('Math').$cos(angle), dist))))]), $b = star, $b['$y='].apply($b, $a), $a[$a.length-1]);
       return star;
     });
 

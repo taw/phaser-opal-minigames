@@ -35405,6 +35405,28 @@ if (o == null) o = nil;
     })($scope.base, null);
 
     (function($base, $super) {
+      function $Rope(){};
+      var self = $Rope = $klass($base, $super, 'Rope', $Rope);
+
+      var def = self.$$proto, $scope = self.$$scope;
+
+      self.$include($scope.get('Native'));
+
+      self.$native_accessor("updateAnimation");
+
+      return self.$alias_native("points");
+    })($scope.base, null);
+
+    (function($base, $super) {
+      function $GameObjectFactory(){};
+      var self = $GameObjectFactory = $klass($base, $super, 'GameObjectFactory', $GameObjectFactory);
+
+      var def = self.$$proto, $scope = self.$$scope;
+
+      return self.$alias_native("rope", "rope", $hash2(["as"], {"as": $scope.get('Rope')}))
+    })($scope.base, null);
+
+    (function($base, $super) {
       function $Input(){};
       var self = $Input = $klass($base, $super, 'Input', $Input);
 
@@ -35482,6 +35504,36 @@ Opal.modules["space_explorer"] = function(Opal) {
     }), nil) && 'initialize'
   })($scope.base, null);
   (function($base, $super) {
+    function $Alien(){};
+    var self = $Alien = $klass($base, $super, 'Alien', $Alien);
+
+    var def = self.$$proto, $scope = self.$$scope;
+
+    def.graphics = nil;
+    return (Opal.defn(self, '$initialize', function() {
+      var self = this;
+      if ($gvars.game == null) $gvars.game = nil;
+
+      self.graphics = $gvars.game.$add().$sprite($gvars.game.$rnd().$between(0, 5000), $gvars.game.$rnd().$between(0, 5000), "ufo");
+      return self.graphics.$anchor().$set(0.5);
+    }), nil) && 'initialize'
+  })($scope.base, null);
+  (function($base, $super) {
+    function $Donut(){};
+    var self = $Donut = $klass($base, $super, 'Donut', $Donut);
+
+    var def = self.$$proto, $scope = self.$$scope;
+
+    def.graphics = nil;
+    return (Opal.defn(self, '$initialize', function() {
+      var self = this;
+      if ($gvars.game == null) $gvars.game = nil;
+
+      self.graphics = $gvars.game.$add().$sprite($gvars.game.$rnd().$between(0, 5000), $gvars.game.$rnd().$between(0, 5000), "doughnut");
+      return self.graphics.$anchor().$set(0.5);
+    }), nil) && 'initialize'
+  })($scope.base, null);
+  (function($base, $super) {
     function $SpaceShip(){};
     var self = $SpaceShip = $klass($base, $super, 'SpaceShip', $SpaceShip);
 
@@ -35521,21 +35573,21 @@ Opal.modules["space_explorer"] = function(Opal) {
     Opal.defn(self, '$speed_up', function(dt) {
       var self = this;
 
-      return self.speed = $rb_plus(self.speed, $rb_times(dt, 250));
+      return self.speed = $rb_plus(self.speed, $rb_times(dt, 500));
     });
 
     Opal.defn(self, '$slow_down', function(dt) {
       var self = this;
 
-      return self.speed = $rb_minus(self.speed, $rb_times(dt, 250));
+      return self.speed = $rb_minus(self.speed, $rb_times(dt, 300));
     });
 
     return (Opal.defn(self, '$update', function(dt) {
       var $a, $b, self = this;
       if ($gvars.game == null) $gvars.game = nil;
 
-      self.speed = $rb_minus(self.speed, $rb_times(dt, 125));
-      self.speed = $gvars.game.$math().$clamp(self.speed, 0, 500);
+      self.speed = $rb_minus(self.speed, $rb_times(dt, 100));
+      self.speed = $gvars.game.$math().$clamp(self.speed, 0, 400);
       (($a = [self.angle]), $b = self.graphics, $b['$angle='].apply($b, $a), $a[$a.length-1]);
       (($a = [$rb_times($scope.get('Math').$sin($gvars.game.$math().$deg_to_rad(self.angle)), self.speed)]), $b = self.graphics.$body().$velocity(), $b['$x='].apply($b, $a), $a[$a.length-1]);
       return (($a = [$rb_times($scope.get('Math').$cos($gvars.game.$math().$deg_to_rad(self.angle))['$-@'](), self.speed)]), $b = self.graphics.$body().$velocity(), $b['$y='].apply($b, $a), $a[$a.length-1]);
@@ -35554,11 +35606,12 @@ Opal.modules["space_explorer"] = function(Opal) {
 
       $gvars.game.$load().$image("star", "../images/star.png");
       $gvars.game.$load().$image("rocket", "../images/rocket.png");
-      return $gvars.game.$load().$image("doughnut", "../images/doughnut.png");
+      $gvars.game.$load().$image("doughnut", "../images/doughnut.png");
+      return $gvars.game.$load().$image("ufo", "../images/ufo.png");
     });
 
     Opal.defn(self, '$create', function() {
-      var $a, $b, TMP_1, self = this;
+      var $a, $b, TMP_1, $c, TMP_2, $d, TMP_3, self = this;
       if ($gvars.game == null) $gvars.game = nil;
 
       (($a = ["003"]), $b = $gvars.game.$stage(), $b['$background_color='].apply($b, $a), $a[$a.length-1]);
@@ -35566,6 +35619,12 @@ Opal.modules["space_explorer"] = function(Opal) {
       self.stars = ($a = ($b = (200).$times()).$map, $a.$$p = (TMP_1 = function(){var self = TMP_1.$$s || this;
 
       return $scope.get('Star').$new()}, TMP_1.$$s = self, TMP_1), $a).call($b);
+      self.donuts = ($a = ($c = (50).$times()).$map, $a.$$p = (TMP_2 = function(){var self = TMP_2.$$s || this;
+
+      return $scope.get('Donut').$new()}, TMP_2.$$s = self, TMP_2), $a).call($c);
+      self.aliens = ($a = ($d = (20).$times()).$map, $a.$$p = (TMP_3 = function(){var self = TMP_3.$$s || this;
+
+      return $scope.get('Alien').$new()}, TMP_3.$$s = self, TMP_3), $a).call($d);
       $gvars.game.$world().$set_bounds(0, 0, 5000, 5000);
       self.spaceship = $scope.get('SpaceShip').$new();
       return self.cursors = $gvars.game.$input().$keyboard().$create_cursor_keys();

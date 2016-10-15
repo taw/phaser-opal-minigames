@@ -35405,6 +35405,28 @@ if (o == null) o = nil;
     })($scope.base, null);
 
     (function($base, $super) {
+      function $Rope(){};
+      var self = $Rope = $klass($base, $super, 'Rope', $Rope);
+
+      var def = self.$$proto, $scope = self.$$scope;
+
+      self.$include($scope.get('Native'));
+
+      self.$native_accessor("updateAnimation");
+
+      return self.$alias_native("points");
+    })($scope.base, null);
+
+    (function($base, $super) {
+      function $GameObjectFactory(){};
+      var self = $GameObjectFactory = $klass($base, $super, 'GameObjectFactory', $GameObjectFactory);
+
+      var def = self.$$proto, $scope = self.$$scope;
+
+      return self.$alias_native("rope", "rope", $hash2(["as"], {"as": $scope.get('Rope')}))
+    })($scope.base, null);
+
+    (function($base, $super) {
       function $Input(){};
       var self = $Input = $klass($base, $super, 'Input', $Input);
 
@@ -35461,10 +35483,10 @@ Opal.modules["cat_platformer"] = function(Opal) {
   function $rb_times(lhs, rhs) {
     return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs * rhs : lhs['$*'](rhs);
   }
-  var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $gvars = Opal.gvars;
+  var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $gvars = Opal.gvars, $range = Opal.range;
   if ($gvars.game == null) $gvars.game = nil;
 
-  Opal.add_stubs(['$image', '$load', '$create', '$height=', '$width=', '$set', '$anchor', '$immovable=', '$body', '$collide', '$arcade', '$physics', '$x=', '$velocity', '$down?', '$left', '$abs', '$x', '$scale', '$right', '$-@', '$down', '$blocked', '$touching', '$y=', '$-', '$/', '$camera', '$background_color=', '$stage', '$start_system', '$set_bounds', '$world', '$create_cursor_keys', '$keyboard', '$input', '$add_key', '$sprite', '$add', '$enable', '$gravity', '$collide_world_bounds=', '$group', '$enable_body=', '$times', '$add_platform', '$+', '$*', '$%', '$state', '$new']);
+  Opal.add_stubs(['$image', '$load', '$create', '$height=', '$width=', '$set', '$anchor', '$immovable=', '$body', '$collide', '$arcade', '$physics', '$x=', '$velocity', '$down?', '$left', '$abs', '$x', '$scale', '$right', '$-@', '$down', '$blocked', '$touching', '$y=', '$-', '$/', '$camera', '$y', '$background_color=', '$stage', '$start_system', '$set_bounds', '$world', '$create_cursor_keys', '$keyboard', '$input', '$add_key', '$sprite', '$add', '$enable', '$gravity', '$collide_world_bounds=', '$group', '$enable_body=', '$times', '$each', '$add_platform', '$+', '$*', '$%', '$sample', '$to_a', '$state', '$new']);
   self.$require("cat_platformer"+ '/../' + "common");
   (function($base, $super) {
     function $MainState(){};
@@ -35472,7 +35494,7 @@ Opal.modules["cat_platformer"] = function(Opal) {
 
     var def = self.$$proto, $scope = self.$$scope;
 
-    def.platforms = def.player = def.cursors = def.jumpButton = nil;
+    def.platforms = def.player = def.cursors = def.jumpButton = def.world_size_y = nil;
     Opal.defn(self, '$preload', function() {
       var self = this;
       if ($gvars.game == null) $gvars.game = nil;
@@ -35495,6 +35517,7 @@ Opal.modules["cat_platformer"] = function(Opal) {
       var $a, $b, $c, self = this;
       if ($gvars.game == null) $gvars.game = nil;
       if ($gvars.size_x == null) $gvars.size_x = nil;
+      if ($gvars.size_y == null) $gvars.size_y = nil;
 
       $gvars.game.$physics().$arcade().$collide(self.player, self.platforms);
       (($a = [0]), $b = self.player.$body().$velocity(), $b['$x='].apply($b, $a), $a[$a.length-1]);
@@ -35506,21 +35529,22 @@ Opal.modules["cat_platformer"] = function(Opal) {
         (($a = [(self.player.$scale().$x().$abs())['$-@']()]), $b = self.player.$scale(), $b['$x='].apply($b, $a), $a[$a.length-1]);};
       if ((($a = ($b = self.jumpButton['$down?'](), $b !== false && $b !== nil ?(((($c = self.player.$body().$blocked().$down()) !== false && $c !== nil) ? $c : self.player.$body().$touching().$down())) : $b)) !== nil && (!$a.$$is_boolean || $a == true))) {
         (($a = [-250]), $b = self.player.$body().$velocity(), $b['$y='].apply($b, $a), $a[$a.length-1])};
-      return (($a = [$rb_minus(self.player.$x(), $rb_divide($gvars.size_x, 2))]), $b = $gvars.game.$camera(), $b['$x='].apply($b, $a), $a[$a.length-1]);
+      (($a = [$rb_minus(self.player.$x(), $rb_divide($gvars.size_x, 2))]), $b = $gvars.game.$camera(), $b['$x='].apply($b, $a), $a[$a.length-1]);
+      return (($a = [$rb_minus(self.player.$y(), $rb_divide($gvars.size_y, 2))]), $b = $gvars.game.$camera(), $b['$y='].apply($b, $a), $a[$a.length-1]);
     });
 
     return (Opal.defn(self, '$create', function() {
       var $a, $b, TMP_1, self = this;
       if ($gvars.game == null) $gvars.game = nil;
-      if ($gvars.size_y == null) $gvars.size_y = nil;
       if ($gvars.size_x == null) $gvars.size_x = nil;
 
+      self.world_size_y = 1500;
       (($a = ["8F8"]), $b = $gvars.game.$stage(), $b['$background_color='].apply($b, $a), $a[$a.length-1]);
       $gvars.game.$physics().$start_system((((($scope.get('Phaser')).$$scope.get('Physics'))).$$scope.get('ARCADE')));
-      $gvars.game.$world().$set_bounds(0, 0, 3200, $gvars.size_y);
+      $gvars.game.$world().$set_bounds(0, 0, 3200, 1500);
       self.cursors = $gvars.game.$input().$keyboard().$create_cursor_keys();
       self.jumpButton = $gvars.game.$input().$keyboard().$add_key(Phaser.Keyboard.SPACEBAR);
-      self.player = $gvars.game.$add().$sprite($rb_divide($gvars.size_x, 2), $rb_minus($gvars.size_y, 100), "cat");
+      self.player = $gvars.game.$add().$sprite($rb_divide($gvars.size_x, 2), $rb_minus(self.world_size_y, 100), "cat");
       self.player.$anchor().$set(0.5);
       (($a = [64]), $b = self.player, $b['$height='].apply($b, $a), $a[$a.length-1]);
       (($a = [64]), $b = self.player, $b['$width='].apply($b, $a), $a[$a.length-1]);
@@ -35529,12 +35553,12 @@ Opal.modules["cat_platformer"] = function(Opal) {
       (($a = [true]), $b = self.player.$body(), $b['$collide_world_bounds='].apply($b, $a), $a[$a.length-1]);
       self.platforms = $gvars.game.$add().$group();
       (($a = [true]), $b = self.platforms, $b['$enable_body='].apply($b, $a), $a[$a.length-1]);
-      return ($a = ($b = (10)).$times, $a.$$p = (TMP_1 = function(i){var self = TMP_1.$$s || this;
-        if ($gvars.size_y == null) $gvars.size_y = nil;
+      return ($a = ($b = (10)).$times, $a.$$p = (TMP_1 = function(i){var self = TMP_1.$$s || this, $a, $b, TMP_2;
 if (i == null) i = nil;
-      self.$add_platform($rb_plus(200, $rb_times(i, 300)), $rb_minus($rb_minus($gvars.size_y, 100), $rb_times(100, (i['$%'](2)))));
-        self.$add_platform($rb_plus(200, $rb_times(i, 300)), $rb_minus($rb_minus($gvars.size_y, 300), $rb_times(100, (i['$%'](2)))));
-        return self.$add_platform($rb_plus(200, $rb_times(i, 300)), $rb_minus($rb_minus($gvars.size_y, 500), $rb_times(100, (i['$%'](2)))));}, TMP_1.$$s = self, TMP_1), $a).call($b);
+      return ($a = ($b = ($range(0, 5, false)).$to_a().$sample(4)).$each, $a.$$p = (TMP_2 = function(j){var self = TMP_2.$$s || this;
+          if (self.world_size_y == null) self.world_size_y = nil;
+if (j == null) j = nil;
+        return self.$add_platform($rb_plus(200, $rb_times(i, 300)), $rb_minus($rb_minus($rb_minus(self.world_size_y, 100), $rb_times(200, j)), $rb_times((i['$%'](2)), 100)))}, TMP_2.$$s = self, TMP_2), $a).call($b)}, TMP_1.$$s = self, TMP_1), $a).call($b);
     }), nil) && 'create';
   })($scope.base, (($scope.get('Phaser')).$$scope.get('State')));
   return $gvars.game.$state().$add("main", $scope.get('MainState').$new(), true);

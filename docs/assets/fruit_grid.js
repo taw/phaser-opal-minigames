@@ -35405,6 +35405,28 @@ if (o == null) o = nil;
     })($scope.base, null);
 
     (function($base, $super) {
+      function $Rope(){};
+      var self = $Rope = $klass($base, $super, 'Rope', $Rope);
+
+      var def = self.$$proto, $scope = self.$$scope;
+
+      self.$include($scope.get('Native'));
+
+      self.$native_accessor("updateAnimation");
+
+      return self.$alias_native("points");
+    })($scope.base, null);
+
+    (function($base, $super) {
+      function $GameObjectFactory(){};
+      var self = $GameObjectFactory = $klass($base, $super, 'GameObjectFactory', $GameObjectFactory);
+
+      var def = self.$$proto, $scope = self.$$scope;
+
+      return self.$alias_native("rope", "rope", $hash2(["as"], {"as": $scope.get('Rope')}))
+    })($scope.base, null);
+
+    (function($base, $super) {
       function $Input(){};
       var self = $Input = $klass($base, $super, 'Input', $Input);
 
@@ -35452,11 +35474,11 @@ Opal.modules["fruit_grid"] = function(Opal) {
   function $rb_divide(lhs, rhs) {
     return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs / rhs : lhs['$/'](rhs);
   }
-  function $rb_plus(lhs, rhs) {
-    return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs + rhs : lhs['$+'](rhs);
-  }
   function $rb_times(lhs, rhs) {
     return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs * rhs : lhs['$*'](rhs);
+  }
+  function $rb_plus(lhs, rhs) {
+    return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs + rhs : lhs['$+'](rhs);
   }
   function $rb_minus(lhs, rhs) {
     return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs - rhs : lhs['$-'](rhs);
@@ -35464,7 +35486,7 @@ Opal.modules["fruit_grid"] = function(Opal) {
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $gvars = Opal.gvars;
   if ($gvars.game == null) $gvars.game = nil;
 
-  Opal.add_stubs(['$/', '$min', '$map', '$between', '$rnd', '$sprite', '$add', '$+', '$*', '$-', '$set', '$anchor', '$height=', '$width=', '$times', '$image', '$load', '$background_color=', '$stage', '$new', '$state']);
+  Opal.add_stubs(['$/', '$min', '$map', '$graphics', '$add', '$grid_x_to_screen_x', '$grid_y_to_screen_y', '$begin_fill', '$draw_rect', '$*', '$-@', '$times', '$between', '$rnd', '$sprite', '$set', '$anchor', '$height=', '$width=', '$+', '$-', '$round', '$screen_x_to_grid_x', '$screen_y_to_grid_y', '$each', '$visible=', '$flatten', '$[]', '$image', '$load', '$background_color=', '$stage', '$new', '$set_highlight', '$worldX', '$mouse_pointer', '$input', '$worldY', '$state']);
   self.$require("fruit_grid"+ '/../' + "common");
   (function($base, $super) {
     function $FruitGrid(){};
@@ -35472,28 +35494,74 @@ Opal.modules["fruit_grid"] = function(Opal) {
 
     var def = self.$$proto, $scope = self.$$scope;
 
-    return (Opal.defn(self, '$initialize', function() {
-      var $a, $b, TMP_1, self = this;
+    def.spacing = def.cells = nil;
+    Opal.defn(self, '$initialize', function() {
+      var $a, $b, TMP_1, $c, TMP_3, self = this;
       if ($gvars.size_x == null) $gvars.size_x = nil;
       if ($gvars.size_y == null) $gvars.size_y = nil;
 
-      self.size = $rb_divide([$gvars.size_x, $gvars.size_y].$min(), 30.0);
       self.spacing = $rb_divide([$gvars.size_x, $gvars.size_y].$min(), 24.0);
-      return self.fruits = ($a = ($b = (20).$times()).$map, $a.$$p = (TMP_1 = function(y){var self = TMP_1.$$s || this, $a, $b, TMP_2;
+      self.cells = ($a = ($b = (20).$times()).$map, $a.$$p = (TMP_1 = function(y){var self = TMP_1.$$s || this, $a, $b, TMP_2;
 if (y == null) y = nil;
-      return ($a = ($b = (20).$times()).$map, $a.$$p = (TMP_2 = function(x){var self = TMP_2.$$s || this, $a, $b, $c, $d, n = nil, sprite = nil;
+      return ($a = ($b = (20).$times()).$map, $a.$$p = (TMP_2 = function(x){var self = TMP_2.$$s || this, graphics = nil;
           if (self.spacing == null) self.spacing = nil;
-          if (self.size == null) self.size = nil;
           if ($gvars.game == null) $gvars.game = nil;
-          if ($gvars.size_x == null) $gvars.size_x = nil;
-          if ($gvars.size_y == null) $gvars.size_y = nil;
+if (x == null) x = nil;
+        graphics = $gvars.game.$add().$graphics(self.$grid_x_to_screen_x(x), self.$grid_y_to_screen_y(y));
+          graphics.$begin_fill(5636044);
+          graphics.$draw_rect($rb_times(self.spacing['$-@'](), 0.45), $rb_times(self.spacing['$-@'](), 0.45), $rb_times(self.spacing, 0.9), $rb_times(self.spacing, 0.9));
+          return graphics;}, TMP_2.$$s = self, TMP_2), $a).call($b)}, TMP_1.$$s = self, TMP_1), $a).call($b);
+      return self.fruits = ($a = ($c = (20).$times()).$map, $a.$$p = (TMP_3 = function(y){var self = TMP_3.$$s || this, $a, $b, TMP_4;
+if (y == null) y = nil;
+      return ($a = ($b = (20).$times()).$map, $a.$$p = (TMP_4 = function(x){var self = TMP_4.$$s || this, $a, $b, $c, $d, n = nil, sprite = nil;
+          if (self.spacing == null) self.spacing = nil;
+          if ($gvars.game == null) $gvars.game = nil;
 if (x == null) x = nil;
         n = $gvars.game.$rnd().$between(1, 12);
-          sprite = $gvars.game.$add().$sprite($rb_plus($rb_times(self.spacing, ($rb_minus(x, 9.5))), $rb_divide($gvars.size_x, 2)), $rb_plus($rb_times(self.spacing, ($rb_minus(y, 9.5))), $rb_divide($gvars.size_y, 2)), "fruit-" + (n));
+          sprite = $gvars.game.$add().$sprite(self.$grid_x_to_screen_x(x), self.$grid_y_to_screen_y(y), "fruit-" + (n));
           sprite.$anchor().$set(0.5);
-          (($a = [(($c = [self.size]), $d = sprite, $d['$width='].apply($d, $c), $c[$c.length-1])]), $b = sprite, $b['$height='].apply($b, $a), $a[$a.length-1]);
-          return sprite;}, TMP_2.$$s = self, TMP_2), $a).call($b)}, TMP_1.$$s = self, TMP_1), $a).call($b);
-    }), nil) && 'initialize'
+          (($a = [(($c = [$rb_times(self.spacing, 0.8)]), $d = sprite, $d['$width='].apply($d, $c), $c[$c.length-1])]), $b = sprite, $b['$height='].apply($b, $a), $a[$a.length-1]);
+          return sprite;}, TMP_4.$$s = self, TMP_4), $a).call($b)}, TMP_3.$$s = self, TMP_3), $a).call($c);
+    });
+
+    Opal.defn(self, '$grid_x_to_screen_x', function(x) {
+      var self = this;
+      if ($gvars.size_x == null) $gvars.size_x = nil;
+
+      return $rb_plus($rb_times(self.spacing, ($rb_minus(x, 9.5))), $rb_divide($gvars.size_x, 2));
+    });
+
+    Opal.defn(self, '$grid_y_to_screen_y', function(y) {
+      var self = this;
+      if ($gvars.size_y == null) $gvars.size_y = nil;
+
+      return $rb_plus($rb_times(self.spacing, ($rb_minus(y, 9.5))), $rb_divide($gvars.size_y, 2));
+    });
+
+    Opal.defn(self, '$screen_x_to_grid_x', function(x) {
+      var self = this;
+      if ($gvars.size_x == null) $gvars.size_x = nil;
+
+      return ($rb_plus($rb_divide(($rb_minus(x, $rb_divide($gvars.size_x, 2))), self.spacing), 9.5)).$round();
+    });
+
+    Opal.defn(self, '$screen_y_to_grid_y', function(y) {
+      var self = this;
+      if ($gvars.size_y == null) $gvars.size_y = nil;
+
+      return ($rb_plus($rb_divide(($rb_minus(y, $rb_divide($gvars.size_y, 2))), self.spacing), 9.5)).$round();
+    });
+
+    return (Opal.defn(self, '$set_highlight', function(mouse_x, mouse_y) {
+      var $a, $b, TMP_5, $c, self = this, x = nil, y = nil;
+
+      x = self.$screen_x_to_grid_x(mouse_x);
+      y = self.$screen_y_to_grid_y(mouse_y);
+      ($a = ($b = self.cells.$flatten()).$each, $a.$$p = (TMP_5 = function(cell){var self = TMP_5.$$s || this, $a, $b;
+if (cell == null) cell = nil;
+      return (($a = [false]), $b = cell, $b['$visible='].apply($b, $a), $a[$a.length-1])}, TMP_5.$$s = self, TMP_5), $a).call($b);
+      return (($a = [true]), $c = self.cells['$[]'](y)['$[]'](x), $c['$visible='].apply($c, $a), $a[$a.length-1]);
+    }), nil) && 'set_highlight';
   })($scope.base, null);
   (function($base, $super) {
     function $MainState(){};
@@ -35501,6 +35569,7 @@ if (x == null) x = nil;
 
     var def = self.$$proto, $scope = self.$$scope;
 
+    def.grid = nil;
     Opal.defn(self, '$preload', function() {
       var self = this;
       if ($gvars.game == null) $gvars.game = nil;
@@ -35519,13 +35588,20 @@ if (x == null) x = nil;
       return $gvars.game.$load().$image("fruit-12", "../images/banana2.png");
     });
 
-    return (Opal.defn(self, '$create', function() {
+    Opal.defn(self, '$create', function() {
       var $a, $b, self = this;
       if ($gvars.game == null) $gvars.game = nil;
 
       (($a = ["2A6"]), $b = $gvars.game.$stage(), $b['$background_color='].apply($b, $a), $a[$a.length-1]);
       return self.grid = $scope.get('FruitGrid').$new();
-    }), nil) && 'create';
+    });
+
+    return (Opal.defn(self, '$update', function() {
+      var self = this;
+      if ($gvars.game == null) $gvars.game = nil;
+
+      return self.grid.$set_highlight($gvars.game.$input().$mouse_pointer().$worldX(), $gvars.game.$input().$mouse_pointer().$worldY());
+    }), nil) && 'update';
   })($scope.base, (($scope.get('Phaser')).$$scope.get('State')));
   return $gvars.game.$state().$add("main", $scope.get('MainState').$new(), true);
 };

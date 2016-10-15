@@ -35405,6 +35405,28 @@ if (o == null) o = nil;
     })($scope.base, null);
 
     (function($base, $super) {
+      function $Rope(){};
+      var self = $Rope = $klass($base, $super, 'Rope', $Rope);
+
+      var def = self.$$proto, $scope = self.$$scope;
+
+      self.$include($scope.get('Native'));
+
+      self.$native_accessor("updateAnimation");
+
+      return self.$alias_native("points");
+    })($scope.base, null);
+
+    (function($base, $super) {
+      function $GameObjectFactory(){};
+      var self = $GameObjectFactory = $klass($base, $super, 'GameObjectFactory', $GameObjectFactory);
+
+      var def = self.$$proto, $scope = self.$$scope;
+
+      return self.$alias_native("rope", "rope", $hash2(["as"], {"as": $scope.get('Rope')}))
+    })($scope.base, null);
+
+    (function($base, $super) {
       function $Input(){};
       var self = $Input = $klass($base, $super, 'Input', $Input);
 
@@ -35473,11 +35495,40 @@ Opal.modules["bricks"] = function(Opal) {
   function $rb_gt(lhs, rhs) {
     return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs > rhs : lhs['$>'](rhs);
   }
-  var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $hash = Opal.hash, $gvars = Opal.gvars, $range = Opal.range;
+  var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $gvars = Opal.gvars, $hash = Opal.hash, $range = Opal.range;
   if ($gvars.game == null) $gvars.game = nil;
 
-  Opal.add_stubs(['$attr_reader', '$/', '$*', '$graphics', '$add', '$begin_fill', '$[]', '$draw_rect', '$-@', '$destroy', '$attr_accessor', '$x=', '$+', '$x', '$y=', '$y', '$<=', '$<', '$>=', '$-', '$>', '$clamp', '$math', '$background_color=', '$stage', '$new', '$flatten', '$map', '$destroyed', '$brick_x_size', '$brick_y_size', '$abs', '$physics_elapsed', '$time', '$update', '$down?', '$keyboard', '$input', '$each', '$handle_brick_colission', '$dx=', '$dx', '$dy=', '$dy', '$all?', '$to_proc', '$state']);
+  Opal.add_stubs(['$emitter', '$add', '$make_particles', '$gravity=', '$x=', '$maxParticleSpeed', '$minParticleSpeed', '$y=', '$set_alpha', '$start', '$attr_reader', '$/', '$*', '$graphics', '$begin_fill', '$[]', '$draw_rect', '$-@', '$destroy', '$attr_accessor', '$+', '$x', '$y', '$<=', '$<', '$>=', '$-', '$>', '$clamp', '$math', '$image', '$load', '$background_color=', '$stage', '$new', '$flatten', '$map', '$destroyed', '$brick_x_size', '$brick_y_size', '$abs', '$burst_at', '$physics_elapsed', '$time', '$update', '$down?', '$keyboard', '$input', '$each', '$handle_brick_colission', '$dx=', '$dx', '$dy=', '$dy', '$all?', '$to_proc', '$state']);
   self.$require("bricks"+ '/../' + "common");
+  (function($base, $super) {
+    function $StarEmitter(){};
+    var self = $StarEmitter = $klass($base, $super, 'StarEmitter', $StarEmitter);
+
+    var def = self.$$proto, $scope = self.$$scope;
+
+    def.emitter = nil;
+    Opal.defn(self, '$initialize', function() {
+      var $a, $b, self = this;
+      if ($gvars.game == null) $gvars.game = nil;
+
+      self.emitter = $gvars.game.$add().$emitter(0, 0, 1000);
+      self.emitter.$make_particles("star3");
+      (($a = [-50]), $b = self.emitter, $b['$gravity='].apply($b, $a), $a[$a.length-1]);
+      (($a = [50]), $b = self.emitter.$maxParticleSpeed(), $b['$x='].apply($b, $a), $a[$a.length-1]);
+      (($a = [-50]), $b = self.emitter.$minParticleSpeed(), $b['$x='].apply($b, $a), $a[$a.length-1]);
+      (($a = [50]), $b = self.emitter.$maxParticleSpeed(), $b['$y='].apply($b, $a), $a[$a.length-1]);
+      (($a = [-50]), $b = self.emitter.$minParticleSpeed(), $b['$y='].apply($b, $a), $a[$a.length-1]);
+      return self.emitter.$set_alpha(0.2, 0.5, 0);
+    });
+
+    return (Opal.defn(self, '$burst_at', function(x, y) {
+      var $a, $b, self = this;
+
+      (($a = [x]), $b = self.emitter, $b['$x='].apply($b, $a), $a[$a.length-1]);
+      (($a = [y]), $b = self.emitter, $b['$y='].apply($b, $a), $a[$a.length-1]);
+      return self.emitter.$start(true, 2000, nil, 40);
+    }), nil) && 'burst_at';
+  })($scope.base, null);
   (function($base, $super) {
     function $Brick(){};
     var self = $Brick = $klass($base, $super, 'Brick', $Brick);
@@ -35587,7 +35638,7 @@ Opal.modules["bricks"] = function(Opal) {
       if ($gvars.game == null) $gvars.game = nil;
       if ($gvars.size_x == null) $gvars.size_x = nil;
 
-      ($a = self.paddle, $a['$x=']($rb_plus($a.$x(), $rb_times($rb_times(dt, direction), 300))));
+      ($a = self.paddle, $a['$x=']($rb_plus($a.$x(), $rb_times($rb_times(dt, direction), 500))));
       return (($a = [$gvars.game.$math().$clamp(self.paddle.$x(), 55, $rb_minus($gvars.size_x, 55))]), $b = self.paddle, $b['$x='].apply($b, $a), $a[$a.length-1]);
     });
 
@@ -35603,7 +35654,14 @@ Opal.modules["bricks"] = function(Opal) {
 
     var def = self.$$proto, $scope = self.$$scope;
 
-    def.ball = def.active = def.paddle = def.bricks = def.ball_bounce_x = def.ball_bounce_y = nil;
+    def.ball = def.emitter = def.active = def.paddle = def.bricks = def.ball_bounce_x = def.ball_bounce_y = nil;
+    Opal.defn(self, '$preload', function() {
+      var self = this;
+      if ($gvars.game == null) $gvars.game = nil;
+
+      return $gvars.game.$load().$image("star3", "../images/star3.png");
+    });
+
     Opal.defn(self, '$create', function() {
       var $a, $b, TMP_1, self = this;
       if ($gvars.game == null) $gvars.game = nil;
@@ -35612,11 +35670,12 @@ Opal.modules["bricks"] = function(Opal) {
       (($a = ["AAF"]), $b = $gvars.game.$stage(), $b['$background_color='].apply($b, $a), $a[$a.length-1]);
       self.paddle = $scope.get('Paddle').$new();
       self.ball = $scope.get('Ball').$new();
-      return self.bricks = ($a = ($b = ($range(1, 11, false))).$map, $a.$$p = (TMP_1 = function(x){var self = TMP_1.$$s || this, $a, $b, TMP_2;
+      self.bricks = ($a = ($b = ($range(1, 11, false))).$map, $a.$$p = (TMP_1 = function(x){var self = TMP_1.$$s || this, $a, $b, TMP_2;
 if (x == null) x = nil;
       return ($a = ($b = ($range(2, 7, false))).$map, $a.$$p = (TMP_2 = function(y){var self = TMP_2.$$s || this;
 if (y == null) y = nil;
         return $scope.get('Brick').$new(x, y)}, TMP_2.$$s = self, TMP_2), $a).call($b)}, TMP_1.$$s = self, TMP_1), $a).call($b).$flatten();
+      return self.emitter = $scope.get('StarEmitter').$new();
     });
 
     Opal.defn(self, '$handle_brick_colission', function(brick) {
@@ -35628,6 +35687,7 @@ if (y == null) y = nil;
       distance_y = $rb_divide(($rb_minus(brick.$y(), self.ball.$y())), ($rb_plus(10, $rb_divide(brick.$brick_y_size(), 2))));
       if ((($a = ($b = $rb_le(distance_x.$abs(), 1.0), $b !== false && $b !== nil ?$rb_le(distance_y.$abs(), 1.0) : $b)) !== nil && (!$a.$$is_boolean || $a == true))) {
         brick.$destroy();
+        self.emitter.$burst_at(self.ball.$x(), self.ball.$y());
         if ((($a = $rb_lt(distance_x.$abs(), distance_y.$abs())) !== nil && (!$a.$$is_boolean || $a == true))) {
           return self.ball_bounce_x = true
           } else {

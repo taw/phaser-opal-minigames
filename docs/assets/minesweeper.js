@@ -35405,6 +35405,28 @@ if (o == null) o = nil;
     })($scope.base, null);
 
     (function($base, $super) {
+      function $Rope(){};
+      var self = $Rope = $klass($base, $super, 'Rope', $Rope);
+
+      var def = self.$$proto, $scope = self.$$scope;
+
+      self.$include($scope.get('Native'));
+
+      self.$native_accessor("updateAnimation");
+
+      return self.$alias_native("points");
+    })($scope.base, null);
+
+    (function($base, $super) {
+      function $GameObjectFactory(){};
+      var self = $GameObjectFactory = $klass($base, $super, 'GameObjectFactory', $GameObjectFactory);
+
+      var def = self.$$proto, $scope = self.$$scope;
+
+      return self.$alias_native("rope", "rope", $hash2(["as"], {"as": $scope.get('Rope')}))
+    })($scope.base, null);
+
+    (function($base, $super) {
       function $Input(){};
       var self = $Input = $klass($base, $super, 'Input', $Input);
 
@@ -35476,7 +35498,7 @@ Opal.modules["minesweeper"] = function(Opal) {
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $gvars = Opal.gvars, $hash2 = Opal.hash2, $range = Opal.range;
   if ($gvars.game == null) $gvars.game = nil;
 
-  Opal.add_stubs(['$attr_reader', '$graphics', '$add', '$line_style', '$begin_fill', '$draw_polygon', '$==', '$visible=', '$===', '$[]=', '$text', '$set', '$anchor', '$!', '$visible', '$map', '$setup_mines', '$setup_numbers', '$setup_grid', '$<', '$>=', '$revealed', '$[]', '$click_cell', '$marked_mine', '$reveal', '$c', '$auto_propagate_reveal', '$-', '$+', '$flip_mine_mark', '$/', '$*', '$new', '$>', '$between', '$rnd', '$each', '$mines_near_xy', '$audio', '$load', '$floor', '$<=', '$size_x', '$size_y', '$right_click_cell', '$grid', '$play', '$background_color=', '$stage', '$on', '$click', '$x', '$y', '$!=', '$buttons', '$input', '$state']);
+  Opal.add_stubs(['$attr_reader', '$graphics', '$add', '$line_style', '$begin_fill', '$draw_rect', '$==', '$visible=', '$===', '$[]=', '$text', '$set', '$anchor', '$!', '$visible', '$map', '$setup_mines', '$setup_numbers', '$setup_grid', '$<', '$>=', '$revealed', '$[]', '$click_cell', '$marked_mine', '$reveal', '$empty?', '$auto_propagate_reveal', '$-', '$+', '$flip_mine_mark', '$/', '$*', '$new', '$>', '$between', '$rnd', '$each', '$mines_near_xy', '$audio', '$load', '$floor', '$<=', '$size_x', '$size_y', '$right_click_cell', '$grid', '$c', '$play', '$background_color=', '$stage', '$on', '$click', '$x', '$y', '$!=', '$buttons', '$input', '$state']);
   self.$require("minesweeper"+ '/../' + "common");
   (function($base, $super) {
     function $Cell(){};
@@ -35485,7 +35507,7 @@ Opal.modules["minesweeper"] = function(Opal) {
     var def = self.$$proto, $scope = self.$$scope;
 
     def.x = def.y = def.grid_hidden = def.grid_visible = def.c = def.text = def.mine_mark = def.marked_mine = nil;
-    self.$attr_reader("c", "revealed", "marked_mine");
+    self.$attr_reader("revealed", "marked_mine");
 
     Opal.defn(self, '$initialize', function(x, y, c) {
       var $a, $b, self = this, label = nil, style = nil, $case = nil;
@@ -35499,7 +35521,7 @@ Opal.modules["minesweeper"] = function(Opal) {
       self.grid_hidden = $gvars.game.$add().$graphics(self.x, self.y);
       self.grid_hidden.$line_style(2, 0, 1);
       self.grid_hidden.$begin_fill(8947848);
-      self.grid_hidden.$draw_polygon(-20, -20, -20, 20, 20, 20, 20, -20, -20, -20);
+      self.grid_hidden.$draw_rect(-20, -20, 40, 40);
       self.grid_visible = $gvars.game.$add().$graphics(self.x, self.y);
       self.grid_visible.$line_style(2, 0, 1);
       if (self.c['$==']("X")) {
@@ -35507,7 +35529,7 @@ Opal.modules["minesweeper"] = function(Opal) {
         } else {
         self.grid_visible.$begin_fill(11184810)
       };
-      self.grid_visible.$draw_polygon(-20, -20, -20, 20, 20, 20, 20, -20, -20, -20);
+      self.grid_visible.$draw_rect(-20, -20, 40, 40);
       (($a = [false]), $b = self.grid_visible, $b['$visible='].apply($b, $a), $a[$a.length-1]);
       label = self.c;
       style = $hash2(["align", "fontSize"], {"align": "center", "fontSize": "16px"});
@@ -35529,12 +35551,18 @@ Opal.modules["minesweeper"] = function(Opal) {
       return (($a = [true]), $b = self.grid_visible, $b['$visible='].apply($b, $a), $a[$a.length-1]);
     });
 
-    return (Opal.defn(self, '$flip_mine_mark', function() {
+    Opal.defn(self, '$flip_mine_mark', function() {
       var $a, $b, self = this;
 
       self.marked_mine = self.marked_mine['$!']();
       return (($a = [self.mine_mark.$visible()['$!']()]), $b = self.mine_mark, $b['$visible='].apply($b, $a), $a[$a.length-1]);
-    }), nil) && 'flip_mine_mark';
+    });
+
+    return (Opal.defn(self, '$empty?', function() {
+      var self = this;
+
+      return self.c['$=='](0);
+    }), nil) && 'empty?';
   })($scope.base, null);
   (function($base, $super) {
     function $Board(){};
@@ -35582,7 +35610,7 @@ if (y == null) y = nil;
       if ((($a = self.grid['$[]'](x)['$[]'](y).$marked_mine()) !== nil && (!$a.$$is_boolean || $a == true))) {
         return nil};
       self.grid['$[]'](x)['$[]'](y).$reveal();
-      if (self.grid['$[]'](x)['$[]'](y).$c()['$=='](0)) {
+      if ((($a = self.grid['$[]'](x)['$[]'](y)['$empty?']()) !== nil && (!$a.$$is_boolean || $a == true))) {
         self.$auto_propagate_reveal($rb_minus(x, 1), $rb_minus(y, 1));
         self.$auto_propagate_reveal($rb_minus(x, 1), y);
         self.$auto_propagate_reveal($rb_minus(x, 1), $rb_plus(y, 1));
