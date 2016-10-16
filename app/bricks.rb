@@ -154,7 +154,9 @@ class MainState < Phaser::State
 
     if @ball.dy > 0
       if bottom_distance <= 30 and paddle_distance <= 60
-        @ball.dy = -@ball.dy
+        # relaunches the ball
+        @ball.dy = -300
+        @ball.dx = 7 * (@ball.x - @paddle.x)
       elsif bottom_distance <= 10 and paddle_distance >= 60
         $game.stage.background_color = "FAA"
         @active = false
