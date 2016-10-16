@@ -35691,9 +35691,9 @@ if (y == null) y = nil;
         brick.$destroy();
         self.emitter.$burst_at(self.ball.$x(), self.ball.$y());
         if ((($a = $rb_lt(distance_x.$abs(), distance_y.$abs())) !== nil && (!$a.$$is_boolean || $a == true))) {
-          return self.ball_bounce_x = true
-          } else {
           return self.ball_bounce_y = true
+          } else {
+          return self.ball_bounce_x = true
         };
         } else {
         return nil
@@ -35728,7 +35728,8 @@ if (brick == null) brick = nil;
       bottom_distance = $rb_minus($gvars.size_y, self.ball.$y());
       if ((($a = $rb_gt(self.ball.$dy(), 0)) !== nil && (!$a.$$is_boolean || $a == true))) {
         if ((($a = ($c = $rb_le(bottom_distance, 30), $c !== false && $c !== nil ?$rb_le(paddle_distance, 60) : $c)) !== nil && (!$a.$$is_boolean || $a == true))) {
-          (($a = [self.ball.$dy()['$-@']()]), $c = self.ball, $c['$dy='].apply($c, $a), $a[$a.length-1])
+          (($a = [-300]), $c = self.ball, $c['$dy='].apply($c, $a), $a[$a.length-1]);
+          (($a = [$rb_times(7, ($rb_minus(self.ball.$x(), self.paddle.$x())))]), $c = self.ball, $c['$dx='].apply($c, $a), $a[$a.length-1]);
         } else if ((($a = ($c = $rb_le(bottom_distance, 10), $c !== false && $c !== nil ?$rb_ge(paddle_distance, 60) : $c)) !== nil && (!$a.$$is_boolean || $a == true))) {
           (($a = ["FAA"]), $c = $gvars.game.$stage(), $c['$background_color='].apply($c, $a), $a[$a.length-1]);
           self.active = false;}};
