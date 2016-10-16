@@ -119,6 +119,25 @@ class MainState < Phaser::State
     add_platform 1050, $world_size_y-100
     add_platform 1100, $world_size_y-400
 
+
+    add_platform 250, $world_size_y-550
+    add_platform 400, $world_size_y-750
+    add_platform 600, $world_size_y-850
+    add_platform 700, $world_size_y-550
+    add_platform 900, $world_size_y-600
+    add_platform 1050, $world_size_y-850
+    add_platform 1100, $world_size_y-1000
+
+    add_platform 1350, $world_size_y-150
+    add_platform 1750, $world_size_y-300
+    add_platform 1890, $world_size_y-450
+    add_platform 2000, $world_size_y-150
+    add_platform 2200, $world_size_y-300
+    add_platform 2350, $world_size_y-100
+    add_platform 2500, $world_size_y-400
+    add_platform 2600, $world_size_y-200
+    add_platform 2700, $world_size_y-500
+
     @fruits = $game.add.group()
     @fruits.enable_body = true
     add_fruit(275, $world_size_y-200, "cherry")
