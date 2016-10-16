@@ -46,18 +46,20 @@ end
 
 class MainState < Phaser::State
   def preload
-    $game.load.image("lollipop", "../images/lollipop.png")
-    $game.load.image("icecream", "../images/icecream.png")
-    $game.load.image("icelolly", "../images/icelolly.png")
-    $game.load.image("grapes", "../images/grapes.png")
-    $game.load.image("cupcake", "../images/cupcake.png")
-    $game.load.image("doughnut", "../images/doughnut.png")
-    $game.load.image("pineapple", "../images/pineapple.png")
-    $game.load.image("orange", "../images/orange.png")
-    $game.load.image("watermelon", "../images/watermelon.png")
-    $game.load.image("cherry", "../images/cherry.png")
-    $game.load.image("apple", "../images/apple.png")
-    $game.load.image("banana2", "../images/banana2.png")
+    $game.load.image("sweet-1", "../images/lollipop.png")
+    $game.load.image("sweet-2", "../images/icecream.png")
+    $game.load.image("sweet-3", "../images/icelolly.png")
+    $game.load.image("sweet-4", "../images/cupcake.png")
+    $game.load.image("sweet-5", "../images/doughnut.png")
+
+    $game.load.image("fruit-1", "../images/grapes.png")
+    $game.load.image("fruit-2", "../images/pineapple.png")
+    $game.load.image("fruit-3", "../images/orange.png")
+    $game.load.image("fruit-4", "../images/watermelon.png")
+    $game.load.image("fruit-5", "../images/cherry.png")
+    $game.load.image("fruit-6", "../images/apple.png")
+    $game.load.image("fruit-7", "../images/banana2.png")
+
     $game.load.image("penguin2", "../images/penguin2.png")
     $game.load.image("clouds2", "../images/clouds2.png")
     $game.load.image("mountain", "../images/mountain.jpg")
@@ -72,6 +74,17 @@ class MainState < Phaser::State
     platform.anchor.set(0.5)
     @platforms.add platform
     platform.body.immovable = true
+
+    text = $game.add.text(x, y, "#{x},#{y}", { font: "24px Arial", fill: "#ffffff"})
+    text.anchor.set(0.5)
+
+    if $game.rnd.between(0,1) == 0
+      number = $game.rnd.between(1,7)
+      add_fruit x, y-50, "fruit-#{number}"
+    else
+      number = $game.rnd.between(1,5)
+      add_sweet x, y-50, "sweet-#{number}"
+    end
   end
 
   def add_floor
@@ -105,11 +118,17 @@ class MainState < Phaser::State
     $world_size_x = 3200
     $world_size_y = 1500
     @score_text = $game.add.text(10, 10, "", { fontSize: '16px', fill: '#FBE8D3', align: 'left' })
+    @score_text.fixed_to_camera = true
     $game.physics.start_system(Phaser::Physics::ARCADE)
     $game.world.set_bounds(0, 0, $world_size_x, $world_size_y)
 
     @platforms = $game.add.group()
     @platforms.enable_body = true
+    @fruits = $game.add.group()
+    @fruits.enable_body = true
+    @sweets = $game.add.group()
+    @sweets.enable_body = true
+
     add_floor
     add_platform 250, $world_size_y-150
     add_platform 400, $world_size_y-300
@@ -118,7 +137,6 @@ class MainState < Phaser::State
     add_platform 900, $world_size_y-300
     add_platform 1050, $world_size_y-100
     add_platform 1100, $world_size_y-400
-
 
     add_platform 250, $world_size_y-550
     add_platform 400, $world_size_y-750
@@ -137,24 +155,6 @@ class MainState < Phaser::State
     add_platform 2500, $world_size_y-400
     add_platform 2600, $world_size_y-200
     add_platform 2700, $world_size_y-500
-
-    @fruits = $game.add.group()
-    @fruits.enable_body = true
-    add_fruit(275, $world_size_y-200, "cherry")
-    add_fruit(675, $world_size_y-200, "grapes")
-    add_fruit(725, $world_size_y-200, "apple")
-    add_fruit(900, $world_size_y-350, "orange")
-    add_fruit(1075, $world_size_y-450, "watermelon")
-    add_fruit(1025, $world_size_y-150, "pineapple")
-    add_fruit(1075, $world_size_y-150, "banana2")
-
-    @sweets = $game.add.group()
-    @sweets.enable_body = true
-    add_sweet(225, $world_size_y-200, "lollipop")
-    add_sweet(400, $world_size_y-350, "icecream")
-    add_sweet(575, $world_size_y-500, "icelolly")
-    add_sweet(625, $world_size_y-500, "cupcake")
-    add_sweet(1125, $world_size_y-450, "doughnut")
 
     @penguin = $game.add.sprite(100, $world_size_y-100, "penguin2")
     $game.physics.enable(@penguin, Phaser::Physics::ARCADE)

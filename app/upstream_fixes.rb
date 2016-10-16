@@ -74,7 +74,6 @@ module Phaser
     def fixed_to_camera=(value)
       Native(`#@native.fixedToCamera = value`)
     end
-
   end
 
   class Text
@@ -88,6 +87,11 @@ module Phaser
     alias_native :stroke_thickness, :strokeThickness
     def stroke_thickness=(value)
       Native(`#@native.strokeThickness = value`)
+    end
+
+    alias_native :fixed_to_camera, :fixedToCamera
+    def fixed_to_camera=(value)
+      Native(`#@native.fixedToCamera = value`)
     end
 
     alias_native :events, as: Phaser::Events
