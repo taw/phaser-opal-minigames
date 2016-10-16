@@ -124,9 +124,9 @@ class MainState < Phaser::State
       brick.destroy
       @emitter.burst_at(@ball.x, @ball.y)
       if distance_x.abs < distance_y.abs
-        @ball_bounce_x = true
-      else
         @ball_bounce_y = true
+      else
+        @ball_bounce_x = true
       end
     end
   end
