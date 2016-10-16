@@ -35174,13 +35174,22 @@ if (o == null) o = nil;
 
       var def = self.$$proto, $scope = self.$$scope;
 
+      def["native"] = nil;
       self.$alias_native("add_child", "addChild");
 
       self.$native_accessor("angle");
 
       self.$native_accessor("frame");
 
-      return self.$native_accessor("name");
+      self.$native_accessor("name");
+
+      self.$alias_native("fixed_to_camera", "fixedToCamera");
+
+      return (Opal.defn(self, '$fixed_to_camera=', function(value) {
+        var self = this;
+
+        return self.$Native(self["native"].fixedToCamera = value);
+      }), nil) && 'fixed_to_camera=';
     })($scope.base, null);
 
     (function($base, $super) {
@@ -35206,6 +35215,14 @@ if (o == null) o = nil;
         var self = this;
 
         return self.$Native(self["native"].strokeThickness = value);
+      });
+
+      self.$alias_native("fixed_to_camera", "fixedToCamera");
+
+      Opal.defn(self, '$fixed_to_camera=', function(value) {
+        var self = this;
+
+        return self.$Native(self["native"].fixedToCamera = value);
       });
 
       self.$alias_native("events", $hash2(["as"], {"as": (($scope.get('Phaser')).$$scope.get('Events'))}));
@@ -35485,10 +35502,13 @@ Opal.modules["penguin_eats"] = function(Opal) {
   function $rb_gt(lhs, rhs) {
     return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs > rhs : lhs['$>'](rhs);
   }
+  function $rb_divide(lhs, rhs) {
+    return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs / rhs : lhs['$/'](rhs);
+  }
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $gvars = Opal.gvars, $hash2 = Opal.hash2;
   if ($gvars.game == null) $gvars.game = nil;
 
-  Opal.add_stubs(['$emitter', '$add', '$make_particles', '$gravity=', '$x=', '$maxParticleSpeed', '$minParticleSpeed', '$y=', '$set_alpha', '$start', '$sprite', '$between', '$rnd', '$-', '$height=', '$width=', '$*', '$rand', '$alpha=', '$+', '$y', '$x', '$>', '$image', '$load', '$audio', '$tile_sprite', '$set', '$anchor', '$immovable=', '$body', '$text', '$start_system', '$physics', '$group', '$enable_body=', '$add_platform', '$add_fruit', '$add_sweet', '$enable', '$collide_world_bounds=', '$gravity', '$new', '$create_cursor_keys', '$keyboard', '$input', '$map', '$times', '$collide', '$arcade', '$overlap', '$play', '$destroy', '$burst_at', '$text=', '$down?', '$right', '$left', '$-@', '$velocity', '$up', '$down', '$blocked', '$touching', '$physics_elapsed', '$time', '$each', '$update', '$state']);
+  Opal.add_stubs(['$emitter', '$add', '$make_particles', '$gravity=', '$x=', '$maxParticleSpeed', '$minParticleSpeed', '$y=', '$set_alpha', '$start', '$sprite', '$between', '$rnd', '$-', '$height=', '$width=', '$*', '$rand', '$alpha=', '$+', '$y', '$x', '$>', '$attr_reader', '$image', '$load', '$audio', '$tile_sprite', '$set', '$anchor', '$immovable=', '$body', '$==', '$add_fruit', '$add_sweet', '$new', '$shark', '$fixed_to_camera=', '$text', '$start_system', '$physics', '$set_bounds', '$world', '$group', '$enable_body=', '$add_floor', '$add_platform', '$enable', '$collide_world_bounds=', '$gravity', '$create_cursor_keys', '$keyboard', '$input', '$map', '$times', '$add_shark', '$collide', '$arcade', '$overlap', '$play', '$destroy', '$burst_at', '$text=', '$down?', '$right', '$left', '$-@', '$velocity', '$up', '$down', '$blocked', '$touching', '$physics_elapsed', '$time', '$each', '$update', '$/', '$camera', '$state']);
   self.$require("penguin_eats"+ '/../' + "common");
   (function($base, $super) {
     function $StarEmitter(){};
@@ -35529,9 +35549,10 @@ Opal.modules["penguin_eats"] = function(Opal) {
     Opal.defn(self, '$initialize', function() {
       var $a, $b, $c, $d, self = this;
       if ($gvars.game == null) $gvars.game = nil;
-      if ($gvars.size_x == null) $gvars.size_x = nil;
+      if ($gvars.world_size_x == null) $gvars.world_size_x = nil;
+      if ($gvars.world_size_y == null) $gvars.world_size_y = nil;
 
-      self.snowflake = $gvars.game.$add().$sprite($gvars.game.$rnd().$between(0, $rb_minus($gvars.size_x, 24)), $gvars.game.$rnd().$between(0, $rb_minus($gvars.size_x, 22)), "circle");
+      self.snowflake = $gvars.game.$add().$sprite($gvars.game.$rnd().$between(0, $rb_minus($gvars.world_size_x, 24)), $gvars.game.$rnd().$between(0, $rb_minus($gvars.world_size_y, 22)), "circle");
       (($a = [(($c = [$rb_times(self.$rand(), 10)]), $d = self.snowflake, $d['$width='].apply($d, $c), $c[$c.length-1])]), $b = self.snowflake, $b['$height='].apply($b, $a), $a[$a.length-1]);
       (($a = [$rb_times(self.$rand(), 0.6)]), $b = self.snowflake, $b['$alpha='].apply($b, $a), $a[$a.length-1]);
       return self.speed = $gvars.game.$rnd().$between(100, 200);
@@ -35539,15 +35560,46 @@ Opal.modules["penguin_eats"] = function(Opal) {
 
     return (Opal.defn(self, '$update', function(time) {
       var $a, $b, self = this;
-      if ($gvars.size_y == null) $gvars.size_y = nil;
-      if ($gvars.size_x == null) $gvars.size_x = nil;
+      if ($gvars.world_size_y == null) $gvars.world_size_y = nil;
+      if ($gvars.world_size_x == null) $gvars.world_size_x = nil;
 
       ($a = self.snowflake, $a['$y=']($rb_plus($a.$y(), $rb_times(self.speed, time))));
       ($a = self.snowflake, $a['$x=']($rb_plus($a.$x(), $rb_times(self.speed, time))));
-      if ((($a = $rb_gt(self.snowflake.$y(), $rb_minus($gvars.size_y, 5))) !== nil && (!$a.$$is_boolean || $a == true))) {
+      if ((($a = $rb_gt(self.snowflake.$y(), $rb_minus($gvars.world_size_y, 5))) !== nil && (!$a.$$is_boolean || $a == true))) {
         (($a = [0]), $b = self.snowflake, $b['$y='].apply($b, $a), $a[$a.length-1])};
-      if ((($a = $rb_gt(self.snowflake.$x(), $rb_minus($gvars.size_x, 5))) !== nil && (!$a.$$is_boolean || $a == true))) {
+      if ((($a = $rb_gt(self.snowflake.$x(), $rb_minus($gvars.world_size_x, 5))) !== nil && (!$a.$$is_boolean || $a == true))) {
         return (($a = [0]), $b = self.snowflake, $b['$x='].apply($b, $a), $a[$a.length-1])
+        } else {
+        return nil
+      };
+    }), nil) && 'update';
+  })($scope.base, null);
+  (function($base, $super) {
+    function $Shark(){};
+    var self = $Shark = $klass($base, $super, 'Shark', $Shark);
+
+    var def = self.$$proto, $scope = self.$$scope;
+
+    def.shark = def.speed = nil;
+    self.$attr_reader("shark");
+
+    Opal.defn(self, '$initialize', function() {
+      var self = this;
+      if ($gvars.game == null) $gvars.game = nil;
+      if ($gvars.world_size_x == null) $gvars.world_size_x = nil;
+      if ($gvars.world_size_y == null) $gvars.world_size_y = nil;
+
+      self.shark = $gvars.game.$add().$sprite($gvars.game.$rnd().$between(0, $rb_minus($gvars.world_size_x, 24)), $gvars.game.$rnd().$between(0, $rb_minus($gvars.world_size_y, 22)), "shark");
+      return self.speed = $gvars.game.$rnd().$between(100, 200);
+    });
+
+    return (Opal.defn(self, '$update', function(time) {
+      var $a, $b, self = this;
+      if ($gvars.world_size_x == null) $gvars.world_size_x = nil;
+
+      ($a = self.shark, $a['$x=']($rb_plus($a.$x(), $rb_times(self.speed, time))));
+      if ((($a = $rb_gt(self.shark.$x(), $rb_minus($gvars.world_size_x, 5))) !== nil && (!$a.$$is_boolean || $a == true))) {
+        return (($a = [0]), $b = self.shark, $b['$x='].apply($b, $a), $a[$a.length-1])
         } else {
         return nil
       };
@@ -35559,39 +35611,60 @@ Opal.modules["penguin_eats"] = function(Opal) {
 
     var def = self.$$proto, $scope = self.$$scope;
 
-    def.platforms = def.fruits = def.sweets = def.penguin = def.score_fruits = def.score_sweets = def.score_text = def.cursors = def.snowflake = nil;
+    def.platforms = def.fruits = def.sweets = def.sharks = def.score_text = def.penguin = def.score_fruits = def.score_sweets = def.cursors = def.snowflake = def.shark = nil;
     Opal.defn(self, '$preload', function() {
       var self = this;
       if ($gvars.game == null) $gvars.game = nil;
 
-      $gvars.game.$load().$image("lollipop", "../images/lollipop.png");
-      $gvars.game.$load().$image("icecream", "../images/icecream.png");
-      $gvars.game.$load().$image("icelolly", "../images/icelolly.png");
-      $gvars.game.$load().$image("grapes", "../images/grapes.png");
-      $gvars.game.$load().$image("cupcake", "../images/cupcake.png");
-      $gvars.game.$load().$image("doughnut", "../images/doughnut.png");
-      $gvars.game.$load().$image("pineapple", "../images/pineapple.png");
-      $gvars.game.$load().$image("orange", "../images/orange.png");
-      $gvars.game.$load().$image("watermelon", "../images/watermelon.png");
-      $gvars.game.$load().$image("cherry", "../images/cherry.png");
-      $gvars.game.$load().$image("apple", "../images/apple.png");
-      $gvars.game.$load().$image("banana2", "../images/banana2.png");
+      $gvars.game.$load().$image("sweet-1", "../images/lollipop.png");
+      $gvars.game.$load().$image("sweet-2", "../images/icecream.png");
+      $gvars.game.$load().$image("sweet-3", "../images/icelolly.png");
+      $gvars.game.$load().$image("sweet-4", "../images/cupcake.png");
+      $gvars.game.$load().$image("sweet-5", "../images/doughnut.png");
+      $gvars.game.$load().$image("fruit-1", "../images/grapes.png");
+      $gvars.game.$load().$image("fruit-2", "../images/pineapple.png");
+      $gvars.game.$load().$image("fruit-3", "../images/orange.png");
+      $gvars.game.$load().$image("fruit-4", "../images/watermelon.png");
+      $gvars.game.$load().$image("fruit-5", "../images/cherry.png");
+      $gvars.game.$load().$image("fruit-6", "../images/apple.png");
+      $gvars.game.$load().$image("fruit-7", "../images/banana2.png");
       $gvars.game.$load().$image("penguin2", "../images/penguin2.png");
       $gvars.game.$load().$image("clouds2", "../images/clouds2.png");
       $gvars.game.$load().$image("mountain", "../images/mountain.jpg");
       $gvars.game.$load().$image("star3", "../images/star3.png");
       $gvars.game.$load().$image("circle", "../images/circle.png");
+      $gvars.game.$load().$image("ice_cloud", "../images/ice_cloud.png");
+      $gvars.game.$load().$image("shark", "../images/shark.png");
       return $gvars.game.$load().$audio("pop", "../audio/pop3.mp3");
     });
 
     Opal.defn(self, '$add_platform', function(x, y) {
-      var $a, $b, self = this, platform = nil;
+      var $a, $b, self = this, platform = nil, number = nil;
       if ($gvars.game == null) $gvars.game = nil;
 
       platform = $gvars.game.$add().$tile_sprite(x, y, $rb_times(64, 3), 36, "clouds2");
       platform.$anchor().$set(0.5);
       self.platforms.$add(platform);
-      return (($a = [true]), $b = platform.$body(), $b['$immovable='].apply($b, $a), $a[$a.length-1]);
+      (($a = [true]), $b = platform.$body(), $b['$immovable='].apply($b, $a), $a[$a.length-1]);
+      if ($gvars.game.$rnd().$between(0, 1)['$=='](0)) {
+        number = $gvars.game.$rnd().$between(1, 7);
+        return self.$add_fruit(x, $rb_minus(y, 50), "fruit-" + (number));
+        } else {
+        number = $gvars.game.$rnd().$between(1, 5);
+        return self.$add_sweet(x, $rb_minus(y, 50), "sweet-" + (number));
+      };
+    });
+
+    Opal.defn(self, '$add_floor', function() {
+      var $a, $b, self = this, floor = nil;
+      if ($gvars.game == null) $gvars.game = nil;
+      if ($gvars.world_size_y == null) $gvars.world_size_y = nil;
+      if ($gvars.world_size_x == null) $gvars.world_size_x = nil;
+
+      floor = $gvars.game.$add().$tile_sprite(0, $gvars.world_size_y, $gvars.world_size_x, 30, "ice_cloud");
+      floor.$anchor().$set(0, 1);
+      self.platforms.$add(floor);
+      return (($a = [true]), $b = floor.$body(), $b['$immovable='].apply($b, $a), $a[$a.length-1]);
     });
 
     Opal.defn(self, '$add_fruit', function(x, y, fruit_name) {
@@ -35614,45 +35687,80 @@ Opal.modules["penguin_eats"] = function(Opal) {
       return (($a = [true]), $b = sweet.$body(), $b['$immovable='].apply($b, $a), $a[$a.length-1]);
     });
 
+    Opal.defn(self, '$add_shark', function(x, y) {
+      var self = this, shark = nil;
+
+      shark = $scope.get('Shark').$new();
+      self.sharks.$add(shark.$shark());
+      return shark;
+    });
+
     Opal.defn(self, '$create', function() {
-      var $a, $b, TMP_1, self = this, background = nil;
+      var $a, $b, TMP_1, $c, TMP_2, self = this, background = nil;
       if ($gvars.game == null) $gvars.game = nil;
       if ($gvars.size_y == null) $gvars.size_y = nil;
       if ($gvars.size_x == null) $gvars.size_x = nil;
+      if ($gvars.world_size_x == null) $gvars.world_size_x = nil;
+      if ($gvars.world_size_y == null) $gvars.world_size_y = nil;
 
       background = $gvars.game.$add().$sprite(0, 0, "mountain");
       (($a = [$gvars.size_y]), $b = background, $b['$height='].apply($b, $a), $a[$a.length-1]);
       (($a = [$gvars.size_x]), $b = background, $b['$width='].apply($b, $a), $a[$a.length-1]);
+      (($a = [true]), $b = background, $b['$fixed_to_camera='].apply($b, $a), $a[$a.length-1]);
       self.score_fruits = 0;
       self.score_sweets = 0;
+      $gvars.world_size_x = 3200;
+      $gvars.world_size_y = 1500;
       self.score_text = $gvars.game.$add().$text(10, 10, "", $hash2(["fontSize", "fill", "align"], {"fontSize": "16px", "fill": "#FBE8D3", "align": "left"}));
+      (($a = [true]), $b = self.score_text, $b['$fixed_to_camera='].apply($b, $a), $a[$a.length-1]);
       $gvars.game.$physics().$start_system((((($scope.get('Phaser')).$$scope.get('Physics'))).$$scope.get('ARCADE')));
+      $gvars.game.$world().$set_bounds(0, 0, $gvars.world_size_x, $gvars.world_size_y);
       self.platforms = $gvars.game.$add().$group();
       (($a = [true]), $b = self.platforms, $b['$enable_body='].apply($b, $a), $a[$a.length-1]);
-      self.$add_platform(250, $rb_minus($gvars.size_y, 150));
-      self.$add_platform(400, $rb_minus($gvars.size_y, 300));
-      self.$add_platform(600, $rb_minus($gvars.size_y, 450));
-      self.$add_platform(700, $rb_minus($gvars.size_y, 150));
-      self.$add_platform(900, $rb_minus($gvars.size_y, 300));
-      self.$add_platform(1050, $rb_minus($gvars.size_y, 100));
-      self.$add_platform(1100, $rb_minus($gvars.size_y, 400));
       self.fruits = $gvars.game.$add().$group();
       (($a = [true]), $b = self.fruits, $b['$enable_body='].apply($b, $a), $a[$a.length-1]);
-      self.$add_fruit(275, $rb_minus($gvars.size_y, 200), "cherry");
-      self.$add_fruit(675, $rb_minus($gvars.size_y, 200), "grapes");
-      self.$add_fruit(725, $rb_minus($gvars.size_y, 200), "apple");
-      self.$add_fruit(900, $rb_minus($gvars.size_y, 350), "orange");
-      self.$add_fruit(1075, $rb_minus($gvars.size_y, 450), "watermelon");
-      self.$add_fruit(1025, $rb_minus($gvars.size_y, 150), "pineapple");
-      self.$add_fruit(1075, $rb_minus($gvars.size_y, 150), "banana2");
       self.sweets = $gvars.game.$add().$group();
       (($a = [true]), $b = self.sweets, $b['$enable_body='].apply($b, $a), $a[$a.length-1]);
-      self.$add_sweet(225, $rb_minus($gvars.size_y, 200), "lollipop");
-      self.$add_sweet(400, $rb_minus($gvars.size_y, 350), "icecream");
-      self.$add_sweet(575, $rb_minus($gvars.size_y, 500), "icelolly");
-      self.$add_sweet(625, $rb_minus($gvars.size_y, 500), "cupcake");
-      self.$add_sweet(1125, $rb_minus($gvars.size_y, 450), "doughnut");
-      self.penguin = $gvars.game.$add().$sprite(100, $rb_minus($gvars.size_y, 100), "penguin2");
+      self.sharks = $gvars.game.$add().$group();
+      (($a = [true]), $b = self.sharks, $b['$enable_body='].apply($b, $a), $a[$a.length-1]);
+      self.$add_floor();
+      self.$add_platform(250, $rb_minus($gvars.world_size_y, 150));
+      self.$add_platform(400, $rb_minus($gvars.world_size_y, 300));
+      self.$add_platform(550, $rb_minus($gvars.world_size_y, 420));
+      self.$add_platform(700, $rb_minus($gvars.world_size_y, 150));
+      self.$add_platform(900, $rb_minus($gvars.world_size_y, 300));
+      self.$add_platform(1050, $rb_minus($gvars.world_size_y, 100));
+      self.$add_platform(1100, $rb_minus($gvars.world_size_y, 400));
+      self.$add_platform(250, $rb_minus($gvars.world_size_y, 550));
+      self.$add_platform(400, $rb_minus($gvars.world_size_y, 750));
+      self.$add_platform(600, $rb_minus($gvars.world_size_y, 850));
+      self.$add_platform(700, $rb_minus($gvars.world_size_y, 550));
+      self.$add_platform(900, $rb_minus($gvars.world_size_y, 600));
+      self.$add_platform(1050, $rb_minus($gvars.world_size_y, 750));
+      self.$add_platform(900, $rb_minus($gvars.world_size_y, 1000));
+      self.$add_platform(800, $rb_minus($gvars.world_size_y, 1200));
+      self.$add_platform(1350, $rb_minus($gvars.world_size_y, 150));
+      self.$add_platform(1750, $rb_minus($gvars.world_size_y, 300));
+      self.$add_platform(1890, $rb_minus($gvars.world_size_y, 450));
+      self.$add_platform(2000, $rb_minus($gvars.world_size_y, 150));
+      self.$add_platform(2200, $rb_minus($gvars.world_size_y, 300));
+      self.$add_platform(2350, $rb_minus($gvars.world_size_y, 100));
+      self.$add_platform(2500, $rb_minus($gvars.world_size_y, 400));
+      self.$add_platform(2600, $rb_minus($gvars.world_size_y, 200));
+      self.$add_platform(2700, $rb_minus($gvars.world_size_y, 500));
+      self.$add_platform(1350, $rb_minus($gvars.world_size_y, 550));
+      self.$add_platform(1750, $rb_minus($gvars.world_size_y, 800));
+      self.$add_platform(1890, $rb_minus($gvars.world_size_y, 1250));
+      self.$add_platform(2000, $rb_minus($gvars.world_size_y, 550));
+      self.$add_platform(2200, $rb_minus($gvars.world_size_y, 800));
+      self.$add_platform(2350, $rb_minus($gvars.world_size_y, 1250));
+      self.$add_platform(2500, $rb_minus($gvars.world_size_y, 1600));
+      self.$add_platform(2600, $rb_minus($gvars.world_size_y, 900));
+      self.$add_platform(2800, $rb_minus($gvars.world_size_y, 700));
+      self.$add_platform(2400, $rb_minus($gvars.world_size_y, 1050));
+      self.$add_platform(2100, $rb_minus($gvars.world_size_y, 1050));
+      self.$add_platform(1400, $rb_minus($gvars.world_size_y, 950));
+      self.penguin = $gvars.game.$add().$sprite(100, $rb_minus($gvars.world_size_y, 100), "penguin2");
       $gvars.game.$physics().$enable(self.penguin, (((($scope.get('Phaser')).$$scope.get('Physics'))).$$scope.get('ARCADE')));
       self.penguin.$anchor().$set(0.5);
       (($a = [true]), $b = self.penguin.$body(), $b['$collide_world_bounds='].apply($b, $a), $a[$a.length-1]);
@@ -35660,24 +35768,29 @@ Opal.modules["penguin_eats"] = function(Opal) {
       self.emitter = $scope.get('StarEmitter').$new();
       self.pop = $gvars.game.$add().$audio("pop");
       self.cursors = $gvars.game.$input().$keyboard().$create_cursor_keys();
-      return self.snowflake = ($a = ($b = (50).$times()).$map, $a.$$p = (TMP_1 = function(){var self = TMP_1.$$s || this;
+      self.snowflake = ($a = ($b = (250).$times()).$map, $a.$$p = (TMP_1 = function(){var self = TMP_1.$$s || this;
 
       return $scope.get('Snowflake').$new()}, TMP_1.$$s = self, TMP_1), $a).call($b);
+      return self.shark = ($a = ($c = (20).$times()).$map, $a.$$p = (TMP_2 = function(){var self = TMP_2.$$s || this;
+
+      return self.$add_shark()}, TMP_2.$$s = self, TMP_2), $a).call($c);
     });
 
     return (Opal.defn(self, '$update', function() {
-      var $a, $b, TMP_2, $c, TMP_3, $d, $e, TMP_4, self = this, penguin_speed = nil, dt = nil;
+      var $a, $b, TMP_3, $c, TMP_4, $d, TMP_5, $e, $f, TMP_6, TMP_7, self = this, penguin_speed = nil, dt = nil;
       if ($gvars.game == null) $gvars.game = nil;
+      if ($gvars.size_x == null) $gvars.size_x = nil;
+      if ($gvars.size_y == null) $gvars.size_y = nil;
 
       $gvars.game.$physics().$arcade().$collide(self.penguin, self.platforms);
-      ($a = ($b = $gvars.game.$physics().$arcade()).$overlap, $a.$$p = (TMP_2 = function(c, s){var self = TMP_2.$$s || this;
+      ($a = ($b = $gvars.game.$physics().$arcade()).$overlap, $a.$$p = (TMP_3 = function(c, s){var self = TMP_3.$$s || this;
         if (self.pop == null) self.pop = nil;
         if (self.score_fruits == null) self.score_fruits = nil;
 if (c == null) c = nil;if (s == null) s = nil;
       self.pop.$play();
         s.$destroy();
-        return self.score_fruits = $rb_plus(self.score_fruits, 1);}, TMP_2.$$s = self, TMP_2), $a).call($b, self.penguin, self.fruits);
-      ($a = ($c = $gvars.game.$physics().$arcade()).$overlap, $a.$$p = (TMP_3 = function(c, s){var self = TMP_3.$$s || this;
+        return self.score_fruits = $rb_plus(self.score_fruits, 1);}, TMP_3.$$s = self, TMP_3), $a).call($b, self.penguin, self.fruits);
+      ($a = ($c = $gvars.game.$physics().$arcade()).$overlap, $a.$$p = (TMP_4 = function(c, s){var self = TMP_4.$$s || this;
         if (self.pop == null) self.pop = nil;
         if (self.score_sweets == null) self.score_sweets = nil;
         if (self.emitter == null) self.emitter = nil;
@@ -35686,22 +35799,32 @@ if (c == null) c = nil;if (s == null) s = nil;
       self.pop.$play();
         s.$destroy();
         self.score_sweets = $rb_plus(self.score_sweets, 2);
-        return self.emitter.$burst_at(self.penguin.$x(), self.penguin.$y());}, TMP_3.$$s = self, TMP_3), $a).call($c, self.penguin, self.sweets);
-      (($a = ["Penguin ate " + (self.score_fruits) + " fruits.\nPenguin ate " + (self.score_sweets) + " sweets.\nTotal score is " + ($rb_plus(self.score_fruits, self.score_sweets)) + "."]), $d = self.score_text, $d['$text='].apply($d, $a), $a[$a.length-1]);
-      penguin_speed = 200;
-      (($a = [(function() {if ((($e = self.cursors.$right()['$down?']()) !== nil && (!$e.$$is_boolean || $e == true))) {
+        return self.emitter.$burst_at(self.penguin.$x(), self.penguin.$y());}, TMP_4.$$s = self, TMP_4), $a).call($c, self.penguin, self.sweets);
+      ($a = ($d = $gvars.game.$physics().$arcade()).$overlap, $a.$$p = (TMP_5 = function(c, s){var self = TMP_5.$$s || this;
+        if (self.pop == null) self.pop = nil;
+if (c == null) c = nil;if (s == null) s = nil;
+      self.pop.$play();
+        return s.$destroy();}, TMP_5.$$s = self, TMP_5), $a).call($d, self.penguin, self.sharks);
+      (($a = ["Penguin ate " + (self.score_fruits) + " fruits.\nPenguin ate " + (self.score_sweets) + " sweets.\nTotal score is " + ($rb_plus(self.score_fruits, self.score_sweets)) + "."]), $e = self.score_text, $e['$text='].apply($e, $a), $a[$a.length-1]);
+      penguin_speed = 250;
+      (($a = [(function() {if ((($f = self.cursors.$right()['$down?']()) !== nil && (!$f.$$is_boolean || $f == true))) {
         return penguin_speed
-      } else if ((($e = self.cursors.$left()['$down?']()) !== nil && (!$e.$$is_boolean || $e == true))) {
+      } else if ((($f = self.cursors.$left()['$down?']()) !== nil && (!$f.$$is_boolean || $f == true))) {
         return penguin_speed['$-@']()
         } else {
         return 0
-      }; return nil; })()]), $d = self.penguin.$body().$velocity(), $d['$x='].apply($d, $a), $a[$a.length-1]);
-      if ((($a = ($d = self.cursors.$up()['$down?'](), $d !== false && $d !== nil ?(((($e = self.penguin.$body().$blocked().$down()) !== false && $e !== nil) ? $e : self.penguin.$body().$touching().$down())) : $d)) !== nil && (!$a.$$is_boolean || $a == true))) {
-        (($a = [-350]), $d = self.penguin.$body().$velocity(), $d['$y='].apply($d, $a), $a[$a.length-1])};
+      }; return nil; })()]), $e = self.penguin.$body().$velocity(), $e['$x='].apply($e, $a), $a[$a.length-1]);
+      if ((($a = ($e = self.cursors.$up()['$down?'](), $e !== false && $e !== nil ?(((($f = self.penguin.$body().$blocked().$down()) !== false && $f !== nil) ? $f : self.penguin.$body().$touching().$down())) : $e)) !== nil && (!$a.$$is_boolean || $a == true))) {
+        (($a = [-350]), $e = self.penguin.$body().$velocity(), $e['$y='].apply($e, $a), $a[$a.length-1])};
       dt = $gvars.game.$time().$physics_elapsed();
-      return ($a = ($d = self.snowflake).$each, $a.$$p = (TMP_4 = function(snowflake){var self = TMP_4.$$s || this;
+      ($a = ($e = self.snowflake).$each, $a.$$p = (TMP_6 = function(snowflake){var self = TMP_6.$$s || this;
 if (snowflake == null) snowflake = nil;
-      return snowflake.$update(dt)}, TMP_4.$$s = self, TMP_4), $a).call($d);
+      return snowflake.$update(dt)}, TMP_6.$$s = self, TMP_6), $a).call($e);
+      (($a = [$rb_minus(self.penguin.$x(), $rb_divide($gvars.size_x, 2))]), $f = $gvars.game.$camera(), $f['$x='].apply($f, $a), $a[$a.length-1]);
+      (($a = [$rb_minus(self.penguin.$y(), $rb_divide($gvars.size_y, 2))]), $f = $gvars.game.$camera(), $f['$y='].apply($f, $a), $a[$a.length-1]);
+      return ($a = ($f = self.shark).$each, $a.$$p = (TMP_7 = function(shark){var self = TMP_7.$$s || this;
+if (shark == null) shark = nil;
+      return shark.$update(dt)}, TMP_7.$$s = self, TMP_7), $a).call($f);
     }), nil) && 'update';
   })($scope.base, (($scope.get('Phaser')).$$scope.get('State')));
   return $gvars.game.$state().$add("main", $scope.get('MainState').$new(), true);

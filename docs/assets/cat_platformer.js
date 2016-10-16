@@ -35174,13 +35174,22 @@ if (o == null) o = nil;
 
       var def = self.$$proto, $scope = self.$$scope;
 
+      def["native"] = nil;
       self.$alias_native("add_child", "addChild");
 
       self.$native_accessor("angle");
 
       self.$native_accessor("frame");
 
-      return self.$native_accessor("name");
+      self.$native_accessor("name");
+
+      self.$alias_native("fixed_to_camera", "fixedToCamera");
+
+      return (Opal.defn(self, '$fixed_to_camera=', function(value) {
+        var self = this;
+
+        return self.$Native(self["native"].fixedToCamera = value);
+      }), nil) && 'fixed_to_camera=';
     })($scope.base, null);
 
     (function($base, $super) {
@@ -35206,6 +35215,14 @@ if (o == null) o = nil;
         var self = this;
 
         return self.$Native(self["native"].strokeThickness = value);
+      });
+
+      self.$alias_native("fixed_to_camera", "fixedToCamera");
+
+      Opal.defn(self, '$fixed_to_camera=', function(value) {
+        var self = this;
+
+        return self.$Native(self["native"].fixedToCamera = value);
       });
 
       self.$alias_native("events", $hash2(["as"], {"as": (($scope.get('Phaser')).$$scope.get('Events'))}));
