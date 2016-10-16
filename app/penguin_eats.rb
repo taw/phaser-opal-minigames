@@ -74,10 +74,10 @@ class MainState < Phaser::State
     platform.body.immovable = true
   end
 
-  def add_floor(x, y)
-    floor = $game.add.tile_sprite(x, y, $world_size_x, 64, "ice_cloud")
-    floor.anchor.set(0)
-    @floors.add floor
+  def add_floor
+    floor = $game.add.tile_sprite(0, $world_size_y, $world_size_x, 30, "ice_cloud")
+    floor.anchor.set(0, 1)
+    @platforms.add floor
     floor.body.immovable = true
   end
 
@@ -108,12 +108,9 @@ class MainState < Phaser::State
     $game.physics.start_system(Phaser::Physics::ARCADE)
     $game.world.set_bounds(0, 0, $world_size_x, $world_size_y)
 
-    @floors = $game.add.group()
-    @floors.enable_body = true
-    add_floor 0, $world_size_y-64
-
     @platforms = $game.add.group()
     @platforms.enable_body = true
+    add_floor
     add_platform 250, $world_size_y-150
     add_platform 400, $world_size_y-300
     add_platform 600, $world_size_y-450
