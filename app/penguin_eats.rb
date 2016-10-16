@@ -95,6 +95,7 @@ class MainState < Phaser::State
     @score_sweets = 0
     @score_text = $game.add.text(10, 10, "", { fontSize: '16px', fill: '#FBE8D3', align: 'left' })
     $game.physics.start_system(Phaser::Physics::ARCADE)
+    $game.world.set_bounds(0, 0, 3200, 1500)
 
     @platforms = $game.add.group()
     @platforms.enable_body = true
@@ -175,6 +176,10 @@ class MainState < Phaser::State
     @snowflake.each do |snowflake|
       snowflake.update(dt)
     end
+
+    $game.camera.x = @penguin.x-$size_x/2
+    $game.camera.y = @penguin.y-$size_y/2
+
   end
 end
 
