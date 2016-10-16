@@ -75,7 +75,7 @@ class MainState < Phaser::State
     @platforms.add platform
     platform.body.immovable = true
 
-    text = $game.add.text(x, y, "#{x},#{y}", { font: "24px Arial", fill: "#ffffff"})
+    text = $game.add.text(x, y, "#{x},#{$world_size_y-y}", { font: "24px Arial", fill: "#ffffff"})
     text.anchor.set(0.5)
 
     if $game.rnd.between(0,1) == 0
@@ -132,7 +132,7 @@ class MainState < Phaser::State
     add_floor
     add_platform 250, $world_size_y-150
     add_platform 400, $world_size_y-300
-    add_platform 600, $world_size_y-450
+    add_platform 550, $world_size_y-420
     add_platform 700, $world_size_y-150
     add_platform 900, $world_size_y-300
     add_platform 1050, $world_size_y-100
@@ -143,8 +143,10 @@ class MainState < Phaser::State
     add_platform 600, $world_size_y-850
     add_platform 700, $world_size_y-550
     add_platform 900, $world_size_y-600
-    add_platform 1050, $world_size_y-850
-    add_platform 1100, $world_size_y-1000
+    add_platform 1050, $world_size_y-750
+    add_platform 900, $world_size_y-1000
+    add_platform 800, $world_size_y-1200
+
 
     add_platform 1350, $world_size_y-150
     add_platform 1750, $world_size_y-300
@@ -155,6 +157,20 @@ class MainState < Phaser::State
     add_platform 2500, $world_size_y-400
     add_platform 2600, $world_size_y-200
     add_platform 2700, $world_size_y-500
+
+    add_platform 1350, $world_size_y-550
+    add_platform 1750, $world_size_y-800
+    add_platform 1890, $world_size_y-1250
+    add_platform 2000, $world_size_y-550
+    add_platform 2200, $world_size_y-800
+    add_platform 2350, $world_size_y-1250
+    add_platform 2500, $world_size_y-1600
+    add_platform 2600, $world_size_y-900
+    add_platform 2800, $world_size_y-700
+    
+    add_platform 2400, $world_size_y-1050
+    add_platform 2100, $world_size_y-1050
+    add_platform 1400, $world_size_y-950
 
     @penguin = $game.add.sprite(100, $world_size_y-100, "penguin2")
     $game.physics.enable(@penguin, Phaser::Physics::ARCADE)
@@ -190,7 +206,7 @@ class MainState < Phaser::State
 
     @score_text.text = "Penguin ate #{@score_fruits} fruits.\nPenguin ate #{@score_sweets} sweets.\nTotal score is #{@score_fruits + @score_sweets}."
 
-    penguin_speed = 200
+    penguin_speed = 250
     @penguin.body.velocity.x = if @cursors.right.down?
       penguin_speed
     elsif @cursors.left.down?
