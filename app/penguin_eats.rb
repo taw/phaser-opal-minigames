@@ -44,6 +44,24 @@ class Snowflake
   end
 end
 
+class Shark
+  def initialize
+    @shark = $game.add.sprite(
+      $game.rnd.between(0,$world_size_x-24),
+      $game.rnd.between(0,$world_size_y-22),
+      "shark"
+    )
+    @speed = $game.rnd.between(100, 200)
+  end
+
+  def update(time)
+    @shark.x += @speed * time
+    if @shark.x > $world_size_x-5
+      @shark.x = 0
+    end
+  end  
+end
+
 class MainState < Phaser::State
   def preload
     $game.load.image("sweet-1", "../images/lollipop.png")
@@ -66,6 +84,7 @@ class MainState < Phaser::State
     $game.load.image("star3", "../images/star3.png")
     $game.load.image("circle", "../images/circle.png")
     $game.load.image("ice_cloud", "../images/ice_cloud.png")
+    $game.load.image("shark", "../images/shark.png")
     $game.load.audio("pop", "../audio/pop3.mp3")
   end
 
@@ -75,8 +94,8 @@ class MainState < Phaser::State
     @platforms.add platform
     platform.body.immovable = true
 
-    text = $game.add.text(x, y, "#{x},#{$world_size_y-y}", { font: "24px Arial", fill: "#ffffff"})
-    text.anchor.set(0.5)
+    # text = $game.add.text(x, y, "#{x},#{$world_size_y-y}", { font: "24px Arial", fill: "#ffffff"})
+    # text.anchor.set(0.5)
 
     if $game.rnd.between(0,1) == 0
       number = $game.rnd.between(1,7)
@@ -107,6 +126,13 @@ class MainState < Phaser::State
     @sweets.add sweet
     sweet.body.immovable = true
   end
+
+  def add_shark(x, y, shark_name)
+    shark = $game.add.sprite(x, y, shark_name)
+    shark.anchor.set(0.5)
+    @sharks.add shark
+  end
+
 
   def create
     background = $game.add.sprite(0, 0, 'mountain')
@@ -187,6 +213,10 @@ class MainState < Phaser::State
     @snowflake = 250.times.map do
       Snowflake.new
     end
+
+    @shark = 20.times.map do
+      Shark.new
+    end
   end
 
   def update
@@ -202,6 +232,13 @@ class MainState < Phaser::State
       s.destroy
       @score_sweets += 2
       @emitter.burst_at(@penguin.x, @penguin.y)
+    end
+
+    $game.physics.arcade.overlap(@penguin, @shark) do |c,s|
+      @pop.play
+      s.destroy
+      # @score_sweets += 2
+      # @emitter.burst_at(@penguin.x, @penguin.y)
     end
 
     @score_text.text = "Penguin ate #{@score_fruits} fruits.\nPenguin ate #{@score_sweets} sweets.\nTotal score is #{@score_fruits + @score_sweets}."
@@ -226,6 +263,10 @@ class MainState < Phaser::State
 
     $game.camera.x = @penguin.x-$size_x/2
     $game.camera.y = @penguin.y-$size_y/2
+
+    @shark.each do |shark|
+      shark.update(dt)
+    end
 
   end
 end
