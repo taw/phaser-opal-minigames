@@ -63,6 +63,7 @@ class MainState < Phaser::State
     $game.load.image("mountain", "../images/mountain.jpg")
     $game.load.image("star3", "../images/star3.png")
     $game.load.image("circle", "../images/circle.png")
+    $game.load.image("ice_cloud", "../images/ice_cloud.png")
     $game.load.audio("pop", "../audio/pop3.mp3")
   end
 
@@ -71,6 +72,13 @@ class MainState < Phaser::State
     platform.anchor.set(0.5)
     @platforms.add platform
     platform.body.immovable = true
+  end
+
+  def add_floor(x, y)
+    floor = $game.add.tile_sprite(x, y, $world_size_x, 64, "ice_cloud")
+    floor.anchor.set(0)
+    @floors.add floor
+    floor.body.immovable = true
   end
 
   def add_fruit(x, y, fruit_name)
@@ -99,6 +107,10 @@ class MainState < Phaser::State
     @score_text = $game.add.text(10, 10, "", { fontSize: '16px', fill: '#FBE8D3', align: 'left' })
     $game.physics.start_system(Phaser::Physics::ARCADE)
     $game.world.set_bounds(0, 0, $world_size_x, $world_size_y)
+
+    @floors = $game.add.group()
+    @floors.enable_body = true
+    add_floor 0, $world_size_y-64
 
     @platforms = $game.add.group()
     @platforms.enable_body = true
