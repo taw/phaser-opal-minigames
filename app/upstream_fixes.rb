@@ -70,6 +70,11 @@ module Phaser
     native_accessor :angle
     native_accessor :frame
     native_accessor :name
+    alias_native :fixed_to_camera, :fixedToCamera
+    def fixed_to_camera=(value)
+      Native(`#@native.fixedToCamera = value`)
+    end
+
   end
 
   class Text

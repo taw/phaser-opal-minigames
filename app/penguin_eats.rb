@@ -22,8 +22,8 @@ end
 class Snowflake
   def initialize
     @snowflake = $game.add.sprite(
-      $game.rnd.between(0,$size_x-24),
-      $game.rnd.between(0,$size_x-22),
+      $game.rnd.between(0, $world_size_x-24),
+      $game.rnd.between(0, $world_size_y-22),
       "circle"
     )
     @snowflake.height = @snowflake.width = rand*10
@@ -34,11 +34,11 @@ class Snowflake
   def update(time)
     @snowflake.y += @speed * time
     @snowflake.x += @speed * time
-    if @snowflake.y > $size_y-5
+    if @snowflake.y > $world_size_y-5
       @snowflake.y = 0
     end
 
-    if @snowflake.x > $size_x-5
+    if @snowflake.x > $world_size_x-5
       @snowflake.x = 0
     end
   end
@@ -91,41 +91,44 @@ class MainState < Phaser::State
     background = $game.add.sprite(0, 0, 'mountain')
     background.height = $size_y
     background.width = $size_x
+    background.fixed_to_camera = true
     @score_fruits = 0
     @score_sweets = 0
+    $world_size_x = 3200
+    $world_size_y = 1500
     @score_text = $game.add.text(10, 10, "", { fontSize: '16px', fill: '#FBE8D3', align: 'left' })
     $game.physics.start_system(Phaser::Physics::ARCADE)
-    $game.world.set_bounds(0, 0, 3200, 1500)
+    $game.world.set_bounds(0, 0, $world_size_x, $world_size_y)
 
     @platforms = $game.add.group()
     @platforms.enable_body = true
-    add_platform 250, $size_y-150
-    add_platform 400, $size_y-300
-    add_platform 600, $size_y-450
-    add_platform 700, $size_y-150
-    add_platform 900, $size_y-300
-    add_platform 1050, $size_y-100
-    add_platform 1100, $size_y-400
+    add_platform 250, $world_size_y-150
+    add_platform 400, $world_size_y-300
+    add_platform 600, $world_size_y-450
+    add_platform 700, $world_size_y-150
+    add_platform 900, $world_size_y-300
+    add_platform 1050, $world_size_y-100
+    add_platform 1100, $world_size_y-400
 
     @fruits = $game.add.group()
     @fruits.enable_body = true
-    add_fruit(275, $size_y-200, "cherry")
-    add_fruit(675, $size_y-200, "grapes")
-    add_fruit(725, $size_y-200, "apple")
-    add_fruit(900, $size_y-350, "orange")
-    add_fruit(1075, $size_y-450, "watermelon")
-    add_fruit(1025, $size_y-150, "pineapple")
-    add_fruit(1075, $size_y-150, "banana2")
+    add_fruit(275, $world_size_y-200, "cherry")
+    add_fruit(675, $world_size_y-200, "grapes")
+    add_fruit(725, $world_size_y-200, "apple")
+    add_fruit(900, $world_size_y-350, "orange")
+    add_fruit(1075, $world_size_y-450, "watermelon")
+    add_fruit(1025, $world_size_y-150, "pineapple")
+    add_fruit(1075, $world_size_y-150, "banana2")
 
     @sweets = $game.add.group()
     @sweets.enable_body = true
-    add_sweet(225, $size_y-200, "lollipop")
-    add_sweet(400, $size_y-350, "icecream")
-    add_sweet(575, $size_y-500, "icelolly")
-    add_sweet(625, $size_y-500, "cupcake")
-    add_sweet(1125, $size_y-450, "doughnut")
+    add_sweet(225, $world_size_y-200, "lollipop")
+    add_sweet(400, $world_size_y-350, "icecream")
+    add_sweet(575, $world_size_y-500, "icelolly")
+    add_sweet(625, $world_size_y-500, "cupcake")
+    add_sweet(1125, $world_size_y-450, "doughnut")
 
-    @penguin = $game.add.sprite(100, $size_y-100, "penguin2")
+    @penguin = $game.add.sprite(100, $world_size_y-100, "penguin2")
     $game.physics.enable(@penguin, Phaser::Physics::ARCADE)
     @penguin.anchor.set(0.5)
     @penguin.body.collide_world_bounds = true
@@ -137,7 +140,7 @@ class MainState < Phaser::State
 
     @cursors = $game.input.keyboard.create_cursor_keys
 
-    @snowflake = 50.times.map do
+    @snowflake = 250.times.map do
       Snowflake.new
     end
   end
