@@ -45,6 +45,7 @@ class Snowflake
 end
 
 class Shark
+  attr_reader :shark
   def initialize
     @shark = $game.add.sprite(
       $game.rnd.between(0,$world_size_x-24),
@@ -59,7 +60,7 @@ class Shark
     if @shark.x > $world_size_x-5
       @shark.x = 0
     end
-  end  
+  end
 end
 
 class MainState < Phaser::State
@@ -127,12 +128,11 @@ class MainState < Phaser::State
     sweet.body.immovable = true
   end
 
-  def add_shark(x, y, shark_name)
-    shark = $game.add.sprite(x, y, shark_name)
-    shark.anchor.set(0.5)
-    @sharks.add shark
+  def add_shark(x, y)
+    shark = Shark.new
+    @sharks.add shark.shark
+    shark
   end
-
 
   def create
     background = $game.add.sprite(0, 0, 'mountain')
@@ -148,12 +148,14 @@ class MainState < Phaser::State
     $game.physics.start_system(Phaser::Physics::ARCADE)
     $game.world.set_bounds(0, 0, $world_size_x, $world_size_y)
 
-    @platforms = $game.add.group()
+    @platforms = $game.add.group
     @platforms.enable_body = true
-    @fruits = $game.add.group()
+    @fruits = $game.add.group
     @fruits.enable_body = true
-    @sweets = $game.add.group()
+    @sweets = $game.add.group
     @sweets.enable_body = true
+    @sharks = $game.add.group
+    @sharks.enable_body = true
 
     add_floor
     add_platform 250, $world_size_y-150
@@ -172,7 +174,6 @@ class MainState < Phaser::State
     add_platform 1050, $world_size_y-750
     add_platform 900, $world_size_y-1000
     add_platform 800, $world_size_y-1200
-
 
     add_platform 1350, $world_size_y-150
     add_platform 1750, $world_size_y-300
@@ -193,7 +194,7 @@ class MainState < Phaser::State
     add_platform 2500, $world_size_y-1600
     add_platform 2600, $world_size_y-900
     add_platform 2800, $world_size_y-700
-    
+
     add_platform 2400, $world_size_y-1050
     add_platform 2100, $world_size_y-1050
     add_platform 1400, $world_size_y-950
@@ -215,7 +216,7 @@ class MainState < Phaser::State
     end
 
     @shark = 20.times.map do
-      Shark.new
+      add_shark
     end
   end
 
@@ -234,11 +235,9 @@ class MainState < Phaser::State
       @emitter.burst_at(@penguin.x, @penguin.y)
     end
 
-    $game.physics.arcade.overlap(@penguin, @shark) do |c,s|
+    $game.physics.arcade.overlap(@penguin, @sharks) do |c,s|
       @pop.play
       s.destroy
-      # @score_sweets += 2
-      # @emitter.burst_at(@penguin.x, @penguin.y)
     end
 
     @score_text.text = "Penguin ate #{@score_fruits} fruits.\nPenguin ate #{@score_sweets} sweets.\nTotal score is #{@score_fruits + @score_sweets}."
@@ -267,7 +266,6 @@ class MainState < Phaser::State
     @shark.each do |shark|
       shark.update(dt)
     end
-
   end
 end
 
