@@ -205,6 +205,22 @@ module Phaser
 
   class GameObjectFactory
     alias_native :rope, :rope, as: Rope
+    alias_native :bitmap_text, :bitmapText
+  end
+
+  class ScaleManager
+    alias_native :page_align_horizontally, :pageAlignHorizontally
+    def page_align_horizontally=(value)
+      `#@native.pageAlignHorizontally = #{value}`
+    end
+    alias_native :page_align_vertically, :pageAlignVertically
+    def page_align_vertically=(value)
+      `#@native.pageAlignVertically = #{value}`
+    end
+  end
+
+  class Loader
+    alias_native :bitmap_font, :bitmapFont
   end
 
   class Input
