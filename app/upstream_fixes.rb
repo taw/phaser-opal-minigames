@@ -70,30 +70,14 @@ module Phaser
     native_accessor :angle
     native_accessor :frame
     native_accessor :name
-    alias_native :fixed_to_camera, :fixedToCamera
-    def fixed_to_camera=(value)
-      Native(`#@native.fixedToCamera = value`)
-    end
+    native_accessor_alias :fixed_to_camera, :fixedToCamera
   end
 
   class Text
     native_accessor :font, :stroke
-
-    alias_native :font_size, :fontSize
-    def font_size=(value)
-      Native(`#@native.fontSize = value`)
-    end
-
-    alias_native :stroke_thickness, :strokeThickness
-    def stroke_thickness=(value)
-      Native(`#@native.strokeThickness = value`)
-    end
-
-    alias_native :fixed_to_camera, :fixedToCamera
-    def fixed_to_camera=(value)
-      Native(`#@native.fixedToCamera = value`)
-    end
-
+    native_accessor_alias :font_size, :fontSize
+    native_accessor_alias :stroke_thickness, :strokeThickness
+    native_accessor_alias :fixed_to_camera, :fixedToCamera
     alias_native :events, as: Phaser::Events
     native_accessor :inputEnabled
   end
@@ -139,7 +123,7 @@ module Phaser
   end
 
   class Keyboard
-     alias_native :create_cursor_keys, :createCursorKeys, as: CursorKeys
+    alias_native :create_cursor_keys, :createCursorKeys, as: CursorKeys
   end
 
   class Filter
@@ -209,14 +193,8 @@ module Phaser
   end
 
   class ScaleManager
-    alias_native :page_align_horizontally, :pageAlignHorizontally
-    def page_align_horizontally=(value)
-      `#@native.pageAlignHorizontally = #{value}`
-    end
-    alias_native :page_align_vertically, :pageAlignVertically
-    def page_align_vertically=(value)
-      `#@native.pageAlignVertically = #{value}`
-    end
+    native_accessor_alias :page_align_horizontally, :pageAlignHorizontally
+    native_accessor_alias :page_align_vertically, :pageAlignVertically
   end
 
   class Loader
