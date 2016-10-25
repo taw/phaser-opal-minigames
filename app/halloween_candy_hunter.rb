@@ -2,6 +2,35 @@ require_relative "common"
 
 class Player
   def initialize
+    @sprite = $game.add.sprite(100, $size_y/2, "kitty_potter")
+    @sprite.anchor.set(0.5, 0.5)
+    @sprite.animations.add("fly")
+    @sprite.animations.play("fly", 15, true)
+    @sprite.scale.x = -0.35
+    @sprite.scale.y =  0.35
+    $game.physics.enable(@sprite, Phaser::Physics::ARCADE)
+    @sprite.body.collide_world_bounds = true
+  end
+
+  def velocity_x=(v)
+    @sprite.body.velocity.x = v
+    if v > 0
+      @sprite.scale.x = -0.35
+    elsif v < 0
+      @sprite.scale.x = 0.35
+    end
+  end
+
+  def velocity_y=(v)
+    @sprite.body.velocity.y = v
+  end
+
+  def x
+    @sprite.x
+  end
+
+  def y
+    @sprite.y
   end
 end
 
@@ -9,26 +38,26 @@ class Bat
   def initialize(x)
     @sprite = $game.add.sprite(
       x,
-      $game.rnd.between(0,$world_size_y-22),
+      $game.rnd.between(40, $world_size_y-40),
       "bat"
     )
     @sprite.anchor.set(0.5)
-
+    @sprite.scale.x = -0.25
+    @sprite.scale.y =  0.25
     @sprite.animations.add("fly")
     @sprite.animations.play("fly", 15, true)
     $game.physics.enable(@sprite, Phaser::Physics::ARCADE)
     @sprite.body.collide_world_bounds = true
-
-    @dy = 100
+    @dy = 200
   end
 
   def update(dt)
     @sprite.y += @dy * dt
-    if @sprite.y < 50
-      @dy = 100
+    if @sprite.y < 40
+      @dy = 200
     end
-    if @sprite.y > $world_size_y - 50
-      @dy = -100
+    if @sprite.y > $world_size_y - 40
+      @dy = -200
     end
   end
 end
@@ -43,24 +72,20 @@ class GameState < Phaser::State
     $game.stage.background_color = "AAF"
     $game.physics.start_system(Phaser::Physics::ARCADE)
 
+    @cursors = $game.input.keyboard.create_cursor_keys
+
     $world_size_x = 3200
-    $world_size_y = $size_x
+    $world_size_y = $size_y
     $game.world.set_bounds(0, 0, $world_size_x, $world_size_y)
 
     @player = Player.new
+    @bats = []
+    @spiders = []
+    @candy = []
+
     (4..30).each do |x|
-      Bat.new(x * 100)
+      @bats << Bat.new(x * 100)
     end
-
-    @chaser = $game.add.sprite($size_x/2, $size_y/2, "kitty_potter")
-    @chaser.anchor.set(0.5, 0.5)
-    @chaser.animations.add("fly")
-    @chaser.animations.play("fly", 15, true)
-    @chaser.width *= 0.5
-    @chaser.height *= 0.5
-    $game.physics.enable(@chaser, Phaser::Physics::ARCADE)
-    @chaser.body.collide_world_bounds = true
-
 
     # TODO: bats
     # TODO: spiders
@@ -71,6 +96,32 @@ class GameState < Phaser::State
   end
 
   def update
+    dt = $game.time.physics_elapsed
+    @bats.each do |bat|
+      bat.update(dt)
+    end
+    @spiders.each do |spider|
+      spider.update(dt)
+    end
+
+    if @cursors.up.down?
+      @player.velocity_y = -150
+    elsif @cursors.down.down?
+      @player.velocity_y =  150
+    else
+      @player.velocity_y = 0
+    end
+
+    if @cursors.right.down?
+      @player.velocity_x =  150
+    elsif @cursors.left.down?
+      @player.velocity_x = -150
+    else
+      @player.velocity_x = 0
+    end
+
+    $game.camera.x = @player.x-$size_x/2
+    $game.camera.y = @player.y-$size_y/2
   end
 end
 
