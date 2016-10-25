@@ -10,3 +10,4 @@ Some of the sources include:
 * penguin eats icons http://www.myiconfinder.com/
 * ice_cloud.png http://www.myiconfinder.com/icon/cloud-clouds-cloudy-rain-saas-sun-upload-weather-icon/16#.64
 * shark.png http://www.myiconfinder.com/icon/shark-animal-fish-sea-danger/12235#.128
+* pumpkin.png http://www.flaticon.com/free-icon/pumpkin_252136
