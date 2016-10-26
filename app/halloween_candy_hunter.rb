@@ -47,6 +47,7 @@ class Player
     $game.physics.enable(@sprite, Phaser::Physics::ARCADE)
     @sprite.body.collide_world_bounds = true
     @cursors = $game.input.keyboard.create_cursor_keys
+    @sprite.body.set_size(180, 150, 50, 60)
   end
 
   def velocity_x=(v)
@@ -100,6 +101,7 @@ class Bat
     $game.physics.enable(@sprite, Phaser::Physics::ARCADE)
     @sprite.body.collide_world_bounds = true
     @sprite.body.velocity.y = 200
+    @sprite.body.set_size(100, 60, 40, 50)
   end
 
   def update(dt)
@@ -202,11 +204,21 @@ class GameState < Phaser::State
       @score.value += 1
     end
 
-    # TODO: fix bat hitbox
     $game.physics.arcade.overlap(@player.sprite, @bats_group) do |_,_|
       game_over
     end
   end
+
+  # This can be used to debug hitboxes
+  # def render
+  #   $game.debug.body(@player.sprite)
+  #   @bats.each do |bat|
+  #     $game.debug.body(bat.sprite)
+  #   end
+  #   @candy.each do |candy|
+  #     $game.debug.body(candy.sprite)
+  #   end
+  # end
 end
 
 class BootState < Phaser::State

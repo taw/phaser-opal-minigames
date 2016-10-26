@@ -71,6 +71,7 @@ module Phaser
     native_accessor :frame
     native_accessor :name
     native_accessor_alias :fixed_to_camera, :fixedToCamera
+    native_accessor_alias :hit_area, :hitArea
   end
 
   class Text
