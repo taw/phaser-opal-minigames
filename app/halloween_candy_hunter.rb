@@ -1,5 +1,30 @@
 require_relative "common"
 
+class Snowflake
+  def initialize
+    @snowflake = $game.add.sprite(
+      $game.rnd.between(0, $world_size_x-24),
+      $game.rnd.between(0, $world_size_y-22),
+      "circle"
+    )
+    @snowflake.height = @snowflake.width = rand*10
+    @snowflake.alpha = rand*0.6
+    @speed = $game.rnd.between(100, 200)
+  end
+
+  def update(time)
+    @snowflake.y += @speed * time
+    @snowflake.x += @speed * time
+    if @snowflake.y > $world_size_y-5
+      @snowflake.y = 0
+    end
+
+    if @snowflake.x > $world_size_x-5
+      @snowflake.x = 0
+    end
+  end
+end
+
 class PumpkinEmitter
   def initialize
     @emitter = $game.add.emitter(0, 0, 1000)
@@ -155,6 +180,10 @@ class GameState < Phaser::State
       end
     end
 
+    @snowflakes = 1000.times.map do
+      Snowflake.new
+    end
+
     @candy_group = $game.add.group
     @candy_group.enable_body = true
     @candy.each do |candy|
@@ -179,7 +208,7 @@ class GameState < Phaser::State
 
   def update
     dt = $game.time.physics_elapsed
-    [@player, *@bats].each do |object|
+    [@player, *@bats, *@snowflakes].each do |object|
       object.update(dt)
     end
 
@@ -218,6 +247,7 @@ class BootState < Phaser::State
     $game.load.image("candy4", "../images/candy/candy4.png")
     $game.load.audio("pop", "../audio/pop3.mp3")
     $game.load.image("darkforest", "../images/darkforest.jpg")
+    $game.load.image("circle", "../images/circle.png")
   end
 
   def create
