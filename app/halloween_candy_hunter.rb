@@ -296,12 +296,23 @@ class GameOverState < Phaser::State
       pumpkin.anchor.set(0.5)
     end
 
-    text = $game.add.text($size_x/2, $size_y/2, "Game over\nYou collected #{$final_score} candy\nPress any key to start again", { fontSize: "64px", fill: "#000", align: "center", font: "Creepster" })
-    text.anchor.set(0.5)
-    text.fixed_to_camera = true
+    @text = $game.add.text($size_x/2, $size_y/2, "Game over\nYou collected #{$final_score} candy\n", { fontSize: "64px", fill: "#000", align: "center", font: "Creepster" })
+    @text.anchor.set(0.5)
+    @text.fixed_to_camera = true
+    @forced_wait = true
+    @time = 0
+  end
 
-    $game.input.keyboard.on_down_callback = proc{ start_game }
-    $game.input.on(:down) { start_game }
+  def update
+    if @forced_wait
+      @time += $game.time.physics_elapsed
+      if @time > 0.5
+        @forced_wait = false
+        @text.text += "Press any key to start again"
+        $game.input.keyboard.on_down_callback = proc{ start_game }
+        $game.input.on(:down) { start_game }
+      end
+    end
   end
 
   def start_game
