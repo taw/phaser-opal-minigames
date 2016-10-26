@@ -2,25 +2,25 @@ require_relative "common"
 
 class Snowflake
   def initialize
-    @snowflake = $game.add.sprite(
-      $game.rnd.between(0, $world_size_x-24),
-      $game.rnd.between(0, $world_size_y-22),
+    @sprite = $game.add.sprite(
+      $game.rnd.between(0, $world_size_x),
+      $game.rnd.between(0, $world_size_y),
       "circle"
     )
-    @snowflake.height = @snowflake.width = rand*10
-    @snowflake.alpha = rand*0.6
-    @speed = $game.rnd.between(100, 200)
+    $game.physics.enable(@sprite, Phaser::Physics::ARCADE)
+    @sprite.height = @sprite.width = rand*10
+    @sprite.alpha = rand*0.6
+    speed = $game.rnd.between(100, 200)
+    @sprite.body.velocity.x = speed
+    @sprite.body.velocity.y = speed
   end
 
-  def update(time)
-    @snowflake.y += @speed * time
-    @snowflake.x += @speed * time
-    if @snowflake.y > $world_size_y-5
-      @snowflake.y = 0
+  def update(dt)
+    if @sprite.y > $world_size_y-5
+      @sprite.y = 0
     end
-
-    if @snowflake.x > $world_size_x-5
-      @snowflake.x = 0
+    if @sprite.x > $world_size_x-5
+      @sprite.x = 0
     end
   end
 end
@@ -180,6 +180,7 @@ class GameState < Phaser::State
       end
     end
 
+    @snowflakes  = []
     @snowflakes = 1000.times.map do
       Snowflake.new
     end
@@ -224,6 +225,11 @@ class GameState < Phaser::State
     end
   end
 
+  # Debug FPS
+  # def render
+  #   $game.debug.text($game.time.fps, 500, 100, "white")
+  # end
+
   # This can be used to debug hitboxes
   # def render
   #   $game.debug.body(@player.sprite)
@@ -267,6 +273,8 @@ class BootState < Phaser::State
 
     $game.input.keyboard.on_down_callback = proc{ start_game }
     $game.input.on(:down) { start_game }
+
+    $game.time.advanced_timing = true
   end
 
   def start_game
