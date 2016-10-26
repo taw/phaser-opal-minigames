@@ -22,7 +22,7 @@ end
 
 class Score
   def initialize
-    @text = $game.add.text(10, 10, "", { fontSize: '24px', fill: '#FBE8D3', align: 'left', font: "Creepster" })
+    @text = $game.add.text(10, 10, "", { fontSize: '32px', fill: '#FBE8D3', align: 'left', font: "Creepster" })
     @text.fixed_to_camera = true
     @value = value
     self.value = 0
@@ -173,7 +173,6 @@ class GameState < Phaser::State
     @pop = $game.add.audio("pop")
     @score = Score.new
 
-    # TODO: bats
     # TODO: spiders
     # TODO: bg
     # TODO: music
@@ -248,20 +247,30 @@ class BootState < Phaser::State
     text = $game.add.text($size_x/2, $size_y/2, "Collect candy\nAvoid creepy things\nPress any key to start", { fontSize: "64px", fill: "#000", align: "center", font: "Creepster" })
     text.anchor.set(0.5)
 
-    # TODO: make it work with keyboard as well
-    # $game.input.keyboard.onDownCalback = proc{ $game.state.start(:game) }
-    $game.input.on(:down) { $game.state.start(:game) }
+    $game.input.keyboard.on_down_callback = proc{ start_game }
+    $game.input.on(:down) { start_game }
+  end
+
+  def start_game
+    $game.input.keyboard.on_down_callback = nil
+    $game.state.start(:game)
   end
 end
 
+# TODO: GameOver camera is broken
 class GameOverState < Phaser::State
   def create
     text = $game.add.text($size_x/2, $size_y/2, "Game over\nPress any key to start again", { fontSize: "64px", fill: "#000", align: "center", font: "Creepster" })
     text.anchor.set(0.5)
     text.fixed_to_camera = true
 
-    # TODO: make it work with keyboard as well
-    $game.input.on(:down) { $game.state.start(:game) }
+    $game.input.keyboard.on_down_callback = proc{ start_game }
+    $game.input.on(:down) { start_game }
+  end
+
+  def start_game
+    $game.input.keyboard.on_down_callback = nil
+    $game.state.start(:game)
   end
 end
 

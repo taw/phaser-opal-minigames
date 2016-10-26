@@ -71,7 +71,6 @@ module Phaser
     native_accessor :frame
     native_accessor :name
     native_accessor_alias :fixed_to_camera, :fixedToCamera
-    native_accessor_alias :hit_area, :hitArea
   end
 
   class Text
@@ -125,6 +124,9 @@ module Phaser
 
   class Keyboard
     alias_native :create_cursor_keys, :createCursorKeys, as: CursorKeys
+    def on_down_callback=(callback)
+      `#@native.onDownCallback = #{callback.to_n}`
+    end
   end
 
   class Filter
