@@ -22,7 +22,7 @@ end
 
 class Score
   def initialize
-    @text = $game.add.text(10, 10, "", { fontSize: '16px', fill: '#FBE8D3', align: 'left', font: "Creepster" })
+    @text = $game.add.text(10, 10, "", { fontSize: '24px', fill: '#FBE8D3', align: 'left', font: "Creepster" })
     @text.fixed_to_camera = true
     @value = value
     self.value = 0
@@ -46,7 +46,6 @@ class Player
     @sprite.scale.y =  0.35
     $game.physics.enable(@sprite, Phaser::Physics::ARCADE)
     @sprite.body.collide_world_bounds = true
-
     @cursors = $game.input.keyboard.create_cursor_keys
   end
 
@@ -100,16 +99,15 @@ class Bat
     @sprite.animations.play("fly", 15, true)
     $game.physics.enable(@sprite, Phaser::Physics::ARCADE)
     @sprite.body.collide_world_bounds = true
-    @dy = 200
+    @sprite.body.velocity.y = 200
   end
 
   def update(dt)
-    @sprite.y += @dy * dt
     if @sprite.y < 40
-      @dy = 200
+      @sprite.body.velocity.y = 200
     end
     if @sprite.y > $world_size_y - 40
-      @dy = -200
+      @sprite.body.velocity.y = -200
     end
   end
 end
@@ -179,7 +177,24 @@ class GameState < Phaser::State
     # TODO: music
   end
 
+  def game_over
+    @bats.each do |bat|
+      bat.sprite.animations.stop
+      bat.sprite.body.velocity.x = 0
+      bat.sprite.body.velocity.y = 0
+    end
+    @player.sprite.animations.stop
+    @player.sprite.body.velocity.x = 0
+    @player.sprite.body.velocity.y = 0
+    $game.state.start(:game_over, false)
+  end
+
   def update
+    dt = $game.time.physics_elapsed
+    [@player, *@bats, *@spiders].each do |object|
+      object.update(dt)
+    end
+
     $game.physics.arcade.overlap(@player.sprite, @candy_group) do |_,candy|
       @emitter.burst_at(candy.x, candy.y)
       candy.destroy
@@ -187,14 +202,10 @@ class GameState < Phaser::State
       @score.value += 1
     end
 
-    dt = $game.time.physics_elapsed
-    @bats.each do |bat|
-      bat.update(dt)
+    # TODO: fix bat hitbox
+    $game.physics.arcade.overlap(@player.sprite, @bats_group) do |_,_|
+      game_over
     end
-    @spiders.each do |spider|
-      spider.update(dt)
-    end
-    @player.update(dt)
   end
 end
 
@@ -225,11 +236,23 @@ class BootState < Phaser::State
     text = $game.add.text($size_x/2, $size_y/2, "Collect candy\nAvoid creepy things\nPress any key to start", { fontSize: "64px", fill: "#000", align: "center", font: "Creepster" })
     text.anchor.set(0.5)
 
-    # FIXME: make it work with keyboard as well
+    # TODO: make it work with keyboard as well
     # $game.input.keyboard.onDownCalback = proc{ $game.state.start(:game) }
     $game.input.on(:down) { $game.state.start(:game) }
   end
 end
 
+class GameOverState < Phaser::State
+  def create
+    text = $game.add.text($size_x/2, $size_y/2, "Game over\nPress any key to start again", { fontSize: "64px", fill: "#000", align: "center", font: "Creepster" })
+    text.anchor.set(0.5)
+    text.fixed_to_camera = true
+
+    # TODO: make it work with keyboard as well
+    $game.input.on(:down) { $game.state.start(:game) }
+  end
+end
+
+$game.state.add(:game_over, GameOverState.new)
 $game.state.add(:game, GameState.new)
 $game.state.add(:boot, BootState.new, true)
