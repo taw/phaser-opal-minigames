@@ -13,7 +13,8 @@ Some of the sources include:
 * pumpkin.png http://www.flaticon.com/free-icon/pumpkin_252136
 
 
-candy1.png http://www.flaticon.com/free-icon/candy_135613
-candy2.png http://www.flaticon.com/free-icon/candy_135770
-candy3.png http://www.flaticon.com/free-icon/candy-canes_227277
-candy4.png http://www.flaticon.com/free-icon/candy_236338
+* candy1.png http://www.flaticon.com/free-icon/candy_135613
+* candy2.png http://www.flaticon.com/free-icon/candy_135770
+* candy3.png http://www.flaticon.com/free-icon/candy-canes_227277
+* candy4.png http://www.flaticon.com/free-icon/candy_236338
+* darkforest.jpg http://pcwallart.com/dark-forest-background-wallpaper-3.html

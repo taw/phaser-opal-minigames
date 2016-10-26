@@ -114,12 +114,6 @@ class Bat
   end
 end
 
-class Spider
-  attr_reader :sprite
-  def initialize(x)
-  end
-end
-
 class Candy
   attr_reader :sprite
   def initialize(x)
@@ -136,19 +130,23 @@ end
 
 class GameState < Phaser::State
   def create
+    background = $game.add.sprite(0, 0, 'darkforest')
+    background.height = $size_y
+    background.width = $size_x
+    background.fixed_to_camera = true
+
     $game.stage.background_color = "8A8"
     $game.physics.start_system(Phaser::Physics::ARCADE)
 
-    $world_size_x = 3200
+    $world_size_x = 100*(200+2)
     $world_size_y = $size_y
     $game.world.set_bounds(0, 0, $world_size_x, $world_size_y)
 
     @player = Player.new
     @bats = []
-    @spiders = []
     @candy = []
 
-    (4..30).each do |x|
+    (4..200).each do |x|
       case $game.rnd.between(0, 1)
       when 0
         @bats << Bat.new(x * 100)
@@ -172,27 +170,16 @@ class GameState < Phaser::State
     @emitter = PumpkinEmitter.new
     @pop = $game.add.audio("pop")
     @score = Score.new
-
-    # TODO: spiders
-    # TODO: bg
-    # TODO: music
   end
 
   def game_over
-    @bats.each do |bat|
-      bat.sprite.animations.stop
-      bat.sprite.body.velocity.x = 0
-      bat.sprite.body.velocity.y = 0
-    end
-    @player.sprite.animations.stop
-    @player.sprite.body.velocity.x = 0
-    @player.sprite.body.velocity.y = 0
-    $game.state.start(:game_over, false)
+    $final_score = @score.value
+    $game.state.start(:game_over)
   end
 
   def update
     dt = $game.time.physics_elapsed
-    [@player, *@bats, *@spiders].each do |object|
+    [@player, *@bats].each do |object|
       object.update(dt)
     end
 
@@ -230,6 +217,7 @@ class BootState < Phaser::State
     $game.load.image("candy3", "../images/candy/candy3.png")
     $game.load.image("candy4", "../images/candy/candy4.png")
     $game.load.audio("pop", "../audio/pop3.mp3")
+    $game.load.image("darkforest", "../images/darkforest.jpg")
   end
 
   def create
@@ -257,10 +245,20 @@ class BootState < Phaser::State
   end
 end
 
-# TODO: GameOver camera is broken
 class GameOverState < Phaser::State
   def create
-    text = $game.add.text($size_x/2, $size_y/2, "Game over\nPress any key to start again", { fontSize: "64px", fill: "#000", align: "center", font: "Creepster" })
+    $game.stage.background_color = "8A8"
+    [
+      [0.25, 0.15], [0.50, 0.10], [0.75, 0.15],
+      [0.25, 0.85], [0.50, 0.90], [0.75, 0.85],
+      [0.10, 0.35], [0.90, 0.35],
+      [0.10, 0.65], [0.90, 0.65],
+    ].each do |xf,yf|
+      pumpkin = $game.add.sprite(xf*$size_x, yf*$size_y, "pumpkin")
+      pumpkin.anchor.set(0.5)
+    end
+
+    text = $game.add.text($size_x/2, $size_y/2, "Game over\nYou collected #{$final_score} candy\nPress any key to start again", { fontSize: "64px", fill: "#000", align: "center", font: "Creepster" })
     text.anchor.set(0.5)
     text.fixed_to_camera = true
 
