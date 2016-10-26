@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset= "utf-8" />
+    <title>Halloween Candy Hunter</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #000000;
+      }
+    </style>
+    <script src="../js/phaser.js"></script>
+    <script src="../assets/halloween_candy_hunter.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script>
+    <script>
+        WebFont.load({
+            google: {
+                // Put your fonts to load here.
+                families: ['Creepster']
+            }
+        });
+    </script>
+  </head>
+
+  <body>
+    <script>
+      window.onload = function() {
+        Opal.load("halloween_candy_hunter")
+      }
+    </script>
+  </body>
+</html>

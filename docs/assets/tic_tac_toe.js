@@ -35082,7 +35082,7 @@ Opal.modules["upstream_fixes"] = function(Opal) {
   }
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $module = Opal.module, $hash2 = Opal.hash2;
 
-  Opal.add_stubs(['$to_enum', '$kind_of?', '$Float', '$raise', '$class', '$Integer', '$!', '$<=', '$<', '$*', '$/', '$+', '$abs', '$-', '$>', '$floor', '$each', '$==', '$%', '$alias_native', '$native_accessor', '$Native', '$include', '$to_n', '$proc', '$new', '$call', '$to_sym', '$===']);
+  Opal.add_stubs(['$to_enum', '$kind_of?', '$Float', '$raise', '$class', '$Integer', '$!', '$<=', '$<', '$*', '$/', '$+', '$abs', '$-', '$>', '$floor', '$each', '$==', '$%', '$alias_native', '$native_accessor', '$native_accessor_alias', '$include', '$to_n', '$proc', '$new', '$call', '$to_sym', '$===']);
   (function($base, $super) {
     function $Range(){};
     var self = $Range = $klass($base, $super, 'Range', $Range);
@@ -35174,7 +35174,6 @@ if (o == null) o = nil;
 
       var def = self.$$proto, $scope = self.$$scope;
 
-      def["native"] = nil;
       self.$alias_native("add_child", "addChild");
 
       self.$native_accessor("angle");
@@ -35183,13 +35182,7 @@ if (o == null) o = nil;
 
       self.$native_accessor("name");
 
-      self.$alias_native("fixed_to_camera", "fixedToCamera");
-
-      return (Opal.defn(self, '$fixed_to_camera=', function(value) {
-        var self = this;
-
-        return self.$Native(self["native"].fixedToCamera = value);
-      }), nil) && 'fixed_to_camera=';
+      return self.$native_accessor_alias("fixed_to_camera", "fixedToCamera");
     })($scope.base, null);
 
     (function($base, $super) {
@@ -35198,32 +35191,13 @@ if (o == null) o = nil;
 
       var def = self.$$proto, $scope = self.$$scope;
 
-      def["native"] = nil;
       self.$native_accessor("font", "stroke");
 
-      self.$alias_native("font_size", "fontSize");
+      self.$native_accessor_alias("font_size", "fontSize");
 
-      Opal.defn(self, '$font_size=', function(value) {
-        var self = this;
+      self.$native_accessor_alias("stroke_thickness", "strokeThickness");
 
-        return self.$Native(self["native"].fontSize = value);
-      });
-
-      self.$alias_native("stroke_thickness", "strokeThickness");
-
-      Opal.defn(self, '$stroke_thickness=', function(value) {
-        var self = this;
-
-        return self.$Native(self["native"].strokeThickness = value);
-      });
-
-      self.$alias_native("fixed_to_camera", "fixedToCamera");
-
-      Opal.defn(self, '$fixed_to_camera=', function(value) {
-        var self = this;
-
-        return self.$Native(self["native"].fixedToCamera = value);
-      });
+      self.$native_accessor_alias("fixed_to_camera", "fixedToCamera");
 
       self.$alias_native("events", $hash2(["as"], {"as": (($scope.get('Phaser')).$$scope.get('Events'))}));
 
@@ -35322,7 +35296,14 @@ if (o == null) o = nil;
 
       var def = self.$$proto, $scope = self.$$scope;
 
-      return self.$alias_native("create_cursor_keys", "createCursorKeys", $hash2(["as"], {"as": $scope.get('CursorKeys')}))
+      def["native"] = nil;
+      self.$alias_native("create_cursor_keys", "createCursorKeys", $hash2(["as"], {"as": $scope.get('CursorKeys')}));
+
+      return (Opal.defn(self, '$on_down_callback=', function(callback) {
+        var self = this;
+
+        return self["native"].onDownCallback = callback.$to_n();
+      }), nil) && 'on_down_callback=';
     })($scope.base, null);
 
     (function($base, $super) {
@@ -35453,22 +35434,9 @@ if (o == null) o = nil;
 
       var def = self.$$proto, $scope = self.$$scope;
 
-      def["native"] = nil;
-      self.$alias_native("page_align_horizontally", "pageAlignHorizontally");
+      self.$native_accessor_alias("page_align_horizontally", "pageAlignHorizontally");
 
-      Opal.defn(self, '$page_align_horizontally=', function(value) {
-        var self = this;
-
-        return self["native"].pageAlignHorizontally = value;
-      });
-
-      self.$alias_native("page_align_vertically", "pageAlignVertically");
-
-      return (Opal.defn(self, '$page_align_vertically=', function(value) {
-        var self = this;
-
-        return self["native"].pageAlignVertically = value;
-      }), nil) && 'page_align_vertically=';
+      return self.$native_accessor_alias("page_align_vertically", "pageAlignVertically");
     })($scope.base, null);
 
     (function($base, $super) {
