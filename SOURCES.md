@@ -11,10 +11,9 @@ Some of the sources include:
 * ice_cloud.png http://www.myiconfinder.com/icon/cloud-clouds-cloudy-rain-saas-sun-upload-weather-icon/16#.64
 * shark.png http://www.myiconfinder.com/icon/shark-animal-fish-sea-danger/12235#.128
 * pumpkin.png http://www.flaticon.com/free-icon/pumpkin_252136
-
-
 * candy1.png http://www.flaticon.com/free-icon/candy_135613
 * candy2.png http://www.flaticon.com/free-icon/candy_135770
 * candy3.png http://www.flaticon.com/free-icon/candy-canes_227277
 * candy4.png http://www.flaticon.com/free-icon/candy_236338
 * darkforest.jpg http://pcwallart.com/dark-forest-background-wallpaper-3.html
+* characters/ - https://github.com/taw/jrpg
