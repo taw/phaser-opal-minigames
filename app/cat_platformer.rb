@@ -28,9 +28,6 @@ class MainState < Phaser::State
     if @jumpButton.down? and (@player.body.blocked.down or @player.body.touching.down)
       @player.body.velocity.y = -500
     end
-
-    $game.camera.x = @player.x-$size_x/2
-    $game.camera.y = @player.y-$size_y/2
   end
 
   def create
@@ -59,6 +56,8 @@ class MainState < Phaser::State
         add_platform 200+i*300, @world_size_y-100-200*j-(i%2)*100
       end
     end
+    $game.camera.follow(@player)
+    $game.camera.deadzone = Phaser::Rectangle.new($size_x*0.25, $size_y*0.25, $size_x*0.5, $size_y*0.5)
   end
 end
 

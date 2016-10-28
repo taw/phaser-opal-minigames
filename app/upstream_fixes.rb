@@ -86,6 +86,14 @@ module Phaser
     alias_native :set_alpha, :setAlpha
   end
 
+  class Camera
+    alias_native :follow
+    alias_native :deadzone, as: Phaser::Rectangle
+    def deadzone=(zone)
+      `#@native.deadzone = #{zone.to_n}`
+    end
+  end
+
   class Sound
     native_accessor :volume
     native_accessor :mute
