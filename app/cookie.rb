@@ -18,18 +18,31 @@ class MainState < Phaser::State
     @cookie.x += @dx*dt
     @cookie.y += @dy*dt
     @scoreText.text = "Score: #{@score}"
+
+    dl = (@dx**2 + @dy**2) ** 0.5
+
+    @cookie_shadow.x = @cookie.x - 10 * @dx/dl
+    @cookie_shadow.y = @cookie.y - 10 * @dy/dl
   end
 
   def create
+    $game.stage.background_color = "4993FA"
+
     @score = 0
     @scoreText = $game.add.text(16, 16, "", { fontSize: "32px", fill: "#fff" })
-    $game.stage.background_color = "4993FA"
+
+    @cookie_shadow = $game.add.sprite(0, 0, "cookie")
+    @cookie_shadow.tint = 0x000000
+    @cookie_shadow.anchor.set(0.5, 0.5)
+    @cookie_shadow.alpha = 0.2
+
     @cookie = $game.add.sprite(
       $game.rnd.between(60, $size_x-60),
       $game.rnd.between(60, $size_y-60),
       "cookie",
     )
     @cookie.anchor.set(0.5, 0.5)
+
     @coin = $game.add.audio("coin")
     @cookie.input_enabled = true
     @cookie.events.on(:down) do
