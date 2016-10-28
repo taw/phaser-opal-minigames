@@ -35082,7 +35082,7 @@ Opal.modules["upstream_fixes"] = function(Opal) {
   }
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $module = Opal.module, $hash2 = Opal.hash2;
 
-  Opal.add_stubs(['$to_enum', '$kind_of?', '$Float', '$raise', '$class', '$Integer', '$!', '$<=', '$<', '$*', '$/', '$+', '$abs', '$-', '$>', '$floor', '$each', '$==', '$%', '$alias_native', '$native_accessor', '$native_accessor_alias', '$include', '$to_n', '$proc', '$new', '$call', '$to_sym', '$===']);
+  Opal.add_stubs(['$to_enum', '$kind_of?', '$Float', '$raise', '$class', '$Integer', '$!', '$<=', '$<', '$*', '$/', '$+', '$abs', '$-', '$>', '$floor', '$each', '$==', '$%', '$alias_native', '$native_accessor', '$native_accessor_alias', '$to_n', '$include', '$proc', '$new', '$call', '$to_sym', '$===']);
   (function($base, $super) {
     function $Range(){};
     var self = $Range = $klass($base, $super, 'Range', $Range);
@@ -35191,9 +35191,11 @@ if (o == null) o = nil;
 
       var def = self.$$proto, $scope = self.$$scope;
 
-      self.$native_accessor("font", "stroke");
+      self.$native_accessor("font", "stroke", "align");
 
       self.$native_accessor_alias("font_size", "fontSize");
+
+      self.$native_accessor_alias("font_weight", "fontWeight");
 
       self.$native_accessor_alias("stroke_thickness", "strokeThickness");
 
@@ -35201,7 +35203,9 @@ if (o == null) o = nil;
 
       self.$alias_native("events", $hash2(["as"], {"as": (($scope.get('Phaser')).$$scope.get('Events'))}));
 
-      return self.$native_accessor("inputEnabled");
+      self.$native_accessor("inputEnabled");
+
+      return self.$alias_native("set_shadow", "setShadow");
     })($scope.base, null);
 
     (function($base, $super) {
@@ -35211,6 +35215,24 @@ if (o == null) o = nil;
       var def = self.$$proto, $scope = self.$$scope;
 
       return self.$alias_native("set_alpha", "setAlpha")
+    })($scope.base, null);
+
+    (function($base, $super) {
+      function $Camera(){};
+      var self = $Camera = $klass($base, $super, 'Camera', $Camera);
+
+      var def = self.$$proto, $scope = self.$$scope;
+
+      def["native"] = nil;
+      self.$alias_native("follow");
+
+      self.$alias_native("deadzone", $hash2(["as"], {"as": (($scope.get('Phaser')).$$scope.get('Rectangle'))}));
+
+      return (Opal.defn(self, '$deadzone=', function(zone) {
+        var self = this;
+
+        return self["native"].deadzone = zone.$to_n();
+      }), nil) && 'deadzone=';
     })($scope.base, null);
 
     (function($base, $super) {
@@ -35331,7 +35353,9 @@ if (o == null) o = nil;
 
       var def = self.$$proto, $scope = self.$$scope;
 
-      return self.$alias_native("blocked")
+      self.$alias_native("blocked");
+
+      return self.$native_accessor_alias("max_velocity", "maxVelocity");
     })((($scope.get('Physics')).$$scope.get('Arcade')), null);
 
     (function($base, $super) {
@@ -35446,6 +35470,15 @@ if (o == null) o = nil;
       var def = self.$$proto, $scope = self.$$scope;
 
       return self.$alias_native("bitmap_font", "bitmapFont")
+    })($scope.base, null);
+
+    (function($base, $super) {
+      function $Time(){};
+      var self = $Time = $klass($base, $super, 'Time', $Time);
+
+      var def = self.$$proto, $scope = self.$$scope;
+
+      return self.$alias_native("now")
     })($scope.base, null);
 
     (function($base, $super) {

@@ -35082,7 +35082,7 @@ Opal.modules["upstream_fixes"] = function(Opal) {
   }
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $module = Opal.module, $hash2 = Opal.hash2;
 
-  Opal.add_stubs(['$to_enum', '$kind_of?', '$Float', '$raise', '$class', '$Integer', '$!', '$<=', '$<', '$*', '$/', '$+', '$abs', '$-', '$>', '$floor', '$each', '$==', '$%', '$alias_native', '$native_accessor', '$native_accessor_alias', '$include', '$to_n', '$proc', '$new', '$call', '$to_sym', '$===']);
+  Opal.add_stubs(['$to_enum', '$kind_of?', '$Float', '$raise', '$class', '$Integer', '$!', '$<=', '$<', '$*', '$/', '$+', '$abs', '$-', '$>', '$floor', '$each', '$==', '$%', '$alias_native', '$native_accessor', '$native_accessor_alias', '$to_n', '$include', '$proc', '$new', '$call', '$to_sym', '$===']);
   (function($base, $super) {
     function $Range(){};
     var self = $Range = $klass($base, $super, 'Range', $Range);
@@ -35191,9 +35191,11 @@ if (o == null) o = nil;
 
       var def = self.$$proto, $scope = self.$$scope;
 
-      self.$native_accessor("font", "stroke");
+      self.$native_accessor("font", "stroke", "align");
 
       self.$native_accessor_alias("font_size", "fontSize");
+
+      self.$native_accessor_alias("font_weight", "fontWeight");
 
       self.$native_accessor_alias("stroke_thickness", "strokeThickness");
 
@@ -35201,7 +35203,9 @@ if (o == null) o = nil;
 
       self.$alias_native("events", $hash2(["as"], {"as": (($scope.get('Phaser')).$$scope.get('Events'))}));
 
-      return self.$native_accessor("inputEnabled");
+      self.$native_accessor("inputEnabled");
+
+      return self.$alias_native("set_shadow", "setShadow");
     })($scope.base, null);
 
     (function($base, $super) {
@@ -35211,6 +35215,24 @@ if (o == null) o = nil;
       var def = self.$$proto, $scope = self.$$scope;
 
       return self.$alias_native("set_alpha", "setAlpha")
+    })($scope.base, null);
+
+    (function($base, $super) {
+      function $Camera(){};
+      var self = $Camera = $klass($base, $super, 'Camera', $Camera);
+
+      var def = self.$$proto, $scope = self.$$scope;
+
+      def["native"] = nil;
+      self.$alias_native("follow");
+
+      self.$alias_native("deadzone", $hash2(["as"], {"as": (($scope.get('Phaser')).$$scope.get('Rectangle'))}));
+
+      return (Opal.defn(self, '$deadzone=', function(zone) {
+        var self = this;
+
+        return self["native"].deadzone = zone.$to_n();
+      }), nil) && 'deadzone=';
     })($scope.base, null);
 
     (function($base, $super) {
@@ -35331,7 +35353,9 @@ if (o == null) o = nil;
 
       var def = self.$$proto, $scope = self.$$scope;
 
-      return self.$alias_native("blocked")
+      self.$alias_native("blocked");
+
+      return self.$native_accessor_alias("max_velocity", "maxVelocity");
     })((($scope.get('Physics')).$$scope.get('Arcade')), null);
 
     (function($base, $super) {
@@ -35449,6 +35473,15 @@ if (o == null) o = nil;
     })($scope.base, null);
 
     (function($base, $super) {
+      function $Time(){};
+      var self = $Time = $klass($base, $super, 'Time', $Time);
+
+      var def = self.$$proto, $scope = self.$$scope;
+
+      return self.$alias_native("now")
+    })($scope.base, null);
+
+    (function($base, $super) {
       function $Input(){};
       var self = $Input = $klass($base, $super, 'Input', $Input);
 
@@ -35494,6 +35527,9 @@ Opal.modules["common"] = function(Opal) {
 Opal.modules["snake"] = function(Opal) {
   Opal.dynamic_require_severity = "error";
   var OPAL_CONFIG = { method_missing: true, arity_check: false, freezing: true, tainting: true };
+  function $rb_minus(lhs, rhs) {
+    return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs - rhs : lhs['$-'](rhs);
+  }
   function $rb_divide(lhs, rhs) {
     return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs / rhs : lhs['$/'](rhs);
   }
@@ -35506,7 +35542,7 @@ Opal.modules["snake"] = function(Opal) {
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $gvars = Opal.gvars, $hash2 = Opal.hash2, $range = Opal.range;
   if ($gvars.game == null) $gvars.game = nil;
 
-  Opal.add_stubs(['$image', '$load', '$map', '$/', '$*', '$rope', '$add', '$updateAnimation=', '$proc', '$+', '$each', '$y=', '$sin', '$[]', '$points', '$state', '$new']);
+  Opal.add_stubs(['$image', '$load', '$-', '$/', '$*', '$sin', '$+', '$cos', '$min', '$map', '$rope', '$add', '$updateAnimation=', '$proc', '$each', '$point_xy', '$x=', '$[]', '$points', '$y=', '$state', '$new']);
   self.$require("snake"+ '/../' + "common");
   (function($base, $super) {
     function $MainState(){};
@@ -35514,7 +35550,7 @@ Opal.modules["snake"] = function(Opal) {
 
     var def = self.$$proto, $scope = self.$$scope;
 
-    def.rope = nil;
+    def.radius = def.rope = nil;
     Opal.defn(self, '$preload', function() {
       var self = this;
       if ($gvars.game == null) $gvars.game = nil;
@@ -35522,26 +35558,36 @@ Opal.modules["snake"] = function(Opal) {
       return $gvars.game.$load().$image("snake", "../images/snake.png");
     });
 
+    Opal.defn(self, '$point_xy', function(i, snake_phase) {
+      var self = this, segment_phase = nil;
+
+      segment_phase = $rb_minus(snake_phase, $rb_divide($rb_times((($scope.get('Math')).$$scope.get('PI')), i), 20));
+      return [$rb_times($rb_times($scope.get('Math').$sin(segment_phase), self.radius), ($rb_plus(1, $rb_times(0.1, $scope.get('Math').$sin($rb_times(segment_phase, 5)))))), $rb_times($rb_times($scope.get('Math').$cos(segment_phase), self.radius), ($rb_plus(1, $rb_times(0.1, $scope.get('Math').$sin($rb_times(segment_phase, 5))))))];
+    });
+
     return (Opal.defn(self, '$create', function() {
       var $a, $b, TMP_1, $c, $d, $e, TMP_2, self = this, points = nil;
-      if ($gvars.game == null) $gvars.game = nil;
       if ($gvars.size_x == null) $gvars.size_x = nil;
       if ($gvars.size_y == null) $gvars.size_y = nil;
+      if ($gvars.game == null) $gvars.game = nil;
 
+      self.radius = $rb_times([$gvars.size_x, $gvars.size_y].$min(), 0.35);
       points = ($a = ($b = ($range(0, 20, true))).$map, $a.$$p = (TMP_1 = function(i){var self = TMP_1.$$s || this;
 if (i == null) i = nil;
-      return $hash2(["x", "y"], {"x": $rb_divide($rb_times(i, 918), 20), "y": 0})}, TMP_1.$$s = self, TMP_1), $a).call($b);
-      self.rope = $gvars.game.$add().$rope($rb_divide($gvars.size_x, 4), $rb_divide($gvars.size_y, 2), "snake", nil, points);
-      self.count = 0;
+      return $hash2(["x", "y"], {"x": 0, "y": 0})}, TMP_1.$$s = self, TMP_1), $a).call($b);
+      self.rope = $gvars.game.$add().$rope($rb_divide($gvars.size_x, 2), $rb_divide($gvars.size_y, 2), "snake", nil, points);
+      self.phase = 0;
       return (($a = [($d = ($e = self).$proc, $d.$$p = (TMP_2 = function(){var self = TMP_2.$$s || this, $a, $b, TMP_3;
-        if (self.count == null) self.count = nil;
+        if (self.phase == null) self.phase = nil;
 
-      self.count = $rb_plus(self.count, 0.1);
-        return ($a = ($b = ($range(0, 20, true))).$each, $a.$$p = (TMP_3 = function(i){var self = TMP_3.$$s || this, $a, $b;
-          if (self.count == null) self.count = nil;
+      self.phase = $rb_minus(self.phase, 0.05);
+        return ($a = ($b = ($range(0, 20, true))).$each, $a.$$p = (TMP_3 = function(i){var self = TMP_3.$$s || this, $a, $b, x = nil, y = nil;
+          if (self.phase == null) self.phase = nil;
           if (self.rope == null) self.rope = nil;
 if (i == null) i = nil;
-        return (($a = [$rb_times($scope.get('Math').$sin($rb_plus($rb_times(i, 0.5), self.count)), 20)]), $b = self.rope.$points()['$[]'](i), $b['$y='].apply($b, $a), $a[$a.length-1])}, TMP_3.$$s = self, TMP_3), $a).call($b);}, TMP_2.$$s = self, TMP_2), $d).call($e)]), $c = self.rope, $c['$updateAnimation='].apply($c, $a), $a[$a.length-1]);
+        $b = self.$point_xy(i, self.phase), $a = Opal.to_ary($b), x = ($a[0] == null ? nil : $a[0]), y = ($a[1] == null ? nil : $a[1]), $b;
+          (($a = [x]), $b = self.rope.$points()['$[]'](i), $b['$x='].apply($b, $a), $a[$a.length-1]);
+          return (($a = [y]), $b = self.rope.$points()['$[]'](i), $b['$y='].apply($b, $a), $a[$a.length-1]);}, TMP_3.$$s = self, TMP_3), $a).call($b);}, TMP_2.$$s = self, TMP_2), $d).call($e)]), $c = self.rope, $c['$updateAnimation='].apply($c, $a), $a[$a.length-1]);
     }), nil) && 'create';
   })($scope.base, (($scope.get('Phaser')).$$scope.get('State')));
   return $gvars.game.$state().$add("main", $scope.get('MainState').$new(), true);

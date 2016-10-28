@@ -35082,7 +35082,7 @@ Opal.modules["upstream_fixes"] = function(Opal) {
   }
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $module = Opal.module, $hash2 = Opal.hash2;
 
-  Opal.add_stubs(['$to_enum', '$kind_of?', '$Float', '$raise', '$class', '$Integer', '$!', '$<=', '$<', '$*', '$/', '$+', '$abs', '$-', '$>', '$floor', '$each', '$==', '$%', '$alias_native', '$native_accessor', '$native_accessor_alias', '$include', '$to_n', '$proc', '$new', '$call', '$to_sym', '$===']);
+  Opal.add_stubs(['$to_enum', '$kind_of?', '$Float', '$raise', '$class', '$Integer', '$!', '$<=', '$<', '$*', '$/', '$+', '$abs', '$-', '$>', '$floor', '$each', '$==', '$%', '$alias_native', '$native_accessor', '$native_accessor_alias', '$to_n', '$include', '$proc', '$new', '$call', '$to_sym', '$===']);
   (function($base, $super) {
     function $Range(){};
     var self = $Range = $klass($base, $super, 'Range', $Range);
@@ -35191,9 +35191,11 @@ if (o == null) o = nil;
 
       var def = self.$$proto, $scope = self.$$scope;
 
-      self.$native_accessor("font", "stroke");
+      self.$native_accessor("font", "stroke", "align");
 
       self.$native_accessor_alias("font_size", "fontSize");
+
+      self.$native_accessor_alias("font_weight", "fontWeight");
 
       self.$native_accessor_alias("stroke_thickness", "strokeThickness");
 
@@ -35201,7 +35203,9 @@ if (o == null) o = nil;
 
       self.$alias_native("events", $hash2(["as"], {"as": (($scope.get('Phaser')).$$scope.get('Events'))}));
 
-      return self.$native_accessor("inputEnabled");
+      self.$native_accessor("inputEnabled");
+
+      return self.$alias_native("set_shadow", "setShadow");
     })($scope.base, null);
 
     (function($base, $super) {
@@ -35211,6 +35215,24 @@ if (o == null) o = nil;
       var def = self.$$proto, $scope = self.$$scope;
 
       return self.$alias_native("set_alpha", "setAlpha")
+    })($scope.base, null);
+
+    (function($base, $super) {
+      function $Camera(){};
+      var self = $Camera = $klass($base, $super, 'Camera', $Camera);
+
+      var def = self.$$proto, $scope = self.$$scope;
+
+      def["native"] = nil;
+      self.$alias_native("follow");
+
+      self.$alias_native("deadzone", $hash2(["as"], {"as": (($scope.get('Phaser')).$$scope.get('Rectangle'))}));
+
+      return (Opal.defn(self, '$deadzone=', function(zone) {
+        var self = this;
+
+        return self["native"].deadzone = zone.$to_n();
+      }), nil) && 'deadzone=';
     })($scope.base, null);
 
     (function($base, $super) {
@@ -35331,7 +35353,9 @@ if (o == null) o = nil;
 
       var def = self.$$proto, $scope = self.$$scope;
 
-      return self.$alias_native("blocked")
+      self.$alias_native("blocked");
+
+      return self.$native_accessor_alias("max_velocity", "maxVelocity");
     })((($scope.get('Physics')).$$scope.get('Arcade')), null);
 
     (function($base, $super) {
@@ -35449,6 +35473,15 @@ if (o == null) o = nil;
     })($scope.base, null);
 
     (function($base, $super) {
+      function $Time(){};
+      var self = $Time = $klass($base, $super, 'Time', $Time);
+
+      var def = self.$$proto, $scope = self.$$scope;
+
+      return self.$alias_native("now")
+    })($scope.base, null);
+
+    (function($base, $super) {
       function $Input(){};
       var self = $Input = $klass($base, $super, 'Input', $Input);
 
@@ -35509,10 +35542,13 @@ Opal.modules["cookie"] = function(Opal) {
   function $rb_times(lhs, rhs) {
     return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs * rhs : lhs['$*'](rhs);
   }
+  function $rb_divide(lhs, rhs) {
+    return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs / rhs : lhs['$/'](rhs);
+  }
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $gvars = Opal.gvars, $hash2 = Opal.hash2;
   if ($gvars.game == null) $gvars.game = nil;
 
-  Opal.add_stubs(['$image', '$load', '$audio', '$physics_elapsed', '$time', '$<', '$x', '$>=', '$-', '$-@', '$y', '$x=', '$+', '$*', '$y=', '$text=', '$text', '$add', '$background_color=', '$stage', '$sprite', '$between', '$rnd', '$set', '$anchor', '$input_enabled=', '$on', '$start', '$play', '$events', '$deg_to_rad', '$math', '$cos', '$sin', '$emitter', '$make_particles', '$gravity=', '$minParticleSpeed', '$maxParticleSpeed', '$set_alpha', '$state', '$new']);
+  Opal.add_stubs(['$image', '$load', '$audio', '$physics_elapsed', '$time', '$<', '$x', '$>=', '$-', '$-@', '$y', '$x=', '$+', '$*', '$y=', '$text=', '$**', '$/', '$background_color=', '$stage', '$text', '$add', '$sprite', '$tint=', '$set', '$anchor', '$alpha=', '$between', '$rnd', '$input_enabled=', '$on', '$start', '$play', '$events', '$deg_to_rad', '$math', '$cos', '$sin', '$emitter', '$make_particles', '$gravity=', '$minParticleSpeed', '$maxParticleSpeed', '$set_alpha', '$state', '$new']);
   self.$require("cookie"+ '/../' + "common");
   (function($base, $super) {
     function $MainState(){};
@@ -35520,7 +35556,7 @@ Opal.modules["cookie"] = function(Opal) {
 
     var def = self.$$proto, $scope = self.$$scope;
 
-    def.cookie = def.dx = def.dy = def.score = def.scoreText = def.emitter = nil;
+    def.cookie = def.dx = def.dy = def.score = def.scoreText = def.cookie_shadow = def.emitter = nil;
     Opal.defn(self, '$preload', function() {
       var self = this;
       if ($gvars.game == null) $gvars.game = nil;
@@ -35531,7 +35567,7 @@ Opal.modules["cookie"] = function(Opal) {
     });
 
     Opal.defn(self, '$update', function() {
-      var $a, $b, self = this, dt = nil;
+      var $a, $b, self = this, dt = nil, dl = nil;
       if ($gvars.game == null) $gvars.game = nil;
       if ($gvars.size_x == null) $gvars.size_x = nil;
       if ($gvars.size_y == null) $gvars.size_y = nil;
@@ -35543,7 +35579,10 @@ Opal.modules["cookie"] = function(Opal) {
         self.dy = self.dy['$-@']()};
       ($a = self.cookie, $a['$x=']($rb_plus($a.$x(), $rb_times(self.dx, dt))));
       ($a = self.cookie, $a['$y=']($rb_plus($a.$y(), $rb_times(self.dy, dt))));
-      return (($a = ["Score: " + (self.score)]), $b = self.scoreText, $b['$text='].apply($b, $a), $a[$a.length-1]);
+      (($a = ["Score: " + (self.score)]), $b = self.scoreText, $b['$text='].apply($b, $a), $a[$a.length-1]);
+      dl = ($rb_plus(self.dx['$**'](2), self.dy['$**'](2)))['$**'](0.5);
+      (($a = [$rb_minus(self.cookie.$x(), $rb_divide($rb_times(10, self.dx), dl))]), $b = self.cookie_shadow, $b['$x='].apply($b, $a), $a[$a.length-1]);
+      return (($a = [$rb_minus(self.cookie.$y(), $rb_divide($rb_times(10, self.dy), dl))]), $b = self.cookie_shadow, $b['$y='].apply($b, $a), $a[$a.length-1]);
     });
 
     return (Opal.defn(self, '$create', function() {
@@ -35552,9 +35591,13 @@ Opal.modules["cookie"] = function(Opal) {
       if ($gvars.size_x == null) $gvars.size_x = nil;
       if ($gvars.size_y == null) $gvars.size_y = nil;
 
+      (($a = ["4993FA"]), $b = $gvars.game.$stage(), $b['$background_color='].apply($b, $a), $a[$a.length-1]);
       self.score = 0;
       self.scoreText = $gvars.game.$add().$text(16, 16, "", $hash2(["fontSize", "fill"], {"fontSize": "32px", "fill": "#fff"}));
-      (($a = ["4993FA"]), $b = $gvars.game.$stage(), $b['$background_color='].apply($b, $a), $a[$a.length-1]);
+      self.cookie_shadow = $gvars.game.$add().$sprite(0, 0, "cookie");
+      (($a = [0]), $b = self.cookie_shadow, $b['$tint='].apply($b, $a), $a[$a.length-1]);
+      self.cookie_shadow.$anchor().$set(0.5, 0.5);
+      (($a = [0.2]), $b = self.cookie_shadow, $b['$alpha='].apply($b, $a), $a[$a.length-1]);
       self.cookie = $gvars.game.$add().$sprite($gvars.game.$rnd().$between(60, $rb_minus($gvars.size_x, 60)), $gvars.game.$rnd().$between(60, $rb_minus($gvars.size_y, 60)), "cookie");
       self.cookie.$anchor().$set(0.5, 0.5);
       self.coin = $gvars.game.$add().$audio("coin");
