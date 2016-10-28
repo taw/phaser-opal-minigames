@@ -26,7 +26,7 @@ class MainState < Phaser::State
       @player.scale.x = -(@player.scale.x.abs)
     end
     if @jumpButton.down? and (@player.body.blocked.down or @player.body.touching.down)
-      @player.body.velocity.y = -250
+      @player.body.velocity.y = -500
     end
 
     $game.camera.x = @player.x-$size_x/2
@@ -48,7 +48,8 @@ class MainState < Phaser::State
     @player.width = 64
     $game.physics.enable(@player, Phaser::Physics::ARCADE)
 
-    @player.body.gravity.y = 250
+    @player.body.gravity.y = 1000
+    @player.body.max_velocity.y = 500
     @player.body.collide_world_bounds = true
 
     @platforms = $game.add.group()

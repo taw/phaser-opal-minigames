@@ -141,6 +141,7 @@ module Phaser
 
   class Physics::Arcade::Body
     alias_native :blocked
+    native_accessor_alias :max_velocity, :maxVelocity
   end
 
   # This is basic browser class, not part of phaser
@@ -202,6 +203,10 @@ module Phaser
 
   class Loader
     alias_native :bitmap_font, :bitmapFont
+  end
+
+  class Time
+    alias_native :now
   end
 
   class Input
