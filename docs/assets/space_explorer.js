@@ -35548,7 +35548,7 @@ Opal.modules["space_explorer"] = function(Opal) {
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $gvars = Opal.gvars, $hash2 = Opal.hash2;
   if ($gvars.game == null) $gvars.game = nil;
 
-  Opal.add_stubs(['$text', '$add', '$fixed_to_camera=', '$value', '$value=', '$attr_reader', '$text=', '$create', '$between', '$rnd', '$set', '$anchor', '$immovable=', '$body', '$attr_accessor', '$collide_world_bounds=', '$target', '$**', '$+', '$-', '$x', '$y', '$<', '$>', '$/', '$*', '$x=', '$velocity', '$y=', '$sin', '$cos', '$sprite', '$enable', '$physics', '$clamp', '$math', '$angle=', '$deg_to_rad', '$-@', '$background_color=', '$stage', '$physics_elapsed', '$time', '$on_down_callback=', '$proc', '$start_game', '$keyboard', '$input', '$on', '$start', '$state', '$image', '$load', '$start_system', '$group', '$enable_body=', '$map', '$new', '$times', '$set_bounds', '$world', '$each', '$target=', '$create_cursor_keys', '$collide', '$arcade', '$overlap', '$destroy', '$camera', '$down?', '$up', '$speed_up', '$down', '$slow_down', '$left', '$turn', '$right', '$update']);
+  Opal.add_stubs(['$text', '$add', '$fixed_to_camera=', '$value', '$value=', '$attr_reader', '$text=', '$create', '$between', '$rnd', '$set', '$anchor', '$immovable=', '$body', '$attr_accessor', '$collide_world_bounds=', '$target', '$**', '$+', '$-', '$x', '$y', '$<', '$>', '$/', '$*', '$x=', '$velocity', '$y=', '$sin', '$cos', '$sprite', '$enable', '$physics', '$clamp', '$math', '$angle=', '$deg_to_rad', '$-@', '$background_color=', '$stage', '$physics_elapsed', '$time', '$on_down_callback=', '$proc', '$start_game', '$keyboard', '$input', '$on', '$start', '$state', '$image', '$load', '$audio', '$start_system', '$group', '$enable_body=', '$map', '$new', '$times', '$set_bounds', '$world', '$each', '$target=', '$create_cursor_keys', '$collide', '$arcade', '$overlap', '$destroy', '$play', '$camera', '$down?', '$up', '$speed_up', '$down', '$slow_down', '$left', '$turn', '$right', '$update']);
   self.$require("space_explorer"+ '/../' + "common");
   (function($base, $super) {
     function $Score(){};
@@ -35790,7 +35790,8 @@ Opal.modules["space_explorer"] = function(Opal) {
       $gvars.game.$load().$image("star", "../images/star.png");
       $gvars.game.$load().$image("rocket", "../images/rocket.png");
       $gvars.game.$load().$image("doughnut", "../images/doughnut.png");
-      return $gvars.game.$load().$image("ufo", "../images/ufo.png");
+      $gvars.game.$load().$image("ufo", "../images/ufo.png");
+      return $gvars.game.$load().$audio("pop", "../audio/pop3.mp3");
     });
 
     Opal.defn(self, '$create', function() {
@@ -35824,7 +35825,8 @@ Opal.modules["space_explorer"] = function(Opal) {
 if (alien == null) alien = nil;
       return (($a = [self.spaceship]), $b = alien, $b['$target='].apply($b, $a), $a[$a.length-1])}, TMP_6.$$s = self, TMP_6), $a).call($e);
       self.cursors = $gvars.game.$input().$keyboard().$create_cursor_keys();
-      return self.score = $scope.get('Score').$new();
+      self.score = $scope.get('Score').$new();
+      return self.pop = $gvars.game.$add().$audio("pop");
     });
 
     return (Opal.defn(self, '$update', function() {
@@ -35837,9 +35839,11 @@ if (alien == null) alien = nil;
       $gvars.game.$physics().$arcade().$collide(self.aliens_group, self.stars_group);
       $gvars.game.$physics().$arcade().$collide(self.aliens_group, self.aliens_group);
       ($a = ($b = $gvars.game.$physics().$arcade()).$overlap, $a.$$p = (TMP_7 = function(s, g){var self = TMP_7.$$s || this, $a;
+        if (self.pop == null) self.pop = nil;
         if (self.score == null) self.score = nil;
 if (s == null) s = nil;if (g == null) g = nil;
       g.$destroy();
+        self.pop.$play();
         return ($a = self.score, $a['$value=']($rb_plus($a.$value(), 1)));}, TMP_7.$$s = self, TMP_7), $a).call($b, self.spaceship.$sprite(), self.donuts_group);
       ($a = ($c = $gvars.game.$physics().$arcade()).$overlap, $a.$$p = (TMP_8 = function(s, g){var self = TMP_8.$$s || this;
         if (self.score == null) self.score = nil;

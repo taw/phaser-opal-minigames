@@ -163,6 +163,7 @@ class GameState < Phaser::State
     $game.load.image("rocket", "../images/rocket.png")
     $game.load.image("doughnut", "../images/doughnut.png")
     $game.load.image("ufo", "../images/ufo.png")
+    $game.load.audio("pop", "../audio/pop3.mp3")
   end
 
   def create
@@ -190,6 +191,7 @@ class GameState < Phaser::State
     end
     @cursors = $game.input.keyboard.create_cursor_keys
     @score = Score.new
+    @pop = $game.add.audio("pop")
   end
 
   def update
@@ -198,6 +200,7 @@ class GameState < Phaser::State
     $game.physics.arcade.collide(@aliens_group, @aliens_group)
     $game.physics.arcade.overlap(@spaceship.sprite, @donuts_group) do |s, g|
       g.destroy
+      @pop.play
       @score.value += 1
     end
     $game.physics.arcade.overlap(@spaceship.sprite, @aliens_group) do |s, g|
