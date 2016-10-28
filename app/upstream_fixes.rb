@@ -74,12 +74,14 @@ module Phaser
   end
 
   class Text
-    native_accessor :font, :stroke
+    native_accessor :font, :stroke, :align
     native_accessor_alias :font_size, :fontSize
+    native_accessor_alias :font_weight, :fontWeight
     native_accessor_alias :stroke_thickness, :strokeThickness
     native_accessor_alias :fixed_to_camera, :fixedToCamera
     alias_native :events, as: Phaser::Events
     native_accessor :inputEnabled
+    alias_native :set_shadow, :setShadow
   end
 
   class Emitter
