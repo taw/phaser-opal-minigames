@@ -35548,7 +35548,7 @@ Opal.modules["halloween_candy_hunter"] = function(Opal) {
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $gvars = Opal.gvars, $hash2 = Opal.hash2, $range = Opal.range;
   if ($gvars.game == null) $gvars.game = nil;
 
-  Opal.add_stubs(['$sprite', '$add', '$between', '$rnd', '$enable', '$physics', '$height=', '$width=', '$*', '$rand', '$alpha=', '$x=', '$velocity', '$body', '$y=', '$>', '$y', '$-', '$x', '$emitter', '$make_particles', '$gravity=', '$maxParticleSpeed', '$minParticleSpeed', '$set_alpha', '$set', '$scale', '$/', '$start', '$text', '$fixed_to_camera=', '$value', '$value=', '$attr_reader', '$text=', '$anchor', '$animations', '$play', '$collide_world_bounds=', '$create_cursor_keys', '$keyboard', '$input', '$set_size', '$<', '$down?', '$up', '$velocity_y=', '$down', '$right', '$velocity_x=', '$left', '$camera', '$background_color=', '$stage', '$start_system', '$+', '$set_bounds', '$world', '$new', '$each', '$===', '$<<', '$map', '$times', '$group', '$enable_body=', '$audio', '$state', '$physics_elapsed', '$time', '$update', '$overlap', '$burst_at', '$destroy', '$arcade', '$game_over', '$spritesheet', '$load', '$image', '$on_down_callback=', '$proc', '$start_game', '$on', '$advanced_timing=']);
+  Opal.add_stubs(['$sprite', '$add', '$between', '$rnd', '$enable', '$physics', '$height=', '$width=', '$*', '$rand', '$alpha=', '$x=', '$velocity', '$body', '$y=', '$>', '$y', '$-', '$x', '$emitter', '$make_particles', '$gravity=', '$maxParticleSpeed', '$minParticleSpeed', '$set_alpha', '$set', '$scale', '$/', '$start', '$text', '$fixed_to_camera=', '$value', '$value=', '$attr_reader', '$text=', '$anchor', '$animations', '$play', '$collide_world_bounds=', '$create_cursor_keys', '$keyboard', '$input', '$set_size', '$<', '$down?', '$up', '$velocity_y=', '$down', '$right', '$velocity_x=', '$left', '$camera', '$-@', '$background_color=', '$stage', '$start_system', '$+', '$set_bounds', '$world', '$new', '$each', '$===', '$<<', '$map', '$times', '$group', '$enable_body=', '$audio', '$state', '$physics_elapsed', '$time', '$update', '$overlap', '$burst_at', '$destroy', '$arcade', '$game_over', '$spritesheet', '$load', '$image', '$on_down_callback=', '$proc', '$start_game', '$on', '$advanced_timing=']);
   self.$require("halloween_candy_hunter"+ '/../' + "common");
   (function($base, $super) {
     function $Snowflake(){};
@@ -35717,10 +35717,10 @@ Opal.modules["halloween_candy_hunter"] = function(Opal) {
 
     var def = self.$$proto, $scope = self.$$scope;
 
-    def.sprite = nil;
+    def.sprite = def.speed = nil;
     self.$attr_reader("sprite");
 
-    Opal.defn(self, '$initialize', function(x) {
+    Opal.defn(self, '$initialize', function(x, speed) {
       var $a, $b, self = this;
       if ($gvars.game == null) $gvars.game = nil;
       if ($gvars.world_size_y == null) $gvars.world_size_y = nil;
@@ -35733,7 +35733,8 @@ Opal.modules["halloween_candy_hunter"] = function(Opal) {
       self.sprite.$animations().$play("fly", 15, true);
       $gvars.game.$physics().$enable(self.sprite, (((($scope.get('Phaser')).$$scope.get('Physics'))).$$scope.get('ARCADE')));
       (($a = [true]), $b = self.sprite.$body(), $b['$collide_world_bounds='].apply($b, $a), $a[$a.length-1]);
-      (($a = [200]), $b = self.sprite.$body().$velocity(), $b['$y='].apply($b, $a), $a[$a.length-1]);
+      self.speed = speed;
+      (($a = [self.speed]), $b = self.sprite.$body().$velocity(), $b['$y='].apply($b, $a), $a[$a.length-1]);
       return self.sprite.$body().$set_size(100, 60, 40, 50);
     });
 
@@ -35742,9 +35743,9 @@ Opal.modules["halloween_candy_hunter"] = function(Opal) {
       if ($gvars.world_size_y == null) $gvars.world_size_y = nil;
 
       if ((($a = $rb_lt(self.sprite.$y(), 40)) !== nil && (!$a.$$is_boolean || $a == true))) {
-        (($a = [200]), $b = self.sprite.$body().$velocity(), $b['$y='].apply($b, $a), $a[$a.length-1])};
+        (($a = [self.speed]), $b = self.sprite.$body().$velocity(), $b['$y='].apply($b, $a), $a[$a.length-1])};
       if ((($a = $rb_gt(self.sprite.$y(), $rb_minus($gvars.world_size_y, 40))) !== nil && (!$a.$$is_boolean || $a == true))) {
-        return (($a = [-200]), $b = self.sprite.$body().$velocity(), $b['$y='].apply($b, $a), $a[$a.length-1])
+        return (($a = [self.speed['$-@']()]), $b = self.sprite.$body().$velocity(), $b['$y='].apply($b, $a), $a[$a.length-1])
         } else {
         return nil
       };
@@ -35802,7 +35803,7 @@ Opal.modules["halloween_candy_hunter"] = function(Opal) {
         if (self.candy == null) self.candy = nil;
         if ($gvars.game == null) $gvars.game = nil;
 if (x == null) x = nil;
-      return (function() {$case = $gvars.game.$rnd().$between(0, 1);if ((0)['$===']($case)) {return self.bats['$<<']($scope.get('Bat').$new($rb_times(x, 100)))}else if ((1)['$===']($case)) {return self.candy['$<<']($scope.get('Candy').$new($rb_times(x, 100)))}else { return nil }})()}, TMP_1.$$s = self, TMP_1), $a).call($b);
+      return (function() {$case = $gvars.game.$rnd().$between(0, 1);if ((0)['$===']($case)) {return self.bats['$<<']($scope.get('Bat').$new($rb_times(x, 100), $rb_plus(200, x)))}else if ((1)['$===']($case)) {return self.candy['$<<']($scope.get('Candy').$new($rb_times(x, 100)))}else { return nil }})()}, TMP_1.$$s = self, TMP_1), $a).call($b);
       self.snowflakes = [];
       self.snowflakes = ($a = ($c = (1000).$times()).$map, $a.$$p = (TMP_2 = function(){var self = TMP_2.$$s || this;
 

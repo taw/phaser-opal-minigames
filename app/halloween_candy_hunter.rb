@@ -112,7 +112,7 @@ end
 
 class Bat
   attr_reader :sprite
-  def initialize(x)
+  def initialize(x, speed)
     @sprite = $game.add.sprite(
       x,
       $game.rnd.between(40, $world_size_y-40),
@@ -125,16 +125,17 @@ class Bat
     @sprite.animations.play("fly", 15, true)
     $game.physics.enable(@sprite, Phaser::Physics::ARCADE)
     @sprite.body.collide_world_bounds = true
-    @sprite.body.velocity.y = 200
+    @speed = speed
+    @sprite.body.velocity.y = @speed
     @sprite.body.set_size(100, 60, 40, 50)
   end
 
   def update(dt)
     if @sprite.y < 40
-      @sprite.body.velocity.y = 200
+      @sprite.body.velocity.y = @speed
     end
     if @sprite.y > $world_size_y - 40
-      @sprite.body.velocity.y = -200
+      @sprite.body.velocity.y = -@speed
     end
   end
 end
@@ -174,7 +175,7 @@ class GameState < Phaser::State
     (4..200).each do |x|
       case $game.rnd.between(0, 1)
       when 0
-        @bats << Bat.new(x * 100)
+        @bats << Bat.new(x * 100, 200 + x)
       when 1
         @candy << Candy.new(x * 100)
       end
