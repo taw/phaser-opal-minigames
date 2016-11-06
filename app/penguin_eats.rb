@@ -247,6 +247,8 @@ class GameState < Phaser::State
       if @penguin_invincibility < 0
         @penguin_invincibility = nil
         @penguin.alpha = 1
+      else
+        @penguin.alpha = 0.4 + 0.2 * Math.sin(@penguin_invincibility*20)
       end
     end
 
@@ -267,7 +269,6 @@ class GameState < Phaser::State
     $game.physics.arcade.overlap(@penguin, @sharks) do |c,s|
       unless @penguin_invincibility
         @pop.play
-        c.alpha = 0.3
         lose_life
       end
     end
