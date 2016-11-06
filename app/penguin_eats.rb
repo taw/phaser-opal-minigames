@@ -53,6 +53,7 @@ class Shark
       "shark"
     )
     @speed = $game.rnd.between(100, 200)
+    @shark.scale.x = -1
   end
 
   def update(time)
@@ -85,7 +86,7 @@ class MainState < Phaser::State
     $game.load.image("star3", "../images/star3.png")
     $game.load.image("circle", "../images/circle.png")
     $game.load.image("ice_cloud", "../images/ice_cloud.png")
-    $game.load.image("shark", "../images/shark.png")
+    $game.load.image("shark", "../images/shark-icon.png")
     $game.load.audio("pop", "../audio/pop3.mp3")
   end
 
