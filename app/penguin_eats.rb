@@ -150,6 +150,7 @@ class GameState < Phaser::State
     @score_text.fixed_to_camera = true
     $game.physics.start_system(Phaser::Physics::ARCADE)
     $game.world.set_bounds(0, 0, $world_size_x, $world_size_y)
+    @jumpButton = $game.input.keyboard.add_key(`Phaser.Keyboard.SPACEBAR`)
 
     @platforms = $game.add.group
     @platforms.enable_body = true
@@ -282,7 +283,7 @@ class GameState < Phaser::State
       0
     end
 
-    if @cursors.up.down? and (@penguin.body.blocked.down or @penguin.body.touching.down)
+    if @jumpButton.down? and (@penguin.body.blocked.down or @penguin.body.touching.down)
       @penguin.body.velocity.y = -350
     end
 
