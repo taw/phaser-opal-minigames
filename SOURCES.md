@@ -17,3 +17,4 @@ Some of the sources include:
 * candy4.png http://www.flaticon.com/free-icon/candy_236338
 * darkforest.jpg http://pcwallart.com/dark-forest-background-wallpaper-3.html
 * characters/ - https://github.com/taw/jrpg
+* shark no 2 - http://www.iconarchive.com/show/flat-animal-icons-by-martin-berube/shark-icon.html
