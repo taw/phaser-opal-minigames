@@ -64,7 +64,7 @@ class Shark
   end
 end
 
-class MainState < Phaser::State
+class GameState < Phaser::State
   def preload
     $game.load.image("sweet-1", "../images/lollipop.png")
     $game.load.image("sweet-2", "../images/icecream.png")
@@ -220,9 +220,29 @@ class MainState < Phaser::State
     @shark = 20.times.map do
       add_shark
     end
+
+    @penguin_invincibility = nil
+  end
+
+  def lose_life
+    @score_lives -= 1
+    @penguin_invincibility = 1.0 # 1 s
+    if @score_lives == 0
+      $game.state.start(:game_over)
+    end
   end
 
   def update
+    dt = $game.time.physics_elapsed
+
+    if @penguin_invincibility
+      @penguin_invincibility -= dt
+      if @penguin_invincibility < 0
+        @penguin_invincibility = nil
+        @penguin.alpha = 1
+      end
+    end
+
     $game.physics.arcade.collide(@penguin, @platforms)
     $game.physics.arcade.overlap(@penguin, @fruits) do |c,s|
       @pop.play
@@ -238,9 +258,11 @@ class MainState < Phaser::State
     end
 
     $game.physics.arcade.overlap(@penguin, @sharks) do |c,s|
-      @pop.play
-      c.alpha = 0.3
-      @score_lives -= 1
+      unless @penguin_invincibility
+        @pop.play
+        c.alpha = 0.3
+        lose_life
+      end
     end
 
     @score_text.text = "Penguin ate #{@score_fruits} fruits.\nPenguin ate #{@score_sweets} sweets.\nTotal score is #{@score_fruits + @score_sweets}.\nNumber of lives #{@score_lives}."
@@ -258,7 +280,6 @@ class MainState < Phaser::State
       @penguin.body.velocity.y = -350
     end
 
-    dt = $game.time.physics_elapsed
     @snowflake.each do |snowflake|
       snowflake.update(dt)
     end
@@ -272,4 +293,29 @@ class MainState < Phaser::State
   end
 end
 
-$game.state.add(:main, MainState.new, true)
+class GameOverState < Phaser::State
+  def create
+    @timer = 1
+    $game.stage.background_color = "8A8"
+    @text = $game.add.text($size_x/2, $size_y/2, "Game over\n", { fontSize: "64px", fill: "#000", align: "center" })
+    @text.anchor.set(0.5)
+    @cursors = $game.input.keyboard.create_cursor_keys
+  end
+
+  def update
+    if @timer
+      @timer -= $game.time.physics_elapsed
+      if @timer < 0
+        @timer = nil
+        @text.text += "Press arrow key to restart"
+      end
+    else
+      if @cursors.up.down? or @cursors.down.down? or @cursors.left.down? or @cursors.right.down?
+        $game.state.start(:game)
+      end
+    end
+  end
+end
+
+$game.state.add(:game, GameState.new, true)
+$game.state.add(:game_over, GameOverState.new)
