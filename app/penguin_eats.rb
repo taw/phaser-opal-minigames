@@ -88,7 +88,9 @@ class GameState < Phaser::State
     $game.load.image("ice_cloud", "../images/ice_cloud.png")
     $game.load.image("shark", "../images/shark-icon.png")
     $game.load.image("dead_emoji", "../images/dead_emoji.png")
+
     $game.load.audio("pop", "../audio/pop3.mp3")
+    $game.load.audio("lose_life", "../audio/lose_life.mp3")
   end
 
   def add_platform(x, y)
@@ -212,6 +214,7 @@ class GameState < Phaser::State
     @emitter = StarEmitter.new
 
     @pop = $game.add.audio("pop")
+    @lose_life = $game.add.audio("lose_life")
 
     @cursors = $game.input.keyboard.create_cursor_keys
 
@@ -227,6 +230,7 @@ class GameState < Phaser::State
   end
 
   def lose_life
+    @lose_life.play
     @score_lives -= 1
     @penguin_invincibility = 1.0 # 1 s
     if @score_lives == 0
