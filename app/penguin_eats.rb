@@ -142,6 +142,7 @@ class MainState < Phaser::State
     background.fixed_to_camera = true
     @score_fruits = 0
     @score_sweets = 0
+    @score_lives = 3
     $world_size_x = 3200
     $world_size_y = 1500
     @score_text = $game.add.text(10, 10, "", { fontSize: '16px', fill: '#FBE8D3', align: 'left' })
@@ -238,10 +239,11 @@ class MainState < Phaser::State
 
     $game.physics.arcade.overlap(@penguin, @sharks) do |c,s|
       @pop.play
-      s.destroy
+      c.alpha = 0.3
+      @score_lives -= 1
     end
 
-    @score_text.text = "Penguin ate #{@score_fruits} fruits.\nPenguin ate #{@score_sweets} sweets.\nTotal score is #{@score_fruits + @score_sweets}."
+    @score_text.text = "Penguin ate #{@score_fruits} fruits.\nPenguin ate #{@score_sweets} sweets.\nTotal score is #{@score_fruits + @score_sweets}.\nNumber of lives #{@score_lives}."
 
     penguin_speed = 250
     @penguin.body.velocity.x = if @cursors.right.down?
