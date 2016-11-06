@@ -92,6 +92,7 @@ class GameState < Phaser::State
     $game.load.audio("pop", "../audio/pop3.mp3")
     $game.load.audio("lose_life", "../audio/lose_life.mp3")
     $game.load.audio("sad_trombone", "../audio/sad_trombone.mp3")
+    $game.load.audio("casanova", "../audio/casanova.mp3")
   end
 
   def add_platform(x, y)
@@ -154,6 +155,9 @@ class GameState < Phaser::State
     $game.physics.start_system(Phaser::Physics::ARCADE)
     $game.world.set_bounds(0, 0, $world_size_x, $world_size_y)
     @jumpButton = $game.input.keyboard.add_key(`Phaser.Keyboard.SPACEBAR`)
+    @casanova_music = $game.add.audio("casanova")
+    @casanova_music.play
+    @casanova_music.loop = true 
 
     @platforms = $game.add.group
     @platforms.enable_body = true
@@ -244,6 +248,7 @@ class GameState < Phaser::State
 
   def game_over
     $final_score = @score_fruits + @score_sweets
+    @casanova_music.stop
     $game.state.start(:game_over)
   end
 
@@ -311,9 +316,11 @@ end
 
 class GameOverState < Phaser::State
   def create
+    background = $game.add.sprite(0, 0, 'mountain')
+    background.height = $size_y
+    background.width = $size_x
     @timer = 1
-    $game.stage.background_color = "#71C9CE"
-    @text = $game.add.text($size_x/2, $size_y/2, "Game over\nTotal sweets and fruits collected: #{$final_score}", { fontSize: "64px", fill: "#000", align: "center" })
+    @text = $game.add.text($size_x/2, $size_y/2, "Game over\nTotal sweets and fruits collected: #{$final_score}", { fontSize: "64px", fill: "#FFF", align: "center" })
     @text.anchor.set(0.5)
     @cursors = $game.input.keyboard.create_cursor_keys
     dead_emoji = $game.add.sprite(0.17*$size_x, 0.25*$size_y, "dead_emoji")
