@@ -87,6 +87,7 @@ class GameState < Phaser::State
     $game.load.image("circle", "../images/circle.png")
     $game.load.image("ice_cloud", "../images/ice_cloud.png")
     $game.load.image("shark", "../images/shark-icon.png")
+    $game.load.image("dead_emoji", "../images/dead_emoji.png")
     $game.load.audio("pop", "../audio/pop3.mp3")
   end
 
@@ -228,8 +229,13 @@ class GameState < Phaser::State
     @score_lives -= 1
     @penguin_invincibility = 1.0 # 1 s
     if @score_lives == 0
-      $game.state.start(:game_over)
+      game_over
     end
+  end
+
+  def game_over
+    $final_score = @score_fruits + @score_sweets
+    $game.state.start(:game_over)
   end
 
   def update
@@ -296,10 +302,12 @@ end
 class GameOverState < Phaser::State
   def create
     @timer = 1
-    $game.stage.background_color = "8A8"
-    @text = $game.add.text($size_x/2, $size_y/2, "Game over\n", { fontSize: "64px", fill: "#000", align: "center" })
+    $game.stage.background_color = "#71C9CE"
+    @text = $game.add.text($size_x/2, $size_y/2, "Game over\nTotal sweets and fruits collected: #{$final_score}", { fontSize: "64px", fill: "#000", align: "center" })
     @text.anchor.set(0.5)
     @cursors = $game.input.keyboard.create_cursor_keys
+    dead_emoji = $game.add.sprite(0.17*$size_x, 0.25*$size_y, "dead_emoji")
+    dead_emoji.anchor.set(0.5)
   end
 
   def update
@@ -307,7 +315,7 @@ class GameOverState < Phaser::State
       @timer -= $game.time.physics_elapsed
       if @timer < 0
         @timer = nil
-        @text.text += "Press arrow key to restart"
+        @text.text += "\nPress arrow key to restart"
       end
     else
       if @cursors.up.down? or @cursors.down.down? or @cursors.left.down? or @cursors.right.down?
