@@ -324,7 +324,11 @@ class GameOverState < Phaser::State
     @text.anchor.set(0.5)
     @cursors = $game.input.keyboard.create_cursor_keys
     dead_emoji = $game.add.sprite(0.17*$size_x, 0.25*$size_y, "dead_emoji")
+    dead_emoji_2 = $game.add.sprite(0.75*$size_x, 0.25*$size_y, "dead_emoji")
+    dead_emoji.height = dead_emoji.width = 150
+    dead_emoji_2.height = dead_emoji_2.width = 150
     dead_emoji.anchor.set(0.5)
+    dead_emoji_2.anchor.set(0.5)
   end
 
   def update
