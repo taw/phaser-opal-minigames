@@ -91,6 +91,7 @@ class GameState < Phaser::State
 
     $game.load.audio("pop", "../audio/pop3.mp3")
     $game.load.audio("lose_life", "../audio/lose_life.mp3")
+    $game.load.audio("sad_trombone", "../audio/sad_trombone.mp3")
   end
 
   def add_platform(x, y)
@@ -215,6 +216,7 @@ class GameState < Phaser::State
 
     @pop = $game.add.audio("pop")
     @lose_life = $game.add.audio("lose_life")
+    @sad_trombone = $game.add.audio("sad_trombone")
 
     @cursors = $game.input.keyboard.create_cursor_keys
 
@@ -230,11 +232,13 @@ class GameState < Phaser::State
   end
 
   def lose_life
-    @lose_life.play
     @score_lives -= 1
     @penguin_invincibility = 1.0 # 1 s
     if @score_lives == 0
+      @sad_trombone.play
       game_over
+    else
+      @lose_life.play
     end
   end
 
