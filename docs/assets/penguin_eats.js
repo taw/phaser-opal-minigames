@@ -35539,13 +35539,16 @@ Opal.modules["penguin_eats"] = function(Opal) {
   function $rb_gt(lhs, rhs) {
     return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs > rhs : lhs['$>'](rhs);
   }
+  function $rb_lt(lhs, rhs) {
+    return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs < rhs : lhs['$<'](rhs);
+  }
   function $rb_divide(lhs, rhs) {
     return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs / rhs : lhs['$/'](rhs);
   }
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $gvars = Opal.gvars, $hash2 = Opal.hash2;
   if ($gvars.game == null) $gvars.game = nil;
 
-  Opal.add_stubs(['$emitter', '$add', '$make_particles', '$gravity=', '$x=', '$maxParticleSpeed', '$minParticleSpeed', '$y=', '$set_alpha', '$start', '$sprite', '$between', '$rnd', '$-', '$height=', '$width=', '$*', '$rand', '$alpha=', '$+', '$y', '$x', '$>', '$attr_reader', '$image', '$load', '$audio', '$tile_sprite', '$set', '$anchor', '$immovable=', '$body', '$==', '$add_fruit', '$add_sweet', '$new', '$shark', '$fixed_to_camera=', '$text', '$start_system', '$physics', '$set_bounds', '$world', '$group', '$enable_body=', '$add_floor', '$add_platform', '$enable', '$collide_world_bounds=', '$gravity', '$create_cursor_keys', '$keyboard', '$input', '$map', '$times', '$add_shark', '$collide', '$arcade', '$overlap', '$play', '$destroy', '$burst_at', '$text=', '$down?', '$right', '$left', '$-@', '$velocity', '$up', '$down', '$blocked', '$touching', '$physics_elapsed', '$time', '$each', '$update', '$/', '$camera', '$state']);
+  Opal.add_stubs(['$emitter', '$add', '$make_particles', '$gravity=', '$x=', '$maxParticleSpeed', '$minParticleSpeed', '$y=', '$set_alpha', '$start', '$sprite', '$between', '$rnd', '$-', '$height=', '$width=', '$*', '$rand', '$alpha=', '$+', '$y', '$x', '$>', '$attr_reader', '$scale', '$image', '$load', '$audio', '$tile_sprite', '$set', '$anchor', '$immovable=', '$body', '$==', '$add_fruit', '$add_sweet', '$new', '$shark', '$fixed_to_camera=', '$text', '$start_system', '$physics', '$set_bounds', '$world', '$add_key', '$keyboard', '$input', '$play', '$loop=', '$group', '$enable_body=', '$add_floor', '$add_platform', '$enable', '$collide_world_bounds=', '$gravity', '$create_cursor_keys', '$map', '$times', '$add_shark', '$game_over', '$stop', '$state', '$physics_elapsed', '$time', '$<', '$sin', '$collide', '$arcade', '$overlap', '$destroy', '$burst_at', '$lose_life', '$text=', '$down?', '$right', '$left', '$-@', '$velocity', '$down', '$blocked', '$touching', '$each', '$update', '$/', '$camera', '$up']);
   self.$require("penguin_eats"+ '/../' + "common");
   (function($base, $super) {
     function $StarEmitter(){};
@@ -35621,13 +35624,14 @@ Opal.modules["penguin_eats"] = function(Opal) {
     self.$attr_reader("shark");
 
     Opal.defn(self, '$initialize', function() {
-      var self = this;
+      var $a, $b, self = this;
       if ($gvars.game == null) $gvars.game = nil;
       if ($gvars.world_size_x == null) $gvars.world_size_x = nil;
       if ($gvars.world_size_y == null) $gvars.world_size_y = nil;
 
       self.shark = $gvars.game.$add().$sprite($gvars.game.$rnd().$between(0, $rb_minus($gvars.world_size_x, 24)), $gvars.game.$rnd().$between(0, $rb_minus($gvars.world_size_y, 22)), "shark");
-      return self.speed = $gvars.game.$rnd().$between(100, 200);
+      self.speed = $gvars.game.$rnd().$between(100, 200);
+      return (($a = [-1]), $b = self.shark.$scale(), $b['$x='].apply($b, $a), $a[$a.length-1]);
     });
 
     return (Opal.defn(self, '$update', function(time) {
@@ -35643,12 +35647,12 @@ Opal.modules["penguin_eats"] = function(Opal) {
     }), nil) && 'update';
   })($scope.base, null);
   (function($base, $super) {
-    function $MainState(){};
-    var self = $MainState = $klass($base, $super, 'MainState', $MainState);
+    function $GameState(){};
+    var self = $GameState = $klass($base, $super, 'GameState', $GameState);
 
     var def = self.$$proto, $scope = self.$$scope;
 
-    def.platforms = def.fruits = def.sweets = def.sharks = def.score_text = def.penguin = def.score_fruits = def.score_sweets = def.cursors = def.snowflake = def.shark = nil;
+    def.platforms = def.fruits = def.sweets = def.sharks = def.score_text = def.casanova_music = def.penguin = def.score_lives = def.sad_trombone = def.lose_life = def.score_fruits = def.score_sweets = def.penguin_invincibility = def.cursors = def.jumpButton = def.snowflake = def.shark = nil;
     Opal.defn(self, '$preload', function() {
       var self = this;
       if ($gvars.game == null) $gvars.game = nil;
@@ -35671,8 +35675,12 @@ Opal.modules["penguin_eats"] = function(Opal) {
       $gvars.game.$load().$image("star3", "../images/star3.png");
       $gvars.game.$load().$image("circle", "../images/circle.png");
       $gvars.game.$load().$image("ice_cloud", "../images/ice_cloud.png");
-      $gvars.game.$load().$image("shark", "../images/shark.png");
-      return $gvars.game.$load().$audio("pop", "../audio/pop3.mp3");
+      $gvars.game.$load().$image("shark", "../images/shark-icon.png");
+      $gvars.game.$load().$image("dead_emoji", "../images/dead_emoji.png");
+      $gvars.game.$load().$audio("pop", "../audio/pop3.mp3");
+      $gvars.game.$load().$audio("lose_life", "../audio/lose_life.mp3");
+      $gvars.game.$load().$audio("sad_trombone", "../audio/sad_trombone.mp3");
+      return $gvars.game.$load().$audio("casanova", "../audio/casanova.mp3");
     });
 
     Opal.defn(self, '$add_platform', function(x, y) {
@@ -35746,12 +35754,17 @@ Opal.modules["penguin_eats"] = function(Opal) {
       (($a = [true]), $b = background, $b['$fixed_to_camera='].apply($b, $a), $a[$a.length-1]);
       self.score_fruits = 0;
       self.score_sweets = 0;
+      self.score_lives = 3;
       $gvars.world_size_x = 3200;
       $gvars.world_size_y = 1500;
       self.score_text = $gvars.game.$add().$text(10, 10, "", $hash2(["fontSize", "fill", "align"], {"fontSize": "16px", "fill": "#FBE8D3", "align": "left"}));
       (($a = [true]), $b = self.score_text, $b['$fixed_to_camera='].apply($b, $a), $a[$a.length-1]);
       $gvars.game.$physics().$start_system((((($scope.get('Phaser')).$$scope.get('Physics'))).$$scope.get('ARCADE')));
       $gvars.game.$world().$set_bounds(0, 0, $gvars.world_size_x, $gvars.world_size_y);
+      self.jumpButton = $gvars.game.$input().$keyboard().$add_key(Phaser.Keyboard.SPACEBAR);
+      self.casanova_music = $gvars.game.$add().$audio("casanova");
+      self.casanova_music.$play();
+      (($a = [true]), $b = self.casanova_music, $b['$loop='].apply($b, $a), $a[$a.length-1]);
       self.platforms = $gvars.game.$add().$group();
       (($a = [true]), $b = self.platforms, $b['$enable_body='].apply($b, $a), $a[$a.length-1]);
       self.fruits = $gvars.game.$add().$group();
@@ -35804,21 +35817,55 @@ Opal.modules["penguin_eats"] = function(Opal) {
       (($a = [250]), $b = self.penguin.$body().$gravity(), $b['$y='].apply($b, $a), $a[$a.length-1]);
       self.emitter = $scope.get('StarEmitter').$new();
       self.pop = $gvars.game.$add().$audio("pop");
+      self.lose_life = $gvars.game.$add().$audio("lose_life");
+      self.sad_trombone = $gvars.game.$add().$audio("sad_trombone");
       self.cursors = $gvars.game.$input().$keyboard().$create_cursor_keys();
       self.snowflake = ($a = ($b = (250).$times()).$map, $a.$$p = (TMP_1 = function(){var self = TMP_1.$$s || this;
 
       return $scope.get('Snowflake').$new()}, TMP_1.$$s = self, TMP_1), $a).call($b);
-      return self.shark = ($a = ($c = (20).$times()).$map, $a.$$p = (TMP_2 = function(){var self = TMP_2.$$s || this;
+      self.shark = ($a = ($c = (20).$times()).$map, $a.$$p = (TMP_2 = function(){var self = TMP_2.$$s || this;
 
       return self.$add_shark()}, TMP_2.$$s = self, TMP_2), $a).call($c);
+      return self.penguin_invincibility = nil;
+    });
+
+    Opal.defn(self, '$lose_life', function() {
+      var self = this;
+
+      self.score_lives = $rb_minus(self.score_lives, 1);
+      self.penguin_invincibility = 1.0;
+      if (self.score_lives['$=='](0)) {
+        self.sad_trombone.$play();
+        return self.$game_over();
+        } else {
+        return self.lose_life.$play()
+      };
+    });
+
+    Opal.defn(self, '$game_over', function() {
+      var self = this;
+      if ($gvars.game == null) $gvars.game = nil;
+
+      $gvars.final_score = $rb_plus(self.score_fruits, self.score_sweets);
+      self.casanova_music.$stop();
+      return $gvars.game.$state().$start("game_over");
     });
 
     return (Opal.defn(self, '$update', function() {
-      var $a, $b, TMP_3, $c, TMP_4, $d, TMP_5, $e, $f, TMP_6, TMP_7, self = this, penguin_speed = nil, dt = nil;
+      var $a, $b, TMP_3, $c, TMP_4, $d, TMP_5, $e, $f, TMP_6, TMP_7, self = this, dt = nil, penguin_speed = nil;
       if ($gvars.game == null) $gvars.game = nil;
       if ($gvars.size_x == null) $gvars.size_x = nil;
       if ($gvars.size_y == null) $gvars.size_y = nil;
 
+      dt = $gvars.game.$time().$physics_elapsed();
+      if ((($a = self.penguin_invincibility) !== nil && (!$a.$$is_boolean || $a == true))) {
+        self.penguin_invincibility = $rb_minus(self.penguin_invincibility, dt);
+        if ((($a = $rb_lt(self.penguin_invincibility, 0)) !== nil && (!$a.$$is_boolean || $a == true))) {
+          self.penguin_invincibility = nil;
+          (($a = [1]), $b = self.penguin, $b['$alpha='].apply($b, $a), $a[$a.length-1]);
+          } else {
+          (($a = [$rb_plus(0.4, $rb_times(0.2, $scope.get('Math').$sin($rb_times(self.penguin_invincibility, 20))))]), $b = self.penguin, $b['$alpha='].apply($b, $a), $a[$a.length-1])
+        };};
       $gvars.game.$physics().$arcade().$collide(self.penguin, self.platforms);
       ($a = ($b = $gvars.game.$physics().$arcade()).$overlap, $a.$$p = (TMP_3 = function(c, s){var self = TMP_3.$$s || this;
         if (self.pop == null) self.pop = nil;
@@ -35837,12 +35884,17 @@ if (c == null) c = nil;if (s == null) s = nil;
         s.$destroy();
         self.score_sweets = $rb_plus(self.score_sweets, 2);
         return self.emitter.$burst_at(self.penguin.$x(), self.penguin.$y());}, TMP_4.$$s = self, TMP_4), $a).call($c, self.penguin, self.sweets);
-      ($a = ($d = $gvars.game.$physics().$arcade()).$overlap, $a.$$p = (TMP_5 = function(c, s){var self = TMP_5.$$s || this;
+      ($a = ($d = $gvars.game.$physics().$arcade()).$overlap, $a.$$p = (TMP_5 = function(c, s){var self = TMP_5.$$s || this, $a;
+        if (self.penguin_invincibility == null) self.penguin_invincibility = nil;
         if (self.pop == null) self.pop = nil;
 if (c == null) c = nil;if (s == null) s = nil;
-      self.pop.$play();
-        return s.$destroy();}, TMP_5.$$s = self, TMP_5), $a).call($d, self.penguin, self.sharks);
-      (($a = ["Penguin ate " + (self.score_fruits) + " fruits.\nPenguin ate " + (self.score_sweets) + " sweets.\nTotal score is " + ($rb_plus(self.score_fruits, self.score_sweets)) + "."]), $e = self.score_text, $e['$text='].apply($e, $a), $a[$a.length-1]);
+      if ((($a = self.penguin_invincibility) !== nil && (!$a.$$is_boolean || $a == true))) {
+          return nil
+          } else {
+          self.pop.$play();
+          return self.$lose_life();
+        }}, TMP_5.$$s = self, TMP_5), $a).call($d, self.penguin, self.sharks);
+      (($a = ["Penguin ate " + (self.score_fruits) + " fruits.\nPenguin ate " + (self.score_sweets) + " sweets.\nTotal score is " + ($rb_plus(self.score_fruits, self.score_sweets)) + ".\nNumber of lives " + (self.score_lives) + "."]), $e = self.score_text, $e['$text='].apply($e, $a), $a[$a.length-1]);
       penguin_speed = 250;
       (($a = [(function() {if ((($f = self.cursors.$right()['$down?']()) !== nil && (!$f.$$is_boolean || $f == true))) {
         return penguin_speed
@@ -35851,9 +35903,8 @@ if (c == null) c = nil;if (s == null) s = nil;
         } else {
         return 0
       }; return nil; })()]), $e = self.penguin.$body().$velocity(), $e['$x='].apply($e, $a), $a[$a.length-1]);
-      if ((($a = ($e = self.cursors.$up()['$down?'](), $e !== false && $e !== nil ?(((($f = self.penguin.$body().$blocked().$down()) !== false && $f !== nil) ? $f : self.penguin.$body().$touching().$down())) : $e)) !== nil && (!$a.$$is_boolean || $a == true))) {
+      if ((($a = ($e = self.jumpButton['$down?'](), $e !== false && $e !== nil ?(((($f = self.penguin.$body().$blocked().$down()) !== false && $f !== nil) ? $f : self.penguin.$body().$touching().$down())) : $e)) !== nil && (!$a.$$is_boolean || $a == true))) {
         (($a = [-350]), $e = self.penguin.$body().$velocity(), $e['$y='].apply($e, $a), $a[$a.length-1])};
-      dt = $gvars.game.$time().$physics_elapsed();
       ($a = ($e = self.snowflake).$each, $a.$$p = (TMP_6 = function(snowflake){var self = TMP_6.$$s || this;
 if (snowflake == null) snowflake = nil;
       return snowflake.$update(dt)}, TMP_6.$$s = self, TMP_6), $a).call($e);
@@ -35864,5 +35915,54 @@ if (shark == null) shark = nil;
       return shark.$update(dt)}, TMP_7.$$s = self, TMP_7), $a).call($f);
     }), nil) && 'update';
   })($scope.base, (($scope.get('Phaser')).$$scope.get('State')));
-  return $gvars.game.$state().$add("main", $scope.get('MainState').$new(), true);
+  (function($base, $super) {
+    function $GameOverState(){};
+    var self = $GameOverState = $klass($base, $super, 'GameOverState', $GameOverState);
+
+    var def = self.$$proto, $scope = self.$$scope;
+
+    def.text = def.timer = def.cursors = nil;
+    Opal.defn(self, '$create', function() {
+      var $a, $b, $c, $d, self = this, background = nil, dead_emoji = nil, dead_emoji_2 = nil;
+      if ($gvars.game == null) $gvars.game = nil;
+      if ($gvars.size_y == null) $gvars.size_y = nil;
+      if ($gvars.size_x == null) $gvars.size_x = nil;
+      if ($gvars.final_score == null) $gvars.final_score = nil;
+
+      background = $gvars.game.$add().$sprite(0, 0, "mountain");
+      (($a = [$gvars.size_y]), $b = background, $b['$height='].apply($b, $a), $a[$a.length-1]);
+      (($a = [$gvars.size_x]), $b = background, $b['$width='].apply($b, $a), $a[$a.length-1]);
+      self.timer = 1;
+      self.text = $gvars.game.$add().$text($rb_divide($gvars.size_x, 2), $rb_divide($gvars.size_y, 2), "Game over\nTotal sweets and fruits collected: " + ($gvars.final_score), $hash2(["fontSize", "fill", "align"], {"fontSize": "64px", "fill": "#FFF", "align": "center"}));
+      self.text.$anchor().$set(0.5);
+      self.cursors = $gvars.game.$input().$keyboard().$create_cursor_keys();
+      dead_emoji = $gvars.game.$add().$sprite($rb_times(0.17, $gvars.size_x), $rb_times(0.25, $gvars.size_y), "dead_emoji");
+      dead_emoji_2 = $gvars.game.$add().$sprite($rb_times(0.75, $gvars.size_x), $rb_times(0.25, $gvars.size_y), "dead_emoji");
+      (($a = [(($c = [150]), $d = dead_emoji, $d['$width='].apply($d, $c), $c[$c.length-1])]), $b = dead_emoji, $b['$height='].apply($b, $a), $a[$a.length-1]);
+      (($a = [(($c = [150]), $d = dead_emoji_2, $d['$width='].apply($d, $c), $c[$c.length-1])]), $b = dead_emoji_2, $b['$height='].apply($b, $a), $a[$a.length-1]);
+      dead_emoji.$anchor().$set(0.5);
+      return dead_emoji_2.$anchor().$set(0.5);
+    });
+
+    return (Opal.defn(self, '$update', function() {
+      var $a, $b, $c, $d, self = this;
+      if ($gvars.game == null) $gvars.game = nil;
+
+      if ((($a = self.timer) !== nil && (!$a.$$is_boolean || $a == true))) {
+        self.timer = $rb_minus(self.timer, $gvars.game.$time().$physics_elapsed());
+        if ((($a = $rb_lt(self.timer, 0)) !== nil && (!$a.$$is_boolean || $a == true))) {
+          self.timer = nil;
+          return ($a = self.text, $a['$text=']($rb_plus($a.$text(), "\nPress arrow key to restart")));
+          } else {
+          return nil
+        };
+      } else if ((($a = ((($b = ((($c = ((($d = self.cursors.$up()['$down?']()) !== false && $d !== nil) ? $d : self.cursors.$down()['$down?']())) !== false && $c !== nil) ? $c : self.cursors.$left()['$down?']())) !== false && $b !== nil) ? $b : self.cursors.$right()['$down?']())) !== nil && (!$a.$$is_boolean || $a == true))) {
+        return $gvars.game.$state().$start("game")
+        } else {
+        return nil
+      };
+    }), nil) && 'update';
+  })($scope.base, (($scope.get('Phaser')).$$scope.get('State')));
+  $gvars.game.$state().$add("game", $scope.get('GameState').$new(), true);
+  return $gvars.game.$state().$add("game_over", $scope.get('GameOverState').$new());
 };
