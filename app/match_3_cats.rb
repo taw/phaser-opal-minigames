@@ -86,8 +86,8 @@ class MainState < Phaser::State
   end
 
   def rotation_position
-    mx = $game.input.mouse_pointer.worldX
-    my = $game.input.mouse_pointer.worldY
+    mx = $game.input.mouse_pointer.world_x
+    my = $game.input.mouse_pointer.world_y
     cx = (((mx - $size_x/2) / 80) + 3.5).floor
     cy = (((my - $size_y/2) / 80) + 3.5).floor
     cx = $game.math.clamp(cx, 0, 6)

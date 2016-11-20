@@ -48,8 +48,8 @@ class MainState < Phaser::State
   def update
     @eyes.each do |eye|
       eye.update(
-        $game.input.active_pointer.worldX,
-        $game.input.active_pointer.worldY,
+        $game.input.active_pointer.world_x,
+        $game.input.active_pointer.world_y,
       )
     end
   end

@@ -101,7 +101,7 @@ class Board
 end
 
 class GameState < Phaser::State
-  def initialize(x,y)
+  def init(x,y)
     @x = x
     @y = y
   end
@@ -135,8 +135,8 @@ class GameState < Phaser::State
     @board = Board.new(@x, @y)
     $game.input.on(:tap) do
       click(
-        $game.input.active_pointer.worldX,
-        $game.input.active_pointer.worldY,
+        $game.input.active_pointer.world_x,
+        $game.input.active_pointer.world_y,
       )
     end
   end
@@ -157,23 +157,21 @@ class MenuState < Phaser::State
   def create
     $game.stage.background_color = "F8F"
     @button22 = $game.add.button($size_x*0.5, $size_y*0.33, "button2x2") do
-      $game.state.start("Game2x2")
+      $game.state.start("Game", true, false, 2, 2)
     end
     @button22.anchor.set(0.5, 0.5)
 
     @button44 = $game.add.button($size_x*0.5, $size_y*0.50, "button4x4") do
-      $game.state.start("Game4x4")
+      $game.state.start("Game", true, false, 4, 4)
     end
     @button44.anchor.set(0.5, 0.5)
 
     @button66 = $game.add.button($size_x*0.5, $size_y*0.67, "button6x6") do
-      $game.state.start("Game6x6")
+      $game.state.start("Game", true, false, 6, 6)
     end
     @button66.anchor.set(0.5, 0.5)
   end
 end
 
 $game.state.add("Menu", MenuState.new, true)
-$game.state.add("Game2x2", GameState.new(2,2))
-$game.state.add("Game4x4", GameState.new(4,4))
-$game.state.add("Game6x6", GameState.new(6,6))
+$game.state.add("Game", GameState.new)

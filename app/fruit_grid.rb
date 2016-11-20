@@ -109,16 +109,16 @@ class MainState < Phaser::State
     @grid = FruitGrid.new
     $game.input.on(:tap) do
       @grid.click(
-        $game.input.active_pointer.worldX,
-        $game.input.active_pointer.worldY,
+        $game.input.active_pointer.world_x,
+        $game.input.active_pointer.world_y,
       )
     end
   end
 
   def update
     @grid.set_highlight(
-      $game.input.mouse_pointer.worldX,
-      $game.input.mouse_pointer.worldY
+      $game.input.mouse_pointer.world_x,
+      $game.input.mouse_pointer.world_y,
     )
   end
 end
