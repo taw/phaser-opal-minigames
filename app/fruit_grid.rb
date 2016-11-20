@@ -58,9 +58,18 @@ class FruitGrid
     [[x-1,y], [x+1,y], [x,y-1], [x,y+1]].each do |xx,yy|
       next unless @cells.has_key? [xx,yy]
       next if @highlighted.include? [xx,yy]
+      next if @fruits[[xx,yy]].key == nil
       if @fruits[[xx,yy]].key == @fruits[[x,y]].key
         find_cells_to_highlight(xx,yy)
       end
+    end
+  end
+
+  def click(mouse_x, mouse_y)
+    set_highlight(mouse_x, mouse_y)
+    @highlighted.each do |x,y|
+      @fruits[[x,y]].destroy
+      @fruits[[x,y]].key = nil
     end
   end
 
@@ -98,6 +107,12 @@ class MainState < Phaser::State
   def create
     $game.stage.background_color = "2A6"
     @grid = FruitGrid.new
+    $game.input.on(:tap) do
+      @grid.click(
+        $game.input.active_pointer.worldX,
+        $game.input.active_pointer.worldY,
+      )
+    end
   end
 
   def update
