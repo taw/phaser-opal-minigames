@@ -157,7 +157,7 @@ class GameState < Phaser::State
     @jumpButton = $game.input.keyboard.add_key(`Phaser.Keyboard.SPACEBAR`)
     @casanova_music = $game.add.audio("casanova")
     @casanova_music.play
-    @casanova_music.loop = true 
+    @casanova_music.loop = true
 
     @platforms = $game.add.group
     @platforms.enable_body = true
@@ -247,9 +247,9 @@ class GameState < Phaser::State
   end
 
   def game_over
-    $final_score = @score_fruits + @score_sweets
+    final_score = @score_fruits + @score_sweets
     @casanova_music.stop
-    $game.state.start(:game_over)
+    $game.state.start(:game_over, true, false, final_score)
   end
 
   def update
@@ -315,12 +315,16 @@ class GameState < Phaser::State
 end
 
 class GameOverState < Phaser::State
+  def init(final_score)
+    @final_score = final_score
+  end
+
   def create
     background = $game.add.sprite(0, 0, 'mountain')
     background.height = $size_y
     background.width = $size_x
     @timer = 1
-    @text = $game.add.text($size_x/2, $size_y/2, "Game over\nTotal sweets and fruits collected: #{$final_score}", { fontSize: "64px", fill: "#FFF", align: "center" })
+    @text = $game.add.text($size_x/2, $size_y/2, "Game over\nTotal sweets and fruits collected: #{@final_score}", { fontSize: "64px", fill: "#FFF", align: "center" })
     @text.anchor.set(0.5)
     @cursors = $game.input.keyboard.create_cursor_keys
     dead_emoji = $game.add.sprite(0.17*$size_x, 0.25*$size_y, "dead_emoji")

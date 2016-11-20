@@ -4,10 +4,11 @@ require_relative "common"
 # Based on https://github.com/dondonz/dondonz.github.io
 
 class GameOverState < Phaser::State
-  def create
-    # FIXME: There's better way to pass arguments between states
-    @score = $score
+  def init(score)
+    @score = score
+  end
 
+  def create
     # Add part of the game world
     $game.add.sprite(0, 0, "bg")
     @platforms = $game.add.group
@@ -115,13 +116,10 @@ class GameState < Phaser::State
   end
 
   def game_over
-    p "Game Over!"
     @player.kill
     @music.stop
     # Syntax is (name of state to start, clearWorld, clearCache (assets), parameters to pass onto the init function)
-    # $game.state.start(:game_over, true, false, @score)
-    $score = @score
-    $game.state.start(:game_over)
+    $game.state.start(:game_over, true, false, @score)
   end
 
   def add_score
@@ -130,7 +128,6 @@ class GameState < Phaser::State
   end
 
   def tap_check
-    p "Tap tap tap"
     @player.body.velocity.y = -350
     @player.animations.play("flap")
   end
