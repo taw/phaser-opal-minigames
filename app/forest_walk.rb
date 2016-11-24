@@ -3,7 +3,7 @@ require_relative "common"
 class MainState < Phaser::State
   def preload
     # All seem to be off by 1 pixel :-/
-    $game.load.spritesheet("angel", "../images/characters/angel-blue.png", 24, 32, 12)
+    $game.load.spritesheet("angel", "../images/characters/angel-blue-2.png", 24+2, 32+2, 12)
   end
 
   def create

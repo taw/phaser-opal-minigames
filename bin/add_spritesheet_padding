@@ -1,0 +1,57 @@
+#!/usr/bin/env ruby
+
+require "RMagick"
+require "pry"
+
+class AddSpiteSheetPadding
+  def initialize(sprite_x_size, sprite_y_size, file_in, file_out)
+    @sprite_x_size = sprite_x_size
+    @sprite_y_size = sprite_y_size
+    @image_in = Magick::ImageList.new(file_in).first
+    @file_out = file_out
+    @image_x_size = @image_in.columns
+    @image_y_size = @image_in.rows
+
+    unless @image_x_size % @sprite_x_size == 0 and @image_y_size % @sprite_y_size == 0
+      raise "Spritesheet size is not multiple of cell size"
+    end
+    @cells_x = @image_x_size / @sprite_x_size
+    @cells_y = @image_y_size / @sprite_y_size
+  end
+
+  def process!
+    image_out = Magick::Image.new(
+      @cells_x * (2 + @sprite_x_size),
+      @cells_y * (2 + @sprite_y_size)
+    )
+    image_out.background_color = "transparent"
+    image_out.erase!
+    @cells_x.times do |x|
+      @cells_y.times do |y|
+        sprite = @image_in.export_pixels(
+          x * @sprite_x_size,
+          y * @sprite_y_size,
+          @sprite_x_size,
+          @sprite_y_size,
+          "RGBA"
+        )
+        image_out.import_pixels(
+          x * (@sprite_x_size + 2) + 1,
+          y * (@sprite_y_size + 2) + 1,
+          @sprite_x_size,
+          @sprite_y_size,
+          "RGBA",
+          sprite
+        )
+      end
+    end
+    image_out.write(@file_out)
+  end
+end
+
+unless ARGV.size == 4
+  STDERR.puts "Usage: #{$0} sprite_x_size sprite_y_size file_in.png file_out.png"
+  exit 1
+end
+
+AddSpiteSheetPadding.new(ARGV[0].to_i, ARGV[1].to_i, ARGV[2], ARGV[3]).process!
