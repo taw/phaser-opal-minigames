@@ -17,7 +17,7 @@ class MainState < Phaser::State
   end
 
   def update
-    offset_x, offset_y = move_towards($game.input.active_pointer, @text, 8)
+    offset_x, offset_y = move_opposite($game.input.active_pointer, @text, 8)
     distance = distance_between($game.input.active_pointer, @text)
     @text.set_shadow(offset_x, offset_y, "rgba(0, 0, 0, 0.5)", distance / 30)
   end
@@ -26,11 +26,12 @@ class MainState < Phaser::State
     ((source.x - target.x) ** 2 + (source.y - target.y) ** 2) ** 0.5
   end
 
-  def move_towards(source, target, speed)
+  def move_opposite(source, target, speed)
     angle = Math.atan2(source.y - target.y, source.x - target.y)
+    speed = [speed, distance_between(source, target)].min
     [
-      Math.cos(angle) * speed,
-      Math.sin(angle) * speed,
+      -Math.cos(angle) * speed,
+      -Math.sin(angle) * speed,
     ]
   end
 end
