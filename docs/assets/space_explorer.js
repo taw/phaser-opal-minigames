@@ -35588,7 +35588,7 @@ Opal.modules["space_explorer"] = function(Opal) {
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $gvars = Opal.gvars, $hash2 = Opal.hash2;
   if ($gvars.game == null) $gvars.game = nil;
 
-  Opal.add_stubs(['$text', '$add', '$fixed_to_camera=', '$value', '$value=', '$attr_reader', '$text=', '$create', '$between', '$rnd', '$set', '$anchor', '$immovable=', '$body', '$attr_accessor', '$collide_world_bounds=', '$target', '$**', '$+', '$-', '$x', '$y', '$<', '$>', '$/', '$*', '$x=', '$velocity', '$y=', '$sin', '$cos', '$sprite', '$enable', '$physics', '$clamp', '$math', '$angle=', '$deg_to_rad', '$-@', '$background_color=', '$stage', '$physics_elapsed', '$time', '$on_down_callback=', '$proc', '$start_game', '$keyboard', '$input', '$on', '$start', '$state', '$image', '$load', '$audio', '$start_system', '$group', '$enable_body=', '$map', '$new', '$times', '$set_bounds', '$world', '$each', '$target=', '$create_cursor_keys', '$collide', '$arcade', '$overlap', '$destroy', '$play', '$camera', '$down?', '$up', '$speed_up', '$down', '$slow_down', '$left', '$turn', '$right', '$update']);
+  Opal.add_stubs(['$text', '$add', '$fixed_to_camera=', '$value', '$value=', '$attr_reader', '$text=', '$create', '$between', '$rnd', '$set', '$anchor', '$immovable=', '$body', '$attr_accessor', '$collide_world_bounds=', '$set_size', '$target', '$**', '$+', '$-', '$x', '$y', '$<', '$>', '$/', '$*', '$x=', '$velocity', '$y=', '$sin', '$cos', '$sprite', '$enable', '$physics', '$clamp', '$math', '$angle=', '$deg_to_rad', '$-@', '$background_color=', '$stage', '$game_over_text', '$physics_elapsed', '$time', '$on_down_callback=', '$proc', '$start_game', '$keyboard', '$input', '$on', '$start', '$state', '$image', '$load', '$audio', '$start_system', '$group', '$enable_body=', '$map', '$new', '$times', '$set_bounds', '$world', '$each', '$target=', '$create_cursor_keys', '$collide', '$arcade', '$overlap', '$destroy', '$play', '$==', '$size', '$game_over', '$camera', '$down?', '$up', '$speed_up', '$down', '$slow_down', '$left', '$turn', '$right', '$update']);
   self.$require("space_explorer"+ '/../' + "common");
   (function($base, $super) {
     function $Score(){};
@@ -35641,6 +35641,8 @@ Opal.modules["space_explorer"] = function(Opal) {
     def.home_x = def.home_y = def.sprite = nil;
     self.$attr_accessor("target");
 
+    self.$attr_reader("sprite");
+
     Opal.defn(self, '$initialize', TMP_4 = function $$initialize(group) {
       var $a, $b, self = this;
       if ($gvars.game == null) $gvars.game = nil;
@@ -35649,7 +35651,8 @@ Opal.modules["space_explorer"] = function(Opal) {
       self.home_y = $gvars.game.$rnd().$between(0, 5000);
       self.sprite = group.$create(self.home_x, self.home_y, "ufo");
       self.sprite.$anchor().$set(0.5);
-      return (($a = [true]), $b = self.sprite.$body(), $b['$collide_world_bounds='].apply($b, $a), $a[$a.length-1]);
+      (($a = [true]), $b = self.sprite.$body(), $b['$collide_world_bounds='].apply($b, $a), $a[$a.length-1]);
+      return self.sprite.$body().$set_size(48, 48, 8, 8);
     }, TMP_4.$$arity = 1);
 
     return (Opal.defn(self, '$update', TMP_5 = function $$update(dt) {
@@ -35718,6 +35721,7 @@ Opal.modules["space_explorer"] = function(Opal) {
       self.sprite.$anchor().$set(0.5);
       $gvars.game.$physics().$enable(self.sprite, (((($scope.get('Phaser')).$$scope.get('Physics'))).$$scope.get('ARCADE')));
       (($a = [true]), $b = self.sprite.$body(), $b['$collide_world_bounds='].apply($b, $a), $a[$a.length-1]);
+      self.sprite.$body().$set_size(48, 48, 8, 8);
       self.angle = 0;
       return self.speed = 0;
     }, TMP_8.$$arity = 0);
@@ -35767,63 +35771,79 @@ Opal.modules["space_explorer"] = function(Opal) {
     function $GameOverState(){};
     var self = $GameOverState = $klass($base, $super, 'GameOverState', $GameOverState);
 
-    var def = self.$$proto, $scope = self.$$scope, TMP_15, TMP_18, TMP_19;
+    var def = self.$$proto, $scope = self.$$scope, TMP_15, TMP_16, TMP_17, TMP_20, TMP_21;
 
-    def.text = def.forced_wait = def.time = nil;
-    Opal.defn(self, '$create', TMP_15 = function $$create() {
+    def.game_won = def.final_score = def.text = def.forced_wait = def.time = nil;
+    Opal.defn(self, '$init', TMP_15 = function $$init(game_won, final_score) {
+      var self = this;
+
+      self.game_won = game_won;
+      return self.final_score = final_score;
+    }, TMP_15.$$arity = 2);
+
+    Opal.defn(self, '$game_over_text', TMP_16 = function $$game_over_text() {
+      var $a, self = this;
+
+      if ((($a = self.game_won) !== nil && $a != null && (!$a.$$is_boolean || $a == true))) {
+        return "You won!\nScore: " + (self.final_score) + "\n"
+        } else {
+        return "Game over\nScore: " + (self.final_score) + "\n"
+      };
+    }, TMP_16.$$arity = 0);
+
+    Opal.defn(self, '$create', TMP_17 = function $$create() {
       var $a, $b, self = this;
       if ($gvars.game == null) $gvars.game = nil;
       if ($gvars.size_x == null) $gvars.size_x = nil;
       if ($gvars.size_y == null) $gvars.size_y = nil;
-      if ($gvars.final_score == null) $gvars.final_score = nil;
 
       (($a = ["003"]), $b = $gvars.game.$stage(), $b['$background_color='].apply($b, $a), $a[$a.length-1]);
-      self.text = $gvars.game.$add().$text($rb_divide($gvars.size_x, 2), $rb_divide($gvars.size_y, 2), "Game over\nScore: " + ($gvars.final_score) + "\n", $hash2(["fontSize", "fill", "align", "font"], {"fontSize": "64px", "fill": "#FFF", "align": "center", "font": "Audiowide"}));
+      self.text = $gvars.game.$add().$text($rb_divide($gvars.size_x, 2), $rb_divide($gvars.size_y, 2), self.$game_over_text(), $hash2(["fontSize", "fill", "align", "font"], {"fontSize": "64px", "fill": "#FFF", "align": "center", "font": "Audiowide"}));
       self.text.$anchor().$set(0.5);
       (($a = [true]), $b = self.text, $b['$fixed_to_camera='].apply($b, $a), $a[$a.length-1]);
       self.forced_wait = true;
       return self.time = 0;
-    }, TMP_15.$$arity = 0);
+    }, TMP_17.$$arity = 0);
 
-    Opal.defn(self, '$update', TMP_18 = function $$update() {
-      var $a, $b, $c, $d, TMP_16, TMP_17, self = this;
+    Opal.defn(self, '$update', TMP_20 = function $$update() {
+      var $a, $b, $c, $d, TMP_18, TMP_19, self = this;
       if ($gvars.game == null) $gvars.game = nil;
 
       if ((($a = self.forced_wait) !== nil && $a != null && (!$a.$$is_boolean || $a == true))) {
         self.time = $rb_plus(self.time, $gvars.game.$time().$physics_elapsed());
-        if ((($a = $rb_gt(self.time, 0.5)) !== nil && $a != null && (!$a.$$is_boolean || $a == true))) {
+        if ((($a = $rb_gt(self.time, 1)) !== nil && $a != null && (!$a.$$is_boolean || $a == true))) {
           self.forced_wait = false;
           ($a = self.text, $a['$text=']($rb_plus($a.$text(), "Press any key to start again")));
-          (($a = [($c = ($d = self).$proc, $c.$$p = (TMP_16 = function(){var self = TMP_16.$$s || this;
+          (($a = [($c = ($d = self).$proc, $c.$$p = (TMP_18 = function(){var self = TMP_18.$$s || this;
 
-          return self.$start_game()}, TMP_16.$$s = self, TMP_16.$$arity = 0, TMP_16), $c).call($d)]), $b = $gvars.game.$input().$keyboard(), $b['$on_down_callback='].apply($b, $a), $a[$a.length-1]);
-          return ($a = ($b = $gvars.game.$input()).$on, $a.$$p = (TMP_17 = function(){var self = TMP_17.$$s || this;
+          return self.$start_game()}, TMP_18.$$s = self, TMP_18.$$arity = 0, TMP_18), $c).call($d)]), $b = $gvars.game.$input().$keyboard(), $b['$on_down_callback='].apply($b, $a), $a[$a.length-1]);
+          return ($a = ($b = $gvars.game.$input()).$on, $a.$$p = (TMP_19 = function(){var self = TMP_19.$$s || this;
 
-          return self.$start_game()}, TMP_17.$$s = self, TMP_17.$$arity = 0, TMP_17), $a).call($b, "down");
+          return self.$start_game()}, TMP_19.$$s = self, TMP_19.$$arity = 0, TMP_19), $a).call($b, "down");
           } else {
           return nil
         };
         } else {
         return nil
       };
-    }, TMP_18.$$arity = 0);
+    }, TMP_20.$$arity = 0);
 
-    return (Opal.defn(self, '$start_game', TMP_19 = function $$start_game() {
+    return (Opal.defn(self, '$start_game', TMP_21 = function $$start_game() {
       var $a, $b, self = this;
       if ($gvars.game == null) $gvars.game = nil;
 
       (($a = [nil]), $b = $gvars.game.$input().$keyboard(), $b['$on_down_callback='].apply($b, $a), $a[$a.length-1]);
       return $gvars.game.$state().$start("game");
-    }, TMP_19.$$arity = 0), nil) && 'start_game';
+    }, TMP_21.$$arity = 0), nil) && 'start_game';
   })($scope.base, (($scope.get('Phaser')).$$scope.get('State')));
   (function($base, $super) {
     function $GameState(){};
     var self = $GameState = $klass($base, $super, 'GameState', $GameState);
 
-    var def = self.$$proto, $scope = self.$$scope, TMP_20, TMP_25, TMP_30;
+    var def = self.$$proto, $scope = self.$$scope, TMP_22, TMP_27, TMP_28, TMP_33;
 
-    def.stars_group = def.donuts_group = def.aliens_group = def.aliens = def.spaceship = def.cursors = def.donuts = nil;
-    Opal.defn(self, '$preload', TMP_20 = function $$preload() {
+    def.stars_group = def.donuts_group = def.aliens_group = def.aliens = def.score = def.spaceship = def.cursors = def.donuts = nil;
+    Opal.defn(self, '$preload', TMP_22 = function $$preload() {
       var self = this;
       if ($gvars.game == null) $gvars.game = nil;
 
@@ -35832,45 +35852,52 @@ Opal.modules["space_explorer"] = function(Opal) {
       $gvars.game.$load().$image("doughnut", "../images/doughnut.png");
       $gvars.game.$load().$image("ufo", "../images/ufo.png");
       return $gvars.game.$load().$audio("pop", "../audio/pop3.mp3");
-    }, TMP_20.$$arity = 0);
+    }, TMP_22.$$arity = 0);
 
-    Opal.defn(self, '$create', TMP_25 = function $$create() {
-      var $a, $b, TMP_21, $c, TMP_22, $d, TMP_23, $e, TMP_24, self = this;
+    Opal.defn(self, '$create', TMP_27 = function $$create() {
+      var $a, $b, TMP_23, $c, TMP_24, $d, TMP_25, $e, TMP_26, self = this;
       if ($gvars.game == null) $gvars.game = nil;
 
       (($a = ["003"]), $b = $gvars.game.$stage(), $b['$background_color='].apply($b, $a), $a[$a.length-1]);
       $gvars.game.$physics().$start_system((((($scope.get('Phaser')).$$scope.get('Physics'))).$$scope.get('ARCADE')));
       self.stars_group = $gvars.game.$add().$group();
       (($a = [true]), $b = self.stars_group, $b['$enable_body='].apply($b, $a), $a[$a.length-1]);
-      self.stars = ($a = ($b = (200).$times()).$map, $a.$$p = (TMP_21 = function(){var self = TMP_21.$$s || this;
+      self.stars = ($a = ($b = (200).$times()).$map, $a.$$p = (TMP_23 = function(){var self = TMP_23.$$s || this;
         if (self.stars_group == null) self.stars_group = nil;
 
-      return $scope.get('Star').$new(self.stars_group)}, TMP_21.$$s = self, TMP_21.$$arity = 0, TMP_21), $a).call($b);
+      return $scope.get('Star').$new(self.stars_group)}, TMP_23.$$s = self, TMP_23.$$arity = 0, TMP_23), $a).call($b);
       self.donuts_group = $gvars.game.$add().$group();
       (($a = [true]), $c = self.donuts_group, $c['$enable_body='].apply($c, $a), $a[$a.length-1]);
-      self.donuts = ($a = ($c = (50).$times()).$map, $a.$$p = (TMP_22 = function(){var self = TMP_22.$$s || this;
+      self.donuts = ($a = ($c = (50).$times()).$map, $a.$$p = (TMP_24 = function(){var self = TMP_24.$$s || this;
         if (self.donuts_group == null) self.donuts_group = nil;
 
-      return $scope.get('Donut').$new(self.donuts_group)}, TMP_22.$$s = self, TMP_22.$$arity = 0, TMP_22), $a).call($c);
+      return $scope.get('Donut').$new(self.donuts_group)}, TMP_24.$$s = self, TMP_24.$$arity = 0, TMP_24), $a).call($c);
       self.aliens_group = $gvars.game.$add().$group();
       (($a = [true]), $d = self.aliens_group, $d['$enable_body='].apply($d, $a), $a[$a.length-1]);
-      self.aliens = ($a = ($d = (20).$times()).$map, $a.$$p = (TMP_23 = function(){var self = TMP_23.$$s || this;
+      self.aliens = ($a = ($d = (20).$times()).$map, $a.$$p = (TMP_25 = function(){var self = TMP_25.$$s || this;
         if (self.aliens_group == null) self.aliens_group = nil;
 
-      return $scope.get('Alien').$new(self.aliens_group)}, TMP_23.$$s = self, TMP_23.$$arity = 0, TMP_23), $a).call($d);
+      return $scope.get('Alien').$new(self.aliens_group)}, TMP_25.$$s = self, TMP_25.$$arity = 0, TMP_25), $a).call($d);
       $gvars.game.$world().$set_bounds(0, 0, 5000, 5000);
       self.spaceship = $scope.get('SpaceShip').$new();
-      ($a = ($e = self.aliens).$each, $a.$$p = (TMP_24 = function(alien){var self = TMP_24.$$s || this, $f, $g;
+      ($a = ($e = self.aliens).$each, $a.$$p = (TMP_26 = function(alien){var self = TMP_26.$$s || this, $f, $g;
         if (self.spaceship == null) self.spaceship = nil;
 if (alien == null) alien = nil;
-      return (($f = [self.spaceship]), $g = alien, $g['$target='].apply($g, $f), $f[$f.length-1])}, TMP_24.$$s = self, TMP_24.$$arity = 1, TMP_24), $a).call($e);
+      return (($f = [self.spaceship]), $g = alien, $g['$target='].apply($g, $f), $f[$f.length-1])}, TMP_26.$$s = self, TMP_26.$$arity = 1, TMP_26), $a).call($e);
       self.cursors = $gvars.game.$input().$keyboard().$create_cursor_keys();
       self.score = $scope.get('Score').$new();
       return self.pop = $gvars.game.$add().$audio("pop");
-    }, TMP_25.$$arity = 0);
+    }, TMP_27.$$arity = 0);
 
-    return (Opal.defn(self, '$update', TMP_30 = function $$update() {
-      var $a, $b, TMP_26, $c, TMP_27, $d, TMP_28, $e, TMP_29, self = this, dt = nil;
+    Opal.defn(self, '$game_over', TMP_28 = function $$game_over(game_won) {
+      var self = this;
+      if ($gvars.game == null) $gvars.game = nil;
+
+      return $gvars.game.$state().$start("game_over", true, false, game_won, self.score.$value());
+    }, TMP_28.$$arity = 1);
+
+    return (Opal.defn(self, '$update', TMP_33 = function $$update() {
+      var $a, $b, TMP_29, $c, TMP_30, $d, TMP_31, $e, TMP_32, self = this, dt = nil;
       if ($gvars.game == null) $gvars.game = nil;
       if ($gvars.size_x == null) $gvars.size_x = nil;
       if ($gvars.size_y == null) $gvars.size_y = nil;
@@ -35878,19 +35905,22 @@ if (alien == null) alien = nil;
       $gvars.game.$physics().$arcade().$collide(self.spaceship.$sprite(), self.stars_group);
       $gvars.game.$physics().$arcade().$collide(self.aliens_group, self.stars_group);
       $gvars.game.$physics().$arcade().$collide(self.aliens_group, self.aliens_group);
-      ($a = ($b = $gvars.game.$physics().$arcade()).$overlap, $a.$$p = (TMP_26 = function(s, g){var self = TMP_26.$$s || this, $c;
+      ($a = ($b = $gvars.game.$physics().$arcade()).$overlap, $a.$$p = (TMP_29 = function(s, g){var self = TMP_29.$$s || this, $c;
         if (self.pop == null) self.pop = nil;
         if (self.score == null) self.score = nil;
+        if (self.donuts == null) self.donuts = nil;
 if (s == null) s = nil;if (g == null) g = nil;
       g.$destroy();
         self.pop.$play();
-        return ($c = self.score, $c['$value=']($rb_plus($c.$value(), 1)));}, TMP_26.$$s = self, TMP_26.$$arity = 2, TMP_26), $a).call($b, self.spaceship.$sprite(), self.donuts_group);
-      ($a = ($c = $gvars.game.$physics().$arcade()).$overlap, $a.$$p = (TMP_27 = function(s, g){var self = TMP_27.$$s || this;
-        if (self.score == null) self.score = nil;
-        if ($gvars.game == null) $gvars.game = nil;
+        ($c = self.score, $c['$value=']($rb_plus($c.$value(), 1)));
+        if (self.score.$value()['$=='](self.donuts.$size())) {
+          return self.$game_over(true)
+          } else {
+          return nil
+        };}, TMP_29.$$s = self, TMP_29.$$arity = 2, TMP_29), $a).call($b, self.spaceship.$sprite(), self.donuts_group);
+      ($a = ($c = $gvars.game.$physics().$arcade()).$overlap, $a.$$p = (TMP_30 = function(s, g){var self = TMP_30.$$s || this;
 if (s == null) s = nil;if (g == null) g = nil;
-      $gvars.final_score = self.score.$value();
-        return $gvars.game.$state().$start("game_over");}, TMP_27.$$s = self, TMP_27.$$arity = 2, TMP_27), $a).call($c, self.spaceship.$sprite(), self.aliens_group);
+      return self.$game_over(false)}, TMP_30.$$s = self, TMP_30.$$arity = 2, TMP_30), $a).call($c, self.spaceship.$sprite(), self.aliens_group);
       dt = $gvars.game.$time().$physics_elapsed();
       (($a = [$rb_minus(self.spaceship.$x(), $rb_divide($gvars.size_x, 2))]), $d = $gvars.game.$camera(), $d['$x='].apply($d, $a), $a[$a.length-1]);
       (($a = [$rb_minus(self.spaceship.$y(), $rb_divide($gvars.size_y, 2))]), $d = $gvars.game.$camera(), $d['$y='].apply($d, $a), $a[$a.length-1]);
@@ -35903,13 +35933,13 @@ if (s == null) s = nil;if (g == null) g = nil;
       if ((($a = self.cursors.$right()['$down?']()) !== nil && $a != null && (!$a.$$is_boolean || $a == true))) {
         self.spaceship.$turn(1.0, dt)};
       self.spaceship.$update(dt);
-      ($a = ($d = self.aliens).$each, $a.$$p = (TMP_28 = function(alien){var self = TMP_28.$$s || this;
+      ($a = ($d = self.aliens).$each, $a.$$p = (TMP_31 = function(alien){var self = TMP_31.$$s || this;
 if (alien == null) alien = nil;
-      return alien.$update(dt)}, TMP_28.$$s = self, TMP_28.$$arity = 1, TMP_28), $a).call($d);
-      return ($a = ($e = self.donuts).$each, $a.$$p = (TMP_29 = function(donut){var self = TMP_29.$$s || this;
+      return alien.$update(dt)}, TMP_31.$$s = self, TMP_31.$$arity = 1, TMP_31), $a).call($d);
+      return ($a = ($e = self.donuts).$each, $a.$$p = (TMP_32 = function(donut){var self = TMP_32.$$s || this;
 if (donut == null) donut = nil;
-      return donut.$update(dt)}, TMP_29.$$s = self, TMP_29.$$arity = 1, TMP_29), $a).call($e);
-    }, TMP_30.$$arity = 0), nil) && 'update';
+      return donut.$update(dt)}, TMP_32.$$s = self, TMP_32.$$arity = 1, TMP_32), $a).call($e);
+    }, TMP_33.$$arity = 0), nil) && 'update';
   })($scope.base, (($scope.get('Phaser')).$$scope.get('State')));
   $gvars.game.$state().$add("game_over", $scope.get('GameOverState').$new(), true);
   return $gvars.game.$state().$add("game", $scope.get('GameState').$new(), true);
