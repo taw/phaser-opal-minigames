@@ -10,7 +10,7 @@ class Character
   def reset_character(top_of_screen_only)
     if top_of_screen_only
       # New characters all start on top
-      @graphics.y = -24
+      @graphics.y = -24*5
     else
       # When starting the game, scatter characters all over the screen
       @graphics.y = $game.rnd.between(0, $size_y)
@@ -18,7 +18,8 @@ class Character
     @graphics.x = $game.rnd.between(0, $size_x)
     # Between 4s to 10s to fall all the way
     @speed = $game.rnd.between($size_y/10, $size_y/4)
-    @graphics.text = $game.rnd.between(0x30A0, 0x30FF).chr
+    size = $game.rnd.between(1, 6)
+    @graphics.text = size.times.map{ $game.rnd.between(0x30A0, 0x30FF).chr }.join("\n")
     @graphics.font_size = random_size
     @graphics.fill = random_color
     @graphics.stroke = random_outline_color
@@ -56,7 +57,7 @@ end
 class MainState < Phaser::State
   def create
     $game.stage.background_color = "020"
-    @characters = 1000.times.map do
+    @characters = 250.times.map do
       Character.new
     end
   end
