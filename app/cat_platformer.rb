@@ -25,7 +25,7 @@ class MainState < Phaser::State
       @player.body.velocity.x = 250
       @player.scale.x = -(@player.scale.x.abs)
     end
-    if @jumpButton.down? and (@player.body.blocked.down or @player.body.touching.down)
+    if @cursors.up.down? and (@player.body.blocked.down or @player.body.touching.down)
       @player.body.velocity.y = -500
     end
   end
@@ -37,7 +37,6 @@ class MainState < Phaser::State
     $game.physics.start_system(Phaser::Physics::ARCADE)
     $game.world.set_bounds(0, 0, 3200, 1500)
     @cursors = $game.input.keyboard.create_cursor_keys
-    @jumpButton = $game.input.keyboard.add_key(`Phaser.Keyboard.SPACEBAR`)
 
     @player = $game.add.sprite($size_x/2, @world_size_y-100, 'cat')
     @player.anchor.set(0.5)
