@@ -29,6 +29,7 @@ end
 
 class Alien
   attr_accessor :target
+  attr_reader :sprite
   def initialize(group)
     @home_x = $game.rnd.between(0, 5_000)
     @home_y = $game.rnd.between(0, 5_000)
@@ -39,6 +40,7 @@ class Alien
     )
     @sprite.anchor.set(0.5)
     @sprite.body.collide_world_bounds = true
+    @sprite.body.set_size(48, 48, 8, 8)
   end
 
   # Go towards target if it's close
@@ -96,6 +98,7 @@ class SpaceShip
     @sprite.anchor.set(0.5)
     $game.physics.enable(@sprite, Phaser::Physics::ARCADE)
     @sprite.body.collide_world_bounds = true
+    @sprite.body.set_size(48, 48, 8, 8)
     @angle = 0
     @speed = 0
   end
@@ -130,9 +133,22 @@ class SpaceShip
 end
 
 class GameOverState < Phaser::State
+  def init(game_won, final_score)
+    @game_won = game_won
+    @final_score = final_score
+  end
+
+  def game_over_text
+    if @game_won
+      "You won!\nScore: #{@final_score}\n"
+    else
+      "Game over\nScore: #{@final_score}\n"
+    end
+  end
+
   def create
     $game.stage.background_color = "003"
-    @text = $game.add.text($size_x/2, $size_y/2, "Game over\nScore: #{$final_score}\n", { fontSize: "64px", fill: "#FFF", align: "center", font: "Audiowide" })
+    @text = $game.add.text($size_x/2, $size_y/2, game_over_text, { fontSize: "64px", fill: "#FFF", align: "center", font: "Audiowide" })
     @text.anchor.set(0.5)
     @text.fixed_to_camera = true
     @forced_wait = true
@@ -142,7 +158,7 @@ class GameOverState < Phaser::State
   def update
     if @forced_wait
       @time += $game.time.physics_elapsed
-      if @time > 0.5
+      if @time > 1
         @forced_wait = false
         @text.text += "Press any key to start again"
         $game.input.keyboard.on_down_callback = proc{ start_game }
@@ -194,6 +210,10 @@ class GameState < Phaser::State
     @pop = $game.add.audio("pop")
   end
 
+  def game_over(game_won)
+    $game.state.start(:game_over, true, false, game_won, @score.value)
+  end
+
   def update
     $game.physics.arcade.collide(@spaceship.sprite, @stars_group)
     $game.physics.arcade.collide(@aliens_group, @stars_group)
@@ -202,10 +222,12 @@ class GameState < Phaser::State
       g.destroy
       @pop.play
       @score.value += 1
+      if @score.value == @donuts.size
+        game_over(true)
+      end
     end
     $game.physics.arcade.overlap(@spaceship.sprite, @aliens_group) do |s, g|
-      $final_score = @score.value
-      $game.state.start(:game_over)
+      game_over(false)
     end
 
     dt = $game.time.physics_elapsed
