@@ -203,8 +203,8 @@ class GameState < Phaser::State
     @score = Score.new
   end
 
-  def game_over
-    $game.state.start(:game_over, true, false, @score.value)
+  def game_over(game_won)
+    $game.state.start(:game_over, true, false, game_won, @score.value)
   end
 
   def update
@@ -218,10 +218,13 @@ class GameState < Phaser::State
       candy.destroy
       @pop.play
       @score.value += 1
+      if @score.value == @candy.size
+        game_over(true)
+      end
     end
 
     $game.physics.arcade.overlap(@player.sprite, @bats_group) do |_,_|
-      game_over
+      game_over(false)
     end
   end
 
@@ -284,8 +287,17 @@ class BootState < Phaser::State
 end
 
 class GameOverState < Phaser::State
-  def init(final_score)
+  def init(game_won, final_score)
+    @game_won = game_won
     @final_score = final_score
+  end
+
+  def game_over_text
+    if @game_won
+      "You won!\nYou collected all #{@final_score} candy\n"
+    else
+      "Game over\nYou collected #{@final_score} candy\n"
+    end
   end
 
   def create
@@ -300,7 +312,7 @@ class GameOverState < Phaser::State
       pumpkin.anchor.set(0.5)
     end
 
-    @text = $game.add.text($size_x/2, $size_y/2, "Game over\nYou collected #{@final_score} candy\n", { fontSize: "64px", fill: "#000", align: "center", font: "Creepster" })
+    @text = $game.add.text($size_x/2, $size_y/2, game_over_text, { fontSize: "64px", fill: "#000", align: "center", font: "Creepster" })
     @text.anchor.set(0.5)
     @text.fixed_to_camera = true
     @forced_wait = true
