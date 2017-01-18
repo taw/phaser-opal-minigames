@@ -92,7 +92,7 @@ class GameState < Phaser::State
     $game.load.audio("pop", "../audio/pop3.mp3")
     $game.load.audio("lose_life", "../audio/lose_life.mp3")
     $game.load.audio("sad_trombone", "../audio/sad_trombone.mp3")
-    $game.load.audio("casanova", "../audio/casanova.mp3")
+    $game.load.audio("casanova", "../audio/Casanova.mp3")
   end
 
   def add_platform(x, y)

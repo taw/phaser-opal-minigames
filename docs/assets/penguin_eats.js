@@ -35720,7 +35720,7 @@ Opal.modules["penguin_eats"] = function(Opal) {
       $gvars.game.$load().$audio("pop", "../audio/pop3.mp3");
       $gvars.game.$load().$audio("lose_life", "../audio/lose_life.mp3");
       $gvars.game.$load().$audio("sad_trombone", "../audio/sad_trombone.mp3");
-      return $gvars.game.$load().$audio("casanova", "../audio/casanova.mp3");
+      return $gvars.game.$load().$audio("casanova", "../audio/Casanova.mp3");
     }, TMP_7.$$arity = 0);
 
     Opal.defn(self, '$add_platform', TMP_8 = function $$add_platform(x, y) {
