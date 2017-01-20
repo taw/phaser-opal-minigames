@@ -35602,6 +35602,9 @@ Opal.modules["zombie_wave"] = function(Opal) {
   function $rb_minus(lhs, rhs) {
     return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs - rhs : lhs['$-'](rhs);
   }
+  function $rb_gt(lhs, rhs) {
+    return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs > rhs : lhs['$>'](rhs);
+  }
   function $rb_lt(lhs, rhs) {
     return (typeof(lhs) === 'number' && typeof(rhs) === 'number') ? lhs < rhs : lhs['$<'](rhs);
   }
@@ -35614,16 +35617,18 @@ Opal.modules["zombie_wave"] = function(Opal) {
   var self = Opal.top, $scope = Opal, nil = Opal.nil, $breaker = Opal.breaker, $slice = Opal.slice, $klass = Opal.klass, $gvars = Opal.gvars, $range = Opal.range;
   if ($gvars.game == null) $gvars.game = nil;
 
-  Opal.add_stubs(['$attr_reader', '$==', '$*', '$rand', '$visible=', '$play', '$animations', '$current_anim', '$===', '$-', '$<', '$set_state!', '$finished?', '$x=', '$+', '$x', '$walking_speed_x', '$raie', '$sprite', '$add', '$set', '$anchor', '$scale', '$to_a', '$spritesheet', '$load', '$background_color=', '$stage', '$each', '$<<', '$new', '$/', '$physics_elapsed', '$time', '$update', '$state']);
+  Opal.add_stubs(['$attr_reader', '$attr_accessor', '$==', '$*', '$rand', '$visible=', '$play', '$animations', '$abs', '$-', '$x', '$sprite', '$>', '$distance_to_enemy', '$dead?', '$set_state!', '$current_anim', '$===', '$<', '$finished?', '$decide_what_to_do', '$x=', '$+', '$walking_speed_x', '$die!', '$raie', '$add', '$set', '$anchor', '$scale', '$to_a', '$spritesheet', '$load', '$background_color=', '$stage', '$each', '$<<', '$new', '$/', '$enemy=', '$[]', '$physics_elapsed', '$time', '$update', '$state']);
   self.$require("zombie_wave"+ '/../' + "common");
   (function($base, $super) {
     function $Monster(){};
     var self = $Monster = $klass($base, $super, 'Monster', $Monster);
 
-    var def = self.$$proto, $scope = self.$$scope, TMP_1, TMP_2;
+    var def = self.$$proto, $scope = self.$$scope, TMP_1, TMP_2, TMP_3, TMP_4, TMP_5, TMP_6;
 
-    def.state = def.sprite = def.delay = nil;
+    def.state = def.sprite = def.enemy = def.delay = nil;
     self.$attr_reader("sprite");
+
+    self.$attr_accessor("enemy");
 
     Opal.defn(self, '$set_state!', TMP_1 = function(state) {
       var $a, $b, self = this;
@@ -35632,13 +35637,43 @@ Opal.modules["zombie_wave"] = function(Opal) {
       if (self.state['$==']("pre-appear")) {
         self.delay = $rb_times(self.$rand(), 2);
         return (($a = [false]), $b = self.sprite, $b['$visible='].apply($b, $a), $a[$a.length-1]);
+      } else if (self.state['$==']("dead")) {
+        return (($a = [false]), $b = self.sprite, $b['$visible='].apply($b, $a), $a[$a.length-1])
         } else {
         (($a = [true]), $b = self.sprite, $b['$visible='].apply($b, $a), $a[$a.length-1]);
         return self.sprite.$animations().$play(state);
       };
     }, TMP_1.$$arity = 1);
 
-    return (Opal.defn(self, '$update', TMP_2 = function $$update(dt) {
+    Opal.defn(self, '$distance_to_enemy', TMP_2 = function $$distance_to_enemy() {
+      var self = this;
+
+      return ($rb_minus(self.sprite.$x(), self.enemy.$sprite().$x())).$abs();
+    }, TMP_2.$$arity = 0);
+
+    Opal.defn(self, '$decide_what_to_do', TMP_3 = function $$decide_what_to_do() {
+      var $a, $b, self = this;
+
+      if ((($a = ((($b = $rb_gt(self.$distance_to_enemy(), 100)) !== false && $b !== nil && $b != null) ? $b : self.enemy['$dead?']())) !== nil && $a != null && (!$a.$$is_boolean || $a == true))) {
+        return self['$set_state!']("walk")
+        } else {
+        return self['$set_state!']("attack")
+      };
+    }, TMP_3.$$arity = 0);
+
+    Opal.defn(self, '$die!', TMP_4 = function() {
+      var self = this;
+
+      return self['$set_state!']("die");
+    }, TMP_4.$$arity = 0);
+
+    Opal.defn(self, '$dead?', TMP_5 = function() {
+      var $a, self = this;
+
+      return ((($a = self.state['$==']("dead")) !== false && $a !== nil && $a != null) ? $a : self.state['$==']("die"));
+    }, TMP_5.$$arity = 0);
+
+    return (Opal.defn(self, '$update', TMP_6 = function $$update(dt) {
       var $a, self = this, current = nil, $case = nil;
 
       current = self.sprite.$animations().$current_anim();
@@ -35651,119 +35686,126 @@ Opal.modules["zombie_wave"] = function(Opal) {
         } else {
         return nil
       };
-      return self['$set_state!']("walk");}else if ("walk"['$===']($case)) {($a = self.sprite, $a['$x=']($rb_plus($a.$x(), $rb_times(dt, self.$walking_speed_x()))));
+      return self.$decide_what_to_do();}else if ("walk"['$===']($case)) {($a = self.sprite, $a['$x=']($rb_plus($a.$x(), $rb_times(dt, self.$walking_speed_x()))));
       if ((($a = current['$finished?']()) !== nil && $a != null && (!$a.$$is_boolean || $a == true))) {
-        return self['$set_state!']("walk")
+        return self.$decide_what_to_do()
         } else {
         return nil
-      };}else {return self.$raie("Unknown state " + (self.state))}})();
-    }, TMP_2.$$arity = 1), nil) && 'update';
+      };}else if ("attack"['$===']($case)) {if ((($a = current['$finished?']()) !== nil && $a != null && (!$a.$$is_boolean || $a == true))) {
+        self.enemy['$die!']();
+        return self.$decide_what_to_do();
+        } else {
+        return nil
+      }}else if ("die"['$===']($case)) {if ((($a = current['$finished?']()) !== nil && $a != null && (!$a.$$is_boolean || $a == true))) {
+        return self['$set_state!']("dead")
+        } else {
+        return nil
+      }}else if ("dead"['$===']($case)) {return nil}else {return self.$raie("Unknown state " + (self.state))}})();
+    }, TMP_6.$$arity = 1), nil) && 'update';
   })($scope.base, null);
   (function($base, $super) {
     function $Zombie(){};
     var self = $Zombie = $klass($base, $super, 'Zombie', $Zombie);
 
-    var def = self.$$proto, $scope = self.$$scope, TMP_3, TMP_4;
+    var def = self.$$proto, $scope = self.$$scope, TMP_7, TMP_8;
 
     def.sprite = nil;
-    Opal.defn(self, '$initialize', TMP_3 = function $$initialize(x, y) {
+    Opal.defn(self, '$initialize', TMP_7 = function $$initialize(x, y) {
       var self = this;
       if ($gvars.game == null) $gvars.game = nil;
 
       self.sprite = $gvars.game.$add().$sprite(x, y, "zombie");
       self.sprite.$anchor().$set(0.5);
       self.sprite.$scale().$set(0.25);
-      self.sprite.$animations().$add("appear", ($range(1, 11, false)).$to_a(), 10, false);
-      self.sprite.$animations().$add("attack", ($range(12, 18, false)).$to_a(), 10, false);
-      self.sprite.$animations().$add("die", ($range(19, 26, false)).$to_a(), 10, false);
-      self.sprite.$animations().$add("idle", ($range(27, 32, false)).$to_a(), 10, false);
-      self.sprite.$animations().$add("walk", ($range(33, 42, false)).$to_a(), 10, false);
+      self.sprite.$animations().$add("appear", ($range(1, 11, false)).$to_a(), 15, false);
+      self.sprite.$animations().$add("attack", ($range(12, 18, false)).$to_a(), 15, false);
+      self.sprite.$animations().$add("die", ($range(19, 26, false)).$to_a(), 15, false);
+      self.sprite.$animations().$add("idle", ($range(27, 32, false)).$to_a(), 15, false);
+      self.sprite.$animations().$add("walk", ($range(33, 42, false)).$to_a(), 15, false);
       self.sprite.$animations().$play("appear");
       return self['$set_state!']("pre-appear");
-    }, TMP_3.$$arity = 2);
+    }, TMP_7.$$arity = 2);
 
-    return (Opal.defn(self, '$walking_speed_x', TMP_4 = function $$walking_speed_x() {
+    return (Opal.defn(self, '$walking_speed_x', TMP_8 = function $$walking_speed_x() {
       var self = this;
 
       return -40;
-    }, TMP_4.$$arity = 0), nil) && 'walking_speed_x';
+    }, TMP_8.$$arity = 0), nil) && 'walking_speed_x';
   })($scope.base, $scope.get('Monster'));
   (function($base, $super) {
     function $Skeleton(){};
     var self = $Skeleton = $klass($base, $super, 'Skeleton', $Skeleton);
 
-    var def = self.$$proto, $scope = self.$$scope, TMP_5, TMP_6;
+    var def = self.$$proto, $scope = self.$$scope, TMP_9, TMP_10;
 
     def.sprite = nil;
-    Opal.defn(self, '$initialize', TMP_5 = function $$initialize(x, y) {
+    Opal.defn(self, '$initialize', TMP_9 = function $$initialize(x, y) {
       var self = this;
       if ($gvars.game == null) $gvars.game = nil;
 
       self.sprite = $gvars.game.$add().$sprite(x, y, "skeleton");
       self.sprite.$anchor().$set(0.5);
       self.sprite.$scale().$set(-0.25, 0.25);
-      self.sprite.$animations().$add("appear", ($range(1, 10, false)).$to_a(), 10, false);
-      self.sprite.$animations().$add("attack", ($range(11, 18, false)).$to_a(), 10, false);
-      self.sprite.$animations().$add("die", ($range(19, 26, false)).$to_a(), 10, false);
-      self.sprite.$animations().$add("idle", ($range(27, 32, false)).$to_a(), 10, false);
-      self.sprite.$animations().$add("walk", ($range(33, 42, false)).$to_a(), 10, false);
+      self.sprite.$animations().$add("appear", ($range(1, 10, false)).$to_a(), 15, false);
+      self.sprite.$animations().$add("attack", ($range(11, 18, false)).$to_a(), 15, false);
+      self.sprite.$animations().$add("die", ($range(19, 26, false)).$to_a(), 15, false);
+      self.sprite.$animations().$add("idle", ($range(27, 32, false)).$to_a(), 15, false);
+      self.sprite.$animations().$add("walk", ($range(33, 42, false)).$to_a(), 15, false);
       return self['$set_state!']("pre-appear");
-    }, TMP_5.$$arity = 2);
+    }, TMP_9.$$arity = 2);
 
-    return (Opal.defn(self, '$walking_speed_x', TMP_6 = function $$walking_speed_x() {
+    return (Opal.defn(self, '$walking_speed_x', TMP_10 = function $$walking_speed_x() {
       var self = this;
 
       return 40;
-    }, TMP_6.$$arity = 0), nil) && 'walking_speed_x';
+    }, TMP_10.$$arity = 0), nil) && 'walking_speed_x';
   })($scope.base, $scope.get('Monster'));
   (function($base, $super) {
     function $MainState(){};
     var self = $MainState = $klass($base, $super, 'MainState', $MainState);
 
-    var def = self.$$proto, $scope = self.$$scope, TMP_7, TMP_10, TMP_13;
+    var def = self.$$proto, $scope = self.$$scope, TMP_11, TMP_13, TMP_16;
 
     def.zombies = def.skeletons = nil;
-    Opal.defn(self, '$preload', TMP_7 = function $$preload() {
+    Opal.defn(self, '$preload', TMP_11 = function $$preload() {
       var self = this;
       if ($gvars.game == null) $gvars.game = nil;
 
       $gvars.game.$load().$spritesheet("zombie", "../images/characters/zombie.png", 444, 324);
       return $gvars.game.$load().$spritesheet("skeleton", "../images/characters/skeleton.png", 456, 384);
-    }, TMP_7.$$arity = 0);
+    }, TMP_11.$$arity = 0);
 
-    Opal.defn(self, '$create', TMP_10 = function $$create() {
-      var $a, $b, TMP_8, $c, TMP_9, self = this;
+    Opal.defn(self, '$create', TMP_13 = function $$create() {
+      var $a, $b, TMP_12, self = this;
       if ($gvars.game == null) $gvars.game = nil;
 
       (($a = ["008"]), $b = $gvars.game.$stage(), $b['$background_color='].apply($b, $a), $a[$a.length-1]);
       self.zombies = [];
       self.skeletons = [];
-      ($a = ($b = ($range(2, 6, false))).$each, $a.$$p = (TMP_8 = function(i){var self = TMP_8.$$s || this;
+      return ($a = ($b = ($range(2, 6, false))).$each, $a.$$p = (TMP_12 = function(i){var self = TMP_12.$$s || this, $c, $d;
         if (self.skeletons == null) self.skeletons = nil;
-        if ($gvars.size_x == null) $gvars.size_x = nil;
-        if ($gvars.size_y == null) $gvars.size_y = nil;
-if (i == null) i = nil;
-      return self.skeletons['$<<']($scope.get('Skeleton').$new($rb_times($gvars.size_x, ($rb_plus(0.05, $rb_times(self.$rand(), 0.2)))), $rb_divide($rb_times($gvars.size_y, i), 8)))}, TMP_8.$$s = self, TMP_8.$$arity = 1, TMP_8), $a).call($b);
-      return ($a = ($c = ($range(2, 6, false))).$each, $a.$$p = (TMP_9 = function(i){var self = TMP_9.$$s || this;
         if (self.zombies == null) self.zombies = nil;
         if ($gvars.size_x == null) $gvars.size_x = nil;
         if ($gvars.size_y == null) $gvars.size_y = nil;
 if (i == null) i = nil;
-      return self.zombies['$<<']($scope.get('Zombie').$new($rb_times($gvars.size_x, ($rb_minus(0.95, $rb_times(self.$rand(), 0.2)))), $rb_divide($rb_times($gvars.size_y, i), 8)))}, TMP_9.$$s = self, TMP_9.$$arity = 1, TMP_9), $a).call($c);
-    }, TMP_10.$$arity = 0);
+      self.skeletons['$<<']($scope.get('Skeleton').$new($rb_times($gvars.size_x, ($rb_plus(0.05, $rb_times(self.$rand(), 0.2)))), $rb_divide($rb_times($gvars.size_y, i), 8)));
+        self.zombies['$<<']($scope.get('Zombie').$new($rb_times($gvars.size_x, ($rb_minus(0.95, $rb_times(self.$rand(), 0.2)))), $rb_divide($rb_times($gvars.size_y, i), 8)));
+        (($c = [self.zombies['$[]'](-1)]), $d = self.skeletons['$[]'](-1), $d['$enemy='].apply($d, $c), $c[$c.length-1]);
+        return (($c = [self.skeletons['$[]'](-1)]), $d = self.zombies['$[]'](-1), $d['$enemy='].apply($d, $c), $c[$c.length-1]);}, TMP_12.$$s = self, TMP_12.$$arity = 1, TMP_12), $a).call($b);
+    }, TMP_13.$$arity = 0);
 
-    return (Opal.defn(self, '$update', TMP_13 = function $$update() {
-      var $a, $b, TMP_11, $c, TMP_12, self = this, dt = nil;
+    return (Opal.defn(self, '$update', TMP_16 = function $$update() {
+      var $a, $b, TMP_14, $c, TMP_15, self = this, dt = nil;
       if ($gvars.game == null) $gvars.game = nil;
 
       dt = $gvars.game.$time().$physics_elapsed();
-      ($a = ($b = self.zombies).$each, $a.$$p = (TMP_11 = function(z){var self = TMP_11.$$s || this;
+      ($a = ($b = self.zombies).$each, $a.$$p = (TMP_14 = function(z){var self = TMP_14.$$s || this;
 if (z == null) z = nil;
-      return z.$update(dt)}, TMP_11.$$s = self, TMP_11.$$arity = 1, TMP_11), $a).call($b);
-      return ($a = ($c = self.skeletons).$each, $a.$$p = (TMP_12 = function(s){var self = TMP_12.$$s || this;
+      return z.$update(dt)}, TMP_14.$$s = self, TMP_14.$$arity = 1, TMP_14), $a).call($b);
+      return ($a = ($c = self.skeletons).$each, $a.$$p = (TMP_15 = function(s){var self = TMP_15.$$s || this;
 if (s == null) s = nil;
-      return s.$update(dt)}, TMP_12.$$s = self, TMP_12.$$arity = 1, TMP_12), $a).call($c);
-    }, TMP_13.$$arity = 0), nil) && 'update';
+      return s.$update(dt)}, TMP_15.$$s = self, TMP_15.$$arity = 1, TMP_15), $a).call($c);
+    }, TMP_16.$$arity = 0), nil) && 'update';
   })($scope.base, (($scope.get('Phaser')).$$scope.get('State')));
   return $gvars.game.$state().$add("main", $scope.get('MainState').$new(), true);
 };
