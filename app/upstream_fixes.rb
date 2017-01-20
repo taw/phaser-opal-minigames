@@ -62,3 +62,17 @@ class Range
     return self
   end
 end
+
+class Phaser::AnimationManager
+  def current_anim
+    Phaser::Animation.new(`#@native.currentAnim`)
+  end
+  def current_anim=(e)
+    `#@native.currentAnim = #{e.to_n}`
+  end
+end
+
+class Phaser::Animation
+  native_accessor_alias :playing?, :isPlaying
+  native_accessor_alias :finished?, :isFinished
+end
