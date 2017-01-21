@@ -16,7 +16,10 @@ Some of the sources include:
 * candy3.png http://www.flaticon.com/free-icon/candy-canes_227277
 * candy4.png http://www.flaticon.com/free-icon/candy_236338
 * darkforest.jpg http://pcwallart.com/dark-forest-background-wallpaper-3.html
-* characters/ - https://github.com/taw/jrpg
+* characters/angel-blue* - https://github.com/taw/jrpg
 * shark no 2 - http://www.iconarchive.com/show/flat-animal-icons-by-martin-berube/shark-icon.html
 * life_loss.mp3 - https://www.freesound.org/people/josepharaoh99/sounds/364929/
 * sad_trombone.mp3 - https://www.freesound.org/people/Benboncan/sounds/73581/
+* characters/cat.png - http://opengameart.org/content/cat-dog-free-sprites
+* characters/zombie.png - http://opengameart.org/content/zombie-animations
+* characters/skeleton.png - http://opengameart.org/content/skeleton-animations
