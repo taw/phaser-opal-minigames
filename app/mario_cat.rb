@@ -6,10 +6,10 @@ class Cat
     @sprite = $game.add.sprite(x, y, "cat")
     $game.physics.enable(@sprite, Phaser::Physics::ARCADE)
     @sprite.body.gravity.y = 1000
-    @sprite.body.max_velocity.y = 500
+    # @sprite.body.max_velocity.y = 500
     @sprite.body.collide_world_bounds = true
     @sprite.anchor.set(0.5)
-    @sprite.scale.set(-0.2, 0.2)
+    @sprite.scale.set(-1, 1)
     # @sprite.animations.add("dead", (0..9).to_a, 15, false)
     # @sprite.animations.add("fall", (10..17).to_a, 15, false)
     # @sprite.animations.add("hurt", (18..27).to_a, 15, false)
@@ -44,19 +44,19 @@ class Cat
   end
 
   def jump!
-    @sprite.body.velocity.y = -500
+    @sprite.body.velocity.y = -1000
     # start once as it does not loop
     @sprite.animations.play("jump")
   end
 
   def left!
-    @sprite.scale.set(-0.2, 0.2)
-    @sprite.body.velocity.x = -200
+    @sprite.scale.set(-1, 1)
+    @sprite.body.velocity.x = -500
   end
 
   def right!
-    @sprite.scale.set(0.2, 0.2)
-    @sprite.body.velocity.x = 200
+    @sprite.scale.set(1, 1)
+    @sprite.body.velocity.x = 500
   end
 
   def stop!
@@ -66,7 +66,7 @@ end
 
 class MainState < Phaser::State
   def preload
-    $game.load.spritesheet("cat", "../images/characters/cat.png", 556, 504, 74)
+    $game.load.spritesheet("cat", "../images/characters/cat_25.png", 139, 126, 74)
   end
 
   def create
@@ -77,7 +77,7 @@ class MainState < Phaser::State
     $game.physics.start_system(Phaser::Physics::ARCADE)
     @cursors = $game.input.keyboard.create_cursor_keys
     @cat = Cat.new($size_x/2, $size_y/2)
-    $game.camera.follow(@cat.sprite)
+    # $game.camera.follow(@cat.sprite)
   end
 
   def update
