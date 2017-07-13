@@ -5,4 +5,4 @@ To use:
 
 Then open http://localhost:9292/ in browser and enjoy
 
-Public domain: https://taw.github.io/phaser-opal-minigames/
+You can also play the games at: https://taw.github.io/phaser-opal-minigames/
