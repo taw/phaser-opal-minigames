@@ -23,3 +23,4 @@ Some of the sources include:
 * characters/cat.png - http://opengameart.org/content/cat-dog-free-sprites
 * characters/zombie.png - http://opengameart.org/content/zombie-animations
 * characters/skeleton.png - http://opengameart.org/content/skeleton-animations
+* goat.png https://opengameart.org/content/lpc-goat
