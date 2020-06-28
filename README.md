@@ -1,7 +1,7 @@
 To use:
 
     bundle install
-    rackup
+    bundle exec rackup
 
 Then open http://localhost:9292/ in browser and enjoy
 
